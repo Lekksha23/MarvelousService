@@ -2,7 +2,7 @@
 as
 begin
 	select
-		 [Name], 
+		 [ServiceName], 
 		 [ServiceType],
 		 [Period],
 	     [Price],
