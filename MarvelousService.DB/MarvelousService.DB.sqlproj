@@ -58,8 +58,10 @@
     <Folder Include="Properties" />
     <Folder Include="StoredProcedures" />
     <Folder Include="Tables" />
+    <Folder Include="StoredProcedures\Service" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Service.sql" />
+    <Build Include="StoredProcedures\Service\Service_Insert.sql" />
   </ItemGroup>
 </Project>
