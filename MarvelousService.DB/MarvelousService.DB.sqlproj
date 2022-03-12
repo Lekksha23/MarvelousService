@@ -63,5 +63,7 @@
   <ItemGroup>
     <Build Include="Tables\Service.sql" />
     <Build Include="StoredProcedures\Service\Service_Insert.sql" />
+    <Build Include="StoredProcedures\Service\Service_SelectAll.sql" />
+    <Build Include="StoredProcedures\Service\Service_SelectByLead.sql" />
   </ItemGroup>
 </Project>

@@ -1,19 +1,20 @@
-﻿CREATE PROCEDURE [dbo].[Service_Insert]
+﻿create procedure [dbo].[Service_Insert]
 	@Name varchar(50),
 	@ServiceType int,
 	@Period int,
 	@Price decimal,
+	@Description varchar(300),
 	@Status int,
 	@LeadId int,
 	@TransactionId int
-	
-AS
-BEGIN 
+as
+begin
 	insert into dbo.[Service]
 		([Name], 
 		 [ServiceType],
 		 [Period],
 	     [Price],
+		 [Description],
 	     [Status],
 		 [LeadId],
 		 [TransactionId])
@@ -22,8 +23,9 @@ BEGIN
 		 @ServiceType,
 		 @Period,
 		 @Price,
+		 @Description,
 		 @Status,
 		 @LeadId,
 		 @TransactionId)
 	select scope_identity()
-END
+end
