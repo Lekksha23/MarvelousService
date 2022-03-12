@@ -59,4 +59,7 @@
     <Folder Include="StoredProcedures" />
     <Folder Include="Tables" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Service.sql" />
+  </ItemGroup>
 </Project>
