@@ -5,7 +5,7 @@ namespace MarvelousService.DataLayer.Entities
     public class Service
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public ServiceName ServiceName { get; set; }
         public ServiceType ServiceType { get; set; }
         public Period Period { get; set; }
         public string Description { get; set; }

@@ -1,5 +1,5 @@
 ﻿create procedure [dbo].[Service_Insert]
-	@Name varchar(50),
+	@ServiceName int,
 	@ServiceType int,
 	@Period int,
 	@Price decimal,
@@ -10,7 +10,7 @@
 as
 begin
 	insert into dbo.[Service]
-		([Name], 
+		([ServiceName], 
 		 [ServiceType],
 		 [Period],
 	     [Price],
@@ -19,7 +19,7 @@ begin
 		 [LeadId],
 		 [TransactionId])
 	values
-		(@Name,
+		(@ServiceName,
 		 @ServiceType,
 		 @Period,
 		 @Price,
