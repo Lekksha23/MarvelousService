@@ -14,4 +14,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MarvelousService.Business\MarvelousService.BusinessLayer.csproj" />
+  </ItemGroup>
+
 </Project>
