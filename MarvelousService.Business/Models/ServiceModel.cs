@@ -2,7 +2,7 @@
 
 namespace MarvelousService.BusinessLayer.Models
 {
-    public class ModelService
+    public class ServiceModel
     {
         public int Id { get; set; }
         public ServiceName ServiceName { get; set; }
