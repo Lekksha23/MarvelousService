@@ -1,4 +1,4 @@
-﻿create procedure [dbo].[Service_SelectByLead]
+﻿create procedure [dbo].[ServiceToLead_SelectByLead]
 		@LeadId int
 as
 begin
@@ -11,6 +11,6 @@ begin
 	     [Status],
 		 [LeadId],
 		 [TransactionId]
-	from dbo.[Service]
+	from dbo.[ServiceToLead]
 	where LeadId = @LeadId
 end

@@ -1,4 +1,4 @@
-﻿create procedure [dbo].[Service_SelectAll]
+﻿create procedure [dbo].[ServiceToLead_SelectAll]
 as
 begin
 	select
@@ -10,5 +10,5 @@ begin
 	     [Status],
 		 [LeadId],
 		 [TransactionId]
-	from dbo.[Service]
+	from dbo.[ServiceToLead]
 end
