@@ -23,9 +23,7 @@ builder.Services.AddSwaggerGen(config =>
 builder.Services.AddMvc()
     .AddJsonOptions(options =>
     {
-
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-
     })
 
     .ConfigureApiBehaviorOptions(options =>
