@@ -15,7 +15,7 @@ namespace MarvelousService.API.Extensions
 
         public static void RegisterMarvelousServiceServices(this IServiceCollection services)
         {
-            services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<IServiceService, ServiceToLeadService>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
