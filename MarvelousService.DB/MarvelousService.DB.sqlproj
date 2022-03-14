@@ -68,5 +68,9 @@
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectByLead.sql" />
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectById.sql" />
     <Build Include="Tables\Service.sql" />
+    <Build Include="StoredProcedures\Service\Service_Insert.sql" />
+    <Build Include="StoredProcedures\Service\Service_Update.sql" />
+    <Build Include="StoredProcedures\Service\Servise_SelectById.sql" />
+    <Build Include="StoredProcedures\Service\Service_SoftDeleted.sql" />
   </ItemGroup>
 </Project>
