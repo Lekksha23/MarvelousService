@@ -10,8 +10,8 @@
 as
 begin
 	insert into dbo.[Service]
-		([ServiceName], 
-		 [ServiceType],
+		([Name], 
+		 [Type],
 		 [Period],
 	     [Price],
 		 [Description],

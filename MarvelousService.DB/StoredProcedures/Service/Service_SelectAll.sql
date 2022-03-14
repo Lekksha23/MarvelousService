@@ -2,8 +2,8 @@
 as
 begin
 	select
-		 [ServiceName], 
-		 [ServiceType],
+		 [Name], 
+		 [Type],
 		 [Period],
 	     [Price],
 		 [Description],

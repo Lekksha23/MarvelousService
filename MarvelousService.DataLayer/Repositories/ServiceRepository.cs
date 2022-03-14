@@ -29,8 +29,8 @@ namespace MarvelousService.DataLayer.Repositories
             return connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
                 new
                 {
-                    service.ServiceName,
-                    service.ServiceType,
+                    service.Name,
+                    service.Type,
                     service.Period,
                     service.Description,
                     service.Price,                  

@@ -5,8 +5,8 @@ namespace MarvelousService.BusinessLayer.Models
     public class ServiceModel
     {
         public int Id { get; set; }
-        public ServiceName ServiceName { get; set; }
-        public ServiceType ServiceType { get; set; }
+        public ServiceName Name { get; set; }
+        public ServiceType Type { get; set; }
         public Period Period { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
