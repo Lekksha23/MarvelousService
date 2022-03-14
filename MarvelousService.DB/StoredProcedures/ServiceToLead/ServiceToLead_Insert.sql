@@ -1,4 +1,4 @@
-﻿create procedure [dbo].[Service_Insert]
+﻿create procedure [dbo].[ServiceToLead_Insert]
 	@ServiceName int,
 	@ServiceType int,
 	@Period int,
@@ -9,7 +9,7 @@
 	@TransactionId int
 as
 begin
-	insert into dbo.[Service]
+	insert into dbo.[ServiceToLead]
 		([Name], 
 		 [Type],
 		 [Period],
