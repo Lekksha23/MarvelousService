@@ -3,13 +3,12 @@
 as
 begin
 	select
-		 [Name], 
 		 [Type],
 		 [Period],
 	     [Price],
-		 [Description],
 	     [Status],
 		 [LeadId],
+		 [ServiceId],
 		 [TransactionId]
 	from dbo.[ServiceToLead]
 	where LeadId = @LeadId

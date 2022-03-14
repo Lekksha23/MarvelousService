@@ -1,31 +1,28 @@
 ﻿create procedure [dbo].[ServiceToLead_Insert]
-	@ServiceName int,
-	@ServiceType int,
+	@Type int,
 	@Period int,
 	@Price decimal,
-	@Description varchar(300),
 	@Status int,
 	@LeadId int,
+	@ServiceId int,
 	@TransactionId int
 as
 begin
 	insert into dbo.[ServiceToLead]
-		([Name], 
-		 [Type],
+		([Type],
 		 [Period],
 	     [Price],
-		 [Description],
 	     [Status],
 		 [LeadId],
+		 [ServiceId],
 		 [TransactionId])
 	values
-		(@ServiceName,
-		 @ServiceType,
+		(@Type,
 		 @Period,
 		 @Price,
-		 @Description,
 		 @Status,
 		 @LeadId,
+		 @ServiceId,
 		 @TransactionId)
 	select scope_identity()
 end
