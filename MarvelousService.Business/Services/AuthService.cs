@@ -2,7 +2,7 @@
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 
-namespace CRM.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Services
 {
     public class AuthService : IAuthService
     {
@@ -13,13 +13,8 @@ namespace CRM.BusinessLayer.Services
             var request = new RestRequest("/login/", Method.Post);
             request.AddJsonBody(authModel);
             var response = client.PostAsync(request);
-            
-            
-            if (response.Status is TaskStatus.Created)
-            {
-                return response.ToString();
-            }
-            else throw new Exception();
+
+            return response.ToString();
         }
     }
 }
