@@ -26,8 +26,7 @@ namespace MarvelousService.DataLayer.Repositories
 
         public IDbConnection Connection => new SqlConnection(_connection.ConnectionString);
 
-
-        public Service AddService(Service service)
+        public int AddService(Service service)
         {
             _logger.Debug("Подключение к базе данных");
 
@@ -46,10 +45,8 @@ namespace MarvelousService.DataLayer.Repositories
                 commandType: CommandType.StoredProcedure);
             _logger.Debug("Услуга добавлена в базу данных");
 
-            return newService;
+            return newService.Id;
         }
-
-
 
         public Service GetServiceById(int id)
         {

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-namespace CRM.APILayer.Infrastructure
+namespace MarvelousService.API.Infrastructure
 {
     public class GlobalExceptionHandler
     {

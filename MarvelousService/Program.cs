@@ -1,4 +1,4 @@
-using CRM.APILayer.Infrastructure;
+using MarvelousService.API.Infrastructure;
 using MarvelousService.API.Extensions;
 using MarvelousService.DataLayer.Configuration;
 

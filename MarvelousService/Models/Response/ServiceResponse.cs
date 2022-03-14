@@ -1,4 +1,4 @@
-﻿namespace MarvelousService.API.Models.Response
+﻿namespace MarvelousService.API.Models
 {
     public class ServiceResponse
     {

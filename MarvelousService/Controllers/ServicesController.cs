@@ -16,7 +16,7 @@ namespace MarvelousService.API.Controllers
     public class ServicesController : Controller
     {
         private readonly IServiceService _serviceService;
-        private readonly IServiceToLead _serviceToLead;
+        //private readonly IServiceToLead _serviceToLead;
         private readonly IMapper _autoMapper;
         private static Logger _logger;
 
@@ -44,14 +44,14 @@ namespace MarvelousService.API.Controllers
         //api/services
         [HttpPost("toLead")]
         [SwaggerOperation("Add service to lead")]
-        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        public ActionResult<int> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
+        [ProducesResponseType(typeof(ServiceToLeadResponse), StatusCodes.Status201Created)]
+        public ActionResult<ServiceToLeadResponse> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
         {
             _logger.Info($"Получен запрос на добавление услуги лиду.");
             var serviceToLeadModel = _autoMapper.Map<ServiceToLeadModel>(serviceToLeadInsertRequest);
-            var id = _servicetoLeadService.AddServiceToLead(serviceToLeadModel);
-            _logger.Info($"Услуга с id = {id} успешно добавлена лиду с id = .");
-            return StatusCode(StatusCodes.Status201Created, id);
+            //_serviceToLeadService.AddServiceToLead(serviceToLeadModel);
+            _logger.Info($"Услуга с id = {serviceToLeadModel.ServiceId} успешно добавлена лиду с id = .");
+            //return StatusCode(StatusCodes.Status201Created, ServiceToLeadResponse);
         }
     }
 }

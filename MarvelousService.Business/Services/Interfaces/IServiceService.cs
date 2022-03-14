@@ -6,6 +6,6 @@ namespace MarvelousService.BusinessLayer.Services.Interfaces
     {
         public ServiceModel GetServiceById(int id);
         int AddService(ServiceModel serviceModel);
-        List<ServiceModel> GetByLeadId(int id);
+        List<ServiceModel> GetById(int id);
     }
 }

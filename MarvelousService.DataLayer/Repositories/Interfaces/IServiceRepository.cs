@@ -9,7 +9,7 @@ namespace MarvelousService.DataLayer.Repositories.Interfaces
 {
     public interface IServiceRepository
     {
-        Service AddService(Service service);
+        int AddService(Service service);
         Service SoftDeletedById(Service service);
         Service UpdateService(Service service);
         Service GetServiceById(int id);

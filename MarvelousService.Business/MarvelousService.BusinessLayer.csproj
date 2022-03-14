@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MarvelousService.DataLayer\MarvelousService.DataLayer.csproj" />
-    <ProjectReference Include="..\MarvelousService.DB\MarvelousService.DB.sqlproj" />
   </ItemGroup>
 
   <ItemGroup>
