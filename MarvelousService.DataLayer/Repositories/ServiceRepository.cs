@@ -35,7 +35,7 @@ namespace MarvelousService.DataLayer.Repositories
 
             _logger.Debug("Подключение к базе данных произведено");
 
-            var newservice =  connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
+            var newService =  connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
                 new
                 {
                     service.Name,
@@ -49,24 +49,42 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure
             );
-            _logger.Debug("");
-            return 
-            
+            _logger.Debug("Услуга добавлена в базу данных");
+
+            return newService;
+
+
         }
 
         public List<Service> GetByLeadId(int id)
         {
+            _logger.Debug("Подключение к базе данных");
+
             using IDbConnection connection = Connection;
 
-            return connection.Query<Service>(_serviceGetByLeadIdProcedure,new { LeadId = id },commandType: CommandType.StoredProcedure)
+            _logger.Debug("Подключение к базе данных произведено");
+
+            var listService =  connection.Query<Service>(_serviceGetByLeadIdProcedure,new { LeadId = id },commandType: CommandType.StoredProcedure)
                 .ToList();
+
+            _logger.Debug("Услуги по LeadId получены");
+
+            return listService;
         }
 
         public Service GetServiceById(int id)
         {
+            _logger.Debug("Подключение к базе данных");
+
             using IDbConnection connection = Connection;
 
-            return connection.QuerySingle<Service>(_serviceGetByIdProcedure, new { Id = id },commandType: CommandType.StoredProcedure);
+            _logger.Debug("Подключение к базе данных произведено");
+
+            var service = connection.QuerySingle<Service>(_serviceGetByIdProcedure, new { Id = id },commandType: CommandType.StoredProcedure);
+
+            _logger.Debug($"Услуга под id = {id} получена");
+
+            return service;
         }
     }
 }
