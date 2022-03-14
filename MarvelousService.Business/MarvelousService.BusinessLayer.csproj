@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Services\" />
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="NLog" Version="4.7.14" />
+    <PackageReference Include="NLog.Config" Version="4.7.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarvelousService.DataLayer\MarvelousService.DataLayer.csproj" />
+    <ProjectReference Include="..\MarvelousService.DB\MarvelousService.DB.sqlproj" />
   </ItemGroup>
 
 </Project>
