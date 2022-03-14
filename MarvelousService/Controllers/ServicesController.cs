@@ -51,7 +51,7 @@ namespace MarvelousService.API.Controllers
             var serviceToLeadModel = _autoMapper.Map<ServiceToLeadModel>(serviceToLeadInsertRequest);
             //_serviceToLeadService.AddServiceToLead(serviceToLeadModel);
             _logger.Info($"Услуга с id = {serviceToLeadModel.ServiceId} успешно добавлена лиду с id = .");
-            //return StatusCode(StatusCodes.Status201Created, ServiceToLeadResponse);
+            return StatusCode(StatusCodes.Status201Created);
         }
     }
 }

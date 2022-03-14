@@ -20,9 +20,9 @@ builder.Services.AddSwaggerGen(config =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.RegisterMarvelousServiceRepositories();
-builder.Services.RegisterMarvelousServiceServices();
-builder.Services.RegisterMarvelousServiceAutomappers();
+//builder.Services.RegisterMarvelousServiceRepositories();
+//builder.Services.RegisterMarvelousServiceServices();
+//builder.Services.RegisterMarvelousServiceAutomappers();
 
 var app = builder.Build();
 
