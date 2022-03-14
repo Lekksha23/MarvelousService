@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Marvelous.Contracts" Version="1.1.1" />
     <PackageReference Include="NLog" Version="4.7.14" />
     <PackageReference Include="NLog.Config" Version="4.7.14" />
   </ItemGroup>
@@ -15,6 +16,12 @@
   <ItemGroup>
     <ProjectReference Include="..\MarvelousService.DataLayer\MarvelousService.DataLayer.csproj" />
     <ProjectReference Include="..\MarvelousService.DB\MarvelousService.DB.sqlproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="C:\Users\Aleksandr\.nuget\packages\nlog.config\4.7.14\contentFiles\any\any\NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

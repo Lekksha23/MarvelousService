@@ -8,7 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Marvelous.Contracts" Version="1.1.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
+    <PackageReference Include="NLog" Version="4.7.14" />
+    <PackageReference Include="NLog.Config" Version="4.7.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="C:\Users\Aleksandr\.nuget\packages\nlog.config\4.7.14\contentFiles\any\any\NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
