@@ -4,5 +4,5 @@
 	[Name] VARCHAR(50) UNIQUE NOT NULL,
 	[Description] VARCHAR(500) NOT NULL,
 	[OneTimePrice] decimal(10,0) NOT NULL,
-	[IsDelete] BIT NOT NULL DEFAULT 0
+	[IsDeleted] BIT NOT NULL DEFAULT 0
 )

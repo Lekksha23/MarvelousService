@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using MarvelousService.DataLayer.Entities;
-using MarvelousService.DataLayer.Interfaces;
+using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using NLog;
 using System.Data;
@@ -10,10 +10,10 @@ namespace MarvelousService.DataLayer.Repositories
     public class ServiceRepository : IServiceRepository
     {
         private const string _serviceAddProcedure = "dbo.Service_Insert";
-        private const string _serviceGetByLeadIdProcedure = "dbo.Service_SelectByLead";
         private const string _serviceGetByIdProcedure = "dbo.Service_SelectById";
+        private const string _serviseUpdateProcedure = "dbo.Service_Update";
+        private const string _serviceSoftDeletedProcedure = "dbo.Service_SoftDeleted";
         private static Logger _logger;
-
 
         public IDbConnection _connection;
 
@@ -26,47 +26,86 @@ namespace MarvelousService.DataLayer.Repositories
 
         public IDbConnection Connection => new SqlConnection(_connection.ConnectionString);
 
-        public int AddService(Service service)
-        {
 
+        public Service AddService(Service service)
+        {
             _logger.Debug("Подключение к базе данных");
 
             using IDbConnection connection = Connection;
 
             _logger.Debug("Подключение к базе данных произведено");
 
-            var newservice =  connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
+            var newService = connection.QueryFirstOrDefault<Service>(_serviceAddProcedure,
                 new
                 {
                     service.Name,
-                    service.Type,
-                    service.Period,
+                    service.OneTimePrice,
                     service.Description,
-                    service.Price,                  
-                    service.Status,
-                    service.LeadId,
-                    service.TransactionId                   
+                    service.IsDeleted
                 },
-                commandType: CommandType.StoredProcedure
-            );
-            _logger.Debug("");
-            return 
-            
+                commandType: CommandType.StoredProcedure);
+            _logger.Debug("Услуга добавлена в базу данных");
+
+            return newService;
         }
 
-        public List<Service> GetByLeadId(int id)
-        {
-            using IDbConnection connection = Connection;
 
-            return connection.Query<Service>(_serviceGetByLeadIdProcedure,new { LeadId = id },commandType: CommandType.StoredProcedure)
-                .ToList();
-        }
 
         public Service GetServiceById(int id)
         {
+            _logger.Debug("Подключение к базе данных");
+
             using IDbConnection connection = Connection;
 
-            return connection.QuerySingle<Service>(_serviceGetByIdProcedure, new { Id = id },commandType: CommandType.StoredProcedure);
+            _logger.Debug("Подключение к базе данных произведено");
+
+            var listService = connection.QueryFirstOrDefault<Service>(_serviceGetByIdProcedure, 
+                new { Id = id }, 
+                commandType: CommandType.StoredProcedure);
+
+            _logger.Debug("Услуги по Id получены");
+
+            return listService;
+        }
+
+
+        public Service SoftDeletedById(Service service)
+        {
+            _logger.Debug("Подключение к базе данных");
+
+            using IDbConnection connection = Connection;
+
+            _logger.Debug("Подключение к базе данных произведено");
+
+            var newService = connection.QueryFirstOrDefault<Service>(_serviceSoftDeletedProcedure,
+                new{IsDeleted = service.IsDeleted},
+                commandType: CommandType.StoredProcedure);
+
+            _logger.Debug("Услуга сменила статус на удалена в базе данных");
+
+            return newService;
+        }
+
+        public Service UpdateService(Service service)
+        {
+            _logger.Debug("Подключение к базе данных");
+
+            using IDbConnection connection = Connection;
+
+            _logger.Debug("Подключение к базе данных произведено");
+
+            var newService = connection.QueryFirstOrDefault<Service>(_serviseUpdateProcedure,
+                new 
+                {
+                    service.Name,
+                    service.OneTimePrice,
+                    service.Description,
+                },
+                commandType: CommandType.StoredProcedure);
+
+            _logger.Debug("Услуга изменена в базе данных");
+
+            return newService;
         }
     }
 }

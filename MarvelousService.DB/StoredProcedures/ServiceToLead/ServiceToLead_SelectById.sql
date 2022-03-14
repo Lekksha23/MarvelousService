@@ -3,11 +3,9 @@
 as
 begin
     select
-         [Name], 
          [Type],
          [Period],
-         [Price],
-         [Description]
+         [Price]
     from dbo.[ServiceToLead]
     where Id = @Id
 end
