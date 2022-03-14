@@ -18,7 +18,6 @@ namespace MarvelousService.BusinessLayer.Services
             _mapper = mapper;
         }
 
-
         public int AddService(ServiceModel serviceModel)
         {
             var service = _mapper.Map<Service>(serviceModel);
