@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[Service_SelectById]
+﻿CREATE PROCEDURE [dbo].[ServiceToLead_SelectById]
             @Id int
 as
 begin
@@ -8,6 +8,6 @@ begin
          [Period],
          [Price],
          [Description]
-    from dbo.[Service]
+    from dbo.[ServiceToLead]
     where Id = @Id
 end

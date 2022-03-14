@@ -1,12 +1,8 @@
 ﻿CREATE TABLE [dbo].[Service]
 (
-	[Id] INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
-	[Name] int UNIQUE NOT NULL,
-	[Type] int NOT NULL,
-	[Period] int NULL,
-	[Price] decimal(10,0) NOT NULL,
-	[Description] varchar(300) NOT NULL,
-	[Status] int NOT NULL,
-	[LeadId] int NOT NULL,
-	[TransactionId] int NOT NULL
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[Name] VARCHAR(50) UNIQUE NOT NULL,
+	[Description] VARCHAR(300) NULL,
+	[OneTimePrice] decimal(10,0) NOT NULL,
+	[IsDelete] BIT NOT NULL DEFAULT 0
 )
