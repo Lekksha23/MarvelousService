@@ -1,12 +1,9 @@
-﻿namespace MarvelousService.API.Models.Request
+﻿namespace MarvelousService.API.Models
 {
     public class ServiceToLeadInsertRequest
     {
         public int ServiceId { get; set; }
         public int Type { get; set; }
-        public int Period { get; set; }
-        public int Status { get; set; }
-        public int LeadId { get; set; }
-        public int TransactionId { get; set; }
+        public int? Period { get; set; }
     }
 }

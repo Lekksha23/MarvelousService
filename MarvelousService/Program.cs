@@ -1,5 +1,5 @@
+using CRM.APILayer.Infrastructure;
 using MarvelousService.API.Extensions;
-using MarvelousService.APILayer.Infrastructure;
 using MarvelousService.DataLayer.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +27,6 @@ builder.Services.RegisterMarvelousServiceAutomappers();
 var app = builder.Build();
 
 
-
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
@@ -37,7 +36,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<ErrorExceptionMiddleware>();
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.MapControllers();
 

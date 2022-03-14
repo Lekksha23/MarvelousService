@@ -11,6 +11,7 @@
     <PackageReference Include="Marvelous.Contracts" Version="1.1.1" />
     <PackageReference Include="NLog" Version="4.7.14" />
     <PackageReference Include="NLog.Config" Version="4.7.14" />
+    <PackageReference Include="RestSharp" Version="107.3.0" />
   </ItemGroup>
 
   <ItemGroup>
