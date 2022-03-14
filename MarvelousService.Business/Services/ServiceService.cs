@@ -9,11 +9,11 @@ namespace MarvelousService.BusinessLayer.Services
 {
     public class ServiceService : IServiceService
     {
-        private readonly IServiceRepository _serviceRepository;
+        private readonly IServiceToLeadRepository _serviceRepository;
         private readonly IMapper _mapper;
         private readonly Logger _logger;
 
-        public ServiceService(IServiceRepository serviceRepository, IMapper mapper)
+        public ServiceService(IServiceToLeadRepository serviceRepository, IMapper mapper)
         {
             _serviceRepository = serviceRepository;
             _mapper = mapper;
