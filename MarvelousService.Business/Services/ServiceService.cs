@@ -2,24 +2,23 @@
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
-using MarvelousService.DataLayer.Interfaces;
+using MarvelousService.DataLayer.Repositories.Interfaces;
 using NLog;
 
 namespace MarvelousService.BusinessLayer.Services
 {
     public class ServiceService : IServiceService
     {
-        private readonly IServiceToLeadRepository _serviceRepository;
+        private readonly IServiceRepository _serviceRepository;
         private readonly IMapper _mapper;
         private readonly Logger _logger;
 
-        public ServiceService(IServiceToLeadRepository serviceRepository, IMapper mapper)
+        public ServiceService(IServiceRepository serviceRepository, IMapper mapper)
         {
             _serviceRepository = serviceRepository;
             _mapper = mapper;
             _logger = LogManager.GetCurrentClassLogger();
         }
-
 
         public int AddService(ServiceModel serviceModel)
         {
@@ -30,12 +29,12 @@ namespace MarvelousService.BusinessLayer.Services
             return _serviceRepository.AddService(service);
         }
 
-        public List<ServiceModel> GetByLeadId(int id)
+        public List<ServiceModel> GetById(int id)
         {
             
             _logger.Debug("запрос на получение лида по id");
 
-            var lead = _serviceRepository.GetByLeadId(id);
+            var lead = _serviceRepository.GetServiceById(id);
 
             return _mapper.Map<List<ServiceModel>>(lead);
 

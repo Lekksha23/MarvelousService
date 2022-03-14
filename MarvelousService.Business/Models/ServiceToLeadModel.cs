@@ -2,7 +2,7 @@
 
 namespace MarvelousService.BusinessLayer.Models
 {
-    public class ServiceModel : Service
+    public class ServiceToLeadModel : ServiceToLead
     {
 
     }

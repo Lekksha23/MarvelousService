@@ -5,7 +5,7 @@
 	[Period] int NULL,
 	[Price] decimal(10,0) NOT NULL,
 	[Status] int NOT NULL,
+	[ServiceId] int NOT NULL,
 	[LeadId] int NOT NULL,
-    [ServiceId] int NOT NULL,
 	[TransactionId] int NOT NULL
 )
