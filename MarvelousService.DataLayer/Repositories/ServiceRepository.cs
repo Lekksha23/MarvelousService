@@ -66,7 +66,7 @@ namespace MarvelousService.DataLayer.Repositories
         }
 
 
-        public Service SoftDeletedById(Service service)
+        public Service SoftDeleted(Service service)
         {
             _logger.Debug("Подключение к базе данных");
 
@@ -94,9 +94,9 @@ namespace MarvelousService.DataLayer.Repositories
             var newService = connection.QueryFirstOrDefault<Service>(_serviseUpdateProcedure,
                 new 
                 {
-                    service.Name,
-                    service.OneTimePrice,
-                    service.Description,
+                    Name =  service.Name,
+                    OneTimePrice =  service.OneTimePrice,
+                    Description = service.Description,
                 },
                 commandType: CommandType.StoredProcedure);
 
