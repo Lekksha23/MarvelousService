@@ -1,18 +1,17 @@
 ﻿using MarvelousService.DataLayer.Entities;
-using MarvelousService.DataLayer.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarvelousService.DataLayer.Interfaces
+namespace MarvelousService.DataLayer.Repositories.Interfaces
 {
     public interface IServiceRepository
     {
-        public Service GetServiceById(int id);
-        int AddService(Service service);        
-        List<Service> GetByLeadId(int id);
-        
+        Service AddService(Service service);
+        Service SoftDeletedById(Service service);
+        Service UpdateService(Service service);
+        Service GetServiceById(int id);
     }
 }
