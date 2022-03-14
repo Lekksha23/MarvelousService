@@ -8,11 +8,18 @@ namespace CRM.BusinessLayer.Services
     {
         public string GetToken(AuthModel authModel)
         {
-            var client = new RestClient("https://api.marvelous.com");
+            string url = "https://api.marvelous.com";
+            var client = new RestClient(url);
             var request = new RestRequest("/login/", Method.Post);
             request.AddJsonBody(authModel);
-            var response = client.ExecuteAsync(request);
-            return response.ToString();
+            var response = client.PostAsync(request);
+            
+            
+            if (response.Status is TaskStatus.Created)
+            {
+                return response.ToString();
+            }
+            else throw new Exception();
         }
     }
 }

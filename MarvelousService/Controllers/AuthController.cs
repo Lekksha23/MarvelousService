@@ -4,7 +4,7 @@ using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CRM.APILayer.Controllers
 {
@@ -24,7 +24,7 @@ namespace CRM.APILayer.Controllers
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [Description("Authentication")]
+        [SwaggerOperation("Authentication")]
         public ActionResult Login([FromBody] AuthRequest auth)
         {
             var authModel = _autoMapper.Map<AuthModel>(auth);
