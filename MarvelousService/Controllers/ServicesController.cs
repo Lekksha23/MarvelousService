@@ -2,6 +2,7 @@
 using CRM.APILayer.Attribites;
 using Marvelous.Contracts;
 using MarvelousService.API.Models;
+using MarvelousService.API.Models.ExceptionModel;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,8 @@ namespace MarvelousService.API.Controllers
         [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Add new service")]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
         public ActionResult<int> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
         {
             _logger.Info($"Получен запрос на добавление новой услуги.");
