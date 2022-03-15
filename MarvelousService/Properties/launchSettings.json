@@ -48,6 +48,16 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "CRM_CONNECTION_STRING": "Data Source=(local);Initial Catalog=LocalMarvelousService;Integrated Security=True"
       }
+    },
+    "Debug Config Shokhin": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BEAR_CONNECTION_STRING": "Data Source=DESKTOP-5HF0J14\\SQLEXPRESS;Initial Catalog=BGKdb;Integrated Security=True"
+      }
     }
   }
 }

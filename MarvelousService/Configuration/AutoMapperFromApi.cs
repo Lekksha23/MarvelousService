@@ -10,7 +10,7 @@ namespace MarvelousService.API.Configuration
         {
             CreateMap<AuthRequest, AuthModel>();
             CreateMap<ServiceInsertRequest, ServiceModel>();
-            CreateMap<ServiceInsertRequest, ServiceModel>();
+            CreateMap<ServiceToLeadInsertRequest, ServiceToLeadModel>();
         }
     }
 }

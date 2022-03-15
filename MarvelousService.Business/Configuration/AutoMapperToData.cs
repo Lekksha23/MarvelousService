@@ -2,7 +2,7 @@
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.DataLayer.Entities;
 
-namespace CRM.BusinessLayer.Configurations
+namespace MarvelousService.BusinessLayer.Configurations
 {
     public class AutoMapperToData : Profile
     {
