@@ -27,17 +27,17 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.Debug("Подключение к базе данных произведено");
 
-            var newService = connection.QueryFirstOrDefault<Service>(_serviceAddProcedure,
+            var newService = connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
                 new
                 {
-                    service.Name,
-                    service.OneTimePrice,
-                    service.Description,
-                    service.IsDeleted
+                    Name =  service.Name,
+                    OneTimePrice = service.OneTimePrice,
+                    Description = service.Description,
+                    IsDeleted = service.IsDeleted
                 },
                 commandType: CommandType.StoredProcedure);
             _logger.Debug("Услуга добавлена в базу данных");
-            return newService.Id;
+            return newService;
         }
 
         public Service GetServiceById(int id)
@@ -69,7 +69,7 @@ namespace MarvelousService.DataLayer.Repositories
             return newService;
         }
 
-        public Service UpdateService(Service service)
+        public int UpdateService(Service service)
         {
             _logger.Debug("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
@@ -78,14 +78,14 @@ namespace MarvelousService.DataLayer.Repositories
             var newService = connection.QueryFirstOrDefault<Service>(_serviseUpdateProcedure,
                 new 
                 {
-                    Name =  service.Name,
-                    OneTimePrice =  service.OneTimePrice,
-                    Description = service.Description,
+                    service.Name,
+                    service.OneTimePrice,
+                    service.Description,
                 },
                 commandType: CommandType.StoredProcedure);
 
             _logger.Debug("Услуга изменена в базе данных");
-            return newService;
+            return newService.Id;
         }
     }
 }

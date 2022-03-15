@@ -21,11 +21,13 @@ namespace MarvelousService.BusinessLayer.Services
         }
         public int AddService(ServiceModel serviceModel)
         {
-            var service = _mapper.Map<Service>(serviceModel);
-
             _logger.Debug("запрос на добавление услуги");
 
-            return _serviceRepository.AddService(service);
+            var service = _mapper.Map<Service>(serviceModel);
+
+            var newService =  _serviceRepository.AddService(service);
+
+            return newService;
         }
 
         public ServiceModel GetServiceById(int id)
@@ -39,20 +41,24 @@ namespace MarvelousService.BusinessLayer.Services
 
         public int SoftDeleted(ServiceModel serviceModel)
         {
+            _logger.Debug("запрос на удаление услуги");
+
             var service = _mapper.Map<Service>(serviceModel);
 
-            _logger.Debug("запрос на удаление услуги");
+            var newService = _serviceRepository.SoftDeleted(service);
 
             return _serviceRepository.SoftDeleted(service);
         }
 
-        public ServiceModel UpdateService(ServiceModel serviceModel)
+        public int UpdateService(ServiceModel serviceModel)
         {
-            var service = _mapper.Map<Service>(serviceModel);
-
             _logger.Debug("запрос на изменение услуги");
 
-            return (ServiceModel)_serviceRepository.UpdateService(service);
+            var service = _mapper.Map<Service>(serviceModel);
+
+            var newService = _serviceRepository.UpdateService(service);
+
+            return newService;
         }
     }
 }
