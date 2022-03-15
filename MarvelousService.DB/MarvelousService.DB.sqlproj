@@ -75,5 +75,6 @@
     <Build Include="StoredProcedures\Service\Service_SoftDeleted.sql" />
     <Build Include="Tables\TransactionFromService.sql" />
     <Build Include="StoredProcedures\TransactionFromService\TransactionFromService_Insert.sql" />
+    <Build Include="Tables\Period.sql" />
   </ItemGroup>
 </Project>
