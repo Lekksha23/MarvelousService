@@ -32,6 +32,26 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
             };
 
             yield return new object[] { service, expected };
+
+            var service1 = new Service
+            {
+                Id = 30,
+                Name = "ЕНКГЕКГЕКГЕК",
+                Description = "32123132",
+                OneTimePrice = 20000
+            };
+
+
+            var expected1 = new ServiceModel
+            {
+                Id = 30,
+                Name = "ЕНКГЕКГЕКГЕК",
+                Description = "32123132",
+                OneTimePrice = 20000
+            };
+
+            yield return new object[] { service1, expected1 };
+
         }
     }
 }

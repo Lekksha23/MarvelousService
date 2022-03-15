@@ -1,5 +1,5 @@
 using AutoMapper;
-using CRM.BusinessLayer.Configurations;
+using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Tests.TestCaseSource;
@@ -32,7 +32,7 @@ namespace MarvelousService.BusinessLayer.Tests
         {
             var id =  1;
             //given
-            _serviceRepositoryMock.Setup(w => w.GetServiceById(id)).Returns(services);
+            _serviceRepositoryMock.Setup(g => g.GetServiceById(id)).Returns(services);
 
             //when
             var actual = _service.GetServiceById(id);
@@ -43,7 +43,24 @@ namespace MarvelousService.BusinessLayer.Tests
             Assert.AreEqual(actual.Description, expected.Description);
             Assert.AreEqual(actual.OneTimePrice, expected.OneTimePrice);
             
-            _serviceRepositoryMock.Verify(s => s.GetServiceById(id), Times.Once);
+            _serviceRepositoryMock.Verify(g => g.GetServiceById(id), Times.Once);
         }
+
+        [TestCaseSource(typeof(AddServiceTestCaseSourse))]
+        public void AddServiceTest(ServiceModel services, int expected)
+        {
+            //given
+            _serviceRepositoryMock.Setup(a => a.AddService(It.IsAny<Service>())).Returns(expected);
+
+            //when
+            var actual = _service.AddService(services);
+
+            //then
+            _serviceRepositoryMock.Verify(a => a.AddService(It.IsAny<Service>()), Times.Once);
+            Assert.AreEqual(expected, actual);
+
+        }
+
+       
     }
 }

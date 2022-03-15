@@ -11,7 +11,7 @@ namespace MarvelousService.DataLayer.Repositories.Interfaces
     {
         int AddService(Service service);
         Service SoftDeleted(Service service);
-        Service UpdateService(Service service);
+        int UpdateService(Service service);
         Service GetServiceById(int id);
     }
 }
