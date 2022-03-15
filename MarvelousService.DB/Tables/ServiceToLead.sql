@@ -8,4 +8,5 @@
 	[ServiceId] int NOT NULL,
 	[LeadId] int NOT NULL,
 	[TransactionId] int NOT NULL
+	CONSTRAINT [FK_ServiceId_ToService] FOREIGN KEY ([ServiceId]) REFERENCES [dbo].[Service]([Id])
 )

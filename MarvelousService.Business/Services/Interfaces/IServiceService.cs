@@ -7,7 +7,7 @@ namespace MarvelousService.BusinessLayer.Services.Interfaces
     {
         int AddService(ServiceModel serviceModel);
         void SoftDelete(ServiceModel serviceModel);
-        void UpdateService(ServiceModel serviceModel);
+        void UpdateService(int id, ServiceModel serviceModel);
         ServiceModel GetServiceById(int id);
     }
 }

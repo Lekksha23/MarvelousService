@@ -1,5 +1,4 @@
 ﻿CREATE PROCEDURE [dbo].[Service_SoftDelete]
-	@Id int,
 	@IsDeleted bit
 AS
 BEGIN

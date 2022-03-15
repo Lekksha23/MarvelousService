@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
@@ -19,46 +20,46 @@ namespace MarvelousService.BusinessLayer.Services
             _mapper = mapper;
             _logger = LogManager.GetCurrentClassLogger();
         }
+
         public int AddService(ServiceModel serviceModel)
         {
             _logger.Debug("запрос на добавление услуги");
-
             var service = _mapper.Map<Service>(serviceModel);
-
             var newService =  _serviceRepository.AddService(service);
-
             return newService;
         }
 
         public ServiceModel GetServiceById(int id)
         {
             _logger.Debug("запрос на получение услуги по id");
-
-            var lead = _serviceRepository.GetServiceById(id);
-
-            return _mapper.Map<ServiceModel>(lead);
+            var service = _serviceRepository.GetServiceById(id);
+            CheckService(id, service);
+            return _mapper.Map<ServiceModel>(service);
         }
 
         public void SoftDelete(ServiceModel serviceModel)
         {
             _logger.Debug("запрос на удаление услуги");
-
             var service = _mapper.Map<Service>(serviceModel);
-
-            var newService = _serviceRepository.SoftDeleted(service);
-
             _serviceRepository.SoftDelete(service);
         }
 
-        public void UpdateService(ServiceModel serviceModel)
+        public void UpdateService(int id, ServiceModel serviceModel)
         {
-            _logger.Debug("запрос на изменение услуги");
+            _logger.Debug("запрос на изменение услуги по id");
+            var service = _serviceRepository.GetServiceById(id);
+            CheckService(id, service);
+            var mappedService = _mapper.Map<Service>(serviceModel);
+            _serviceRepository.UpdateService(mappedService);
+        }
 
-            var service = _mapper.Map<Service>(serviceModel);
-
-            var newService = _serviceRepository.UpdateService(service);
-
-            _serviceRepository.UpdateService(service);
+        private void CheckService(int id, Service service)
+        {
+            if (service is null || service.IsDeleted == true)
+            {
+                _logger.Error($"Услуга с id = {id} не найдена.");
+                throw new ServiceException($"Услуга с id = {id} не найдена.");
+            }
         }
     }
 }

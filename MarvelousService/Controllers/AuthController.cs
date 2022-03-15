@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace CRM.APILayer.Controllers
+namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/auth")]

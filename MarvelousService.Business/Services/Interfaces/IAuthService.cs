@@ -5,6 +5,7 @@ namespace MarvelousService.BusinessLayer.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<RestResponse> GetToken(AuthModel authModel);
+        Task<string> GetToken(AuthModel authModel);
+        Task<RestResponse> RegistrateLead(LeadModel leadModel);
     }
 }

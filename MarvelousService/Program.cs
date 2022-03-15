@@ -15,6 +15,9 @@ builder.Services.Configure<DbConfiguration>(opt =>
     opt.ConnectionString = connString;
 });
 
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 builder.Services.AddSwaggerGen(config =>
 {
     config.EnableAnnotations();
@@ -38,9 +41,9 @@ builder.Services.AddMvc()
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-//builder.Services.RegisterMarvelousServiceRepositories();
-//builder.Services.RegisterMarvelousServiceServices();
-//builder.Services.RegisterMarvelousServiceAutomappers();
+builder.Services.RegisterMarvelousServiceRepositories();
+builder.Services.RegisterMarvelousServiceServices();
+builder.Services.RegisterMarvelousServiceAutomappers();
 
 var app = builder.Build();
 

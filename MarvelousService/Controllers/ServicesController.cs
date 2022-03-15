@@ -30,7 +30,7 @@ namespace MarvelousService.API.Controllers
 
         //api/services
         [HttpPost]
-        //[AuthorizeRole(Role.Admin)]
+        [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Add new service")]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
