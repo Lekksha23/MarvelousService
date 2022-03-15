@@ -39,7 +39,7 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<ServiceModel>(lead);
         }
 
-        public Service SoftDeleted(ServiceModel serviceModel)
+        public int SoftDeleted(ServiceModel serviceModel)
         {
             _logger.Debug("запрос на удаление услуги");
 
@@ -47,7 +47,7 @@ namespace MarvelousService.BusinessLayer.Services
 
             var newService = _serviceRepository.SoftDeleted(service);
 
-            return newService;
+            return _serviceRepository.SoftDeleted(service);
         }
 
         public int UpdateService(ServiceModel serviceModel)

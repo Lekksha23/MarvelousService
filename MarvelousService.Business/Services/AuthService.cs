@@ -1,25 +1,33 @@
-﻿using RestSharp;
-using MarvelousService.BusinessLayer.Models;
+﻿using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
+using Newtonsoft.Json;
+using RestSharp;
 
-namespace CRM.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Services
 {
     public class AuthService : IAuthService
     {
-        public string GetToken(AuthModel authModel)
+        private const string _url = "https://piter-education.ru:5050";
+        private const string _loginPath = "/login/";
+
+        public Task<RestResponse> GetToken(AuthModel authModel)
         {
-            string url = "https://api.marvelous.com";
-            var client = new RestClient(url);
-            var request = new RestRequest("/login/", Method.Post);
+            var client = new RestClient(_url);
+            var request = new RestRequest(_loginPath, Method.Post);
             request.AddJsonBody(authModel);
             var response = client.PostAsync(request);
-            
-            
-            if (response.Status is TaskStatus.Created)
-            {
-                return response.ToString();
-            }
-            else throw new Exception();
+
+            return response;
+        }
+
+        public Task<RestResponse> RegistrateUser(LeadModel leadModel)
+        {
+            var client = new RestClient(_url);
+            var request = new RestRequest("", Method.Post);
+            request.AddJsonBody(leadModel);
+            var response = client.PostAsync(request);
+
+            return response;
         }
     }
 }
