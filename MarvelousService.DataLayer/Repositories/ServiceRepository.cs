@@ -76,9 +76,9 @@ namespace MarvelousService.DataLayer.Repositories
             var newService = connection.QueryFirstOrDefault<Service>(_serviceUpdateProcedure,
                 new 
                 {
-                    Name =  service.Name,
-                    OneTimePrice =  service.OneTimePrice,
-                    Description = service.Description,
+                    service.Name,
+                    service.OneTimePrice,
+                    service.Description,
                 },
                 commandType: CommandType.StoredProcedure);
 
