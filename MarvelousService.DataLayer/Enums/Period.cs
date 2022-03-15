@@ -2,7 +2,8 @@
 {
     public enum Period : byte
     {
-        Week = 1,
+        OneTime,
+        Week,
         Month,
         Year
     }
