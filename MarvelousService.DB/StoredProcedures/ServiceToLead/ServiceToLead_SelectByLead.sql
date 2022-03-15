@@ -8,8 +8,7 @@ begin
 	     [Price],
 	     [Status],
 		 [LeadId],
-		 [ServiceId],
-		 [TransactionId]
+		 [ServiceId]
 	from dbo.[ServiceToLead]
 	where LeadId = @LeadId
 end

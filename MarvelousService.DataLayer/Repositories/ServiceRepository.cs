@@ -54,7 +54,7 @@ namespace MarvelousService.DataLayer.Repositories
             return listService;
         }
 
-        public Service SoftDeleted(Service service)
+        public void SoftDeleted(int id, Service service)
         {
             _logger.Debug("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
@@ -66,10 +66,9 @@ namespace MarvelousService.DataLayer.Repositories
 
             _logger.Debug("Услуга сменила статус на удалена в базе данных");
 
-            return newService;
         }
 
-        public int UpdateService(Service service)
+        public void UpdateService(Service oldService, Service service)
         {
             _logger.Debug("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
@@ -85,7 +84,7 @@ namespace MarvelousService.DataLayer.Repositories
                 commandType: CommandType.StoredProcedure);
 
             _logger.Debug("Услуга изменена в базе данных");
-            return newService.Id;
+
         }
     }
 }

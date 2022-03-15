@@ -3,7 +3,7 @@
 	@IsDeleted bit
 AS
 BEGIN
-	insert into dbo.[Service]
+	update into dbo.[Service]
 	([IsDeleted])
 	values
 	(@IsDeleted)

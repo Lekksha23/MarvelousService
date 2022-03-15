@@ -7,7 +7,6 @@ begin
 	     [Price],
 	     [Status],
 		 [LeadId],
-		 [ServiceId],
-		 [TransactionId]
+		 [ServiceId]
 	from dbo.[ServiceToLead]
 end

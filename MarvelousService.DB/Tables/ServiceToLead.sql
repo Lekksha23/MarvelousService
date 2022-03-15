@@ -7,5 +7,5 @@
 	[Status] int NOT NULL,
 	[ServiceId] int NOT NULL,
 	[LeadId] int NOT NULL,
-	[TransactionId] int NOT NULL
+	
 )
