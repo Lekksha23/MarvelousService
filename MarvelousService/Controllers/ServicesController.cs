@@ -13,7 +13,6 @@ namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/services")]
-    [AuthorizeRole]
     public class ServicesController : Controller
     {
         private readonly IServiceService _serviceService;

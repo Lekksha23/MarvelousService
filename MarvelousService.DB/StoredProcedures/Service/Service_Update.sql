@@ -12,5 +12,4 @@ BEGIN
 	(@Name,
 	 @Description,
 	 @OneTimePrice)
-	select scope_identity()
 end

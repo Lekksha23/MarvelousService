@@ -34,7 +34,7 @@ namespace MarvelousService.BusinessLayer.Models
                 }
                 else return Price * _yearCoef;
             }
-            private set { }
+            set { }
         }
     }
 }

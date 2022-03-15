@@ -1,11 +1,12 @@
-﻿using System.Net;
+﻿using MarvelousService.BusinessLayer.Exceptions;
+using System.Data.SqlClient;
+using System.Net;
 using System.Text.Json;
 
 namespace MarvelousService.API.Infrastructure
 {
     public class GlobalExceptionHandler
     {
-
         private readonly RequestDelegate _next;
 
         public GlobalExceptionHandler(RequestDelegate next)
@@ -18,6 +19,26 @@ namespace MarvelousService.API.Infrastructure
             try
             {
                 await _next(context);
+            }
+            catch (ServiceException ex)
+            {
+                await ConstructResponse(context, HttpStatusCode.NotFound, ex.Message);
+            }
+            catch (RepositoryException ex)
+            {
+                await ConstructResponse(context, HttpStatusCode.Conflict, ex.Message);
+            }
+            catch (BusinessException ex)
+            {
+                await ConstructResponse(context, HttpStatusCode.Conflict, ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                await ConstructResponse(context, HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (SqlException ex)
+            {
+                await ConstructResponse(context, HttpStatusCode.InternalServerError, ex.Message);
             }
             catch (Exception ex)
             {

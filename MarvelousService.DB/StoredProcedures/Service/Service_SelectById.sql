@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[Servise_SelectById]
+﻿CREATE PROCEDURE [dbo].[Service_SelectById]
 	 @Id int
 AS
 BEGIN

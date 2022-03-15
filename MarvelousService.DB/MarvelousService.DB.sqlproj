@@ -70,7 +70,7 @@
     <Build Include="Tables\Service.sql" />
     <Build Include="StoredProcedures\Service\Service_Insert.sql" />
     <Build Include="StoredProcedures\Service\Service_Update.sql" />
-    <Build Include="StoredProcedures\Service\Servise_SelectById.sql" />
-    <Build Include="StoredProcedures\Service\Service_SoftDeleted.sql" />
+    <Build Include="StoredProcedures\Service\Service_SelectById.sql" />
+    <Build Include="StoredProcedures\Service\Service_SoftDelete.sql" />
   </ItemGroup>
 </Project>

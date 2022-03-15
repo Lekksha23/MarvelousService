@@ -23,9 +23,9 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
         }
 
-        //public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
-        //{
-        //    services.AddAutoMapper(typeof(AutoMapperFromApi), typeof(AutoMapperToData));
-        //}
+        public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(AutoMapperFromApi), typeof(AutoMapperToData));
+        }
     }
 }

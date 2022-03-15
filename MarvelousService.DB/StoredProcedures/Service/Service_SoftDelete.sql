@@ -1,5 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[Service_SoftDeleted]
-	@Id int,
+﻿CREATE PROCEDURE [dbo].[Service_SoftDelete]
 	@IsDeleted bit
 AS
 BEGIN
@@ -7,5 +6,4 @@ BEGIN
 	([IsDeleted])
 	values
 	(@IsDeleted)
-	select scope_identity()
 end
