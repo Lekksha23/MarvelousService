@@ -37,22 +37,22 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<ServiceModel>(lead);
         }
 
-        public int SoftDeleted(ServiceModel serviceModel)
+        public void SoftDelete(ServiceModel serviceModel)
         {
             var service = _mapper.Map<Service>(serviceModel);
 
             _logger.Debug("запрос на удаление услуги");
 
-            return _serviceRepository.SoftDeleted(service);
+            _serviceRepository.SoftDelete(service);
         }
 
-        public ServiceModel UpdateService(ServiceModel serviceModel)
+        public void UpdateService(ServiceModel serviceModel)
         {
             var service = _mapper.Map<Service>(serviceModel);
 
             _logger.Debug("запрос на изменение услуги");
 
-            return (ServiceModel)_serviceRepository.UpdateService(service);
+            _serviceRepository.UpdateService(service);
         }
     }
 }

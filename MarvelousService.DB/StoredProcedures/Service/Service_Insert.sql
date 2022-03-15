@@ -1,19 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[Service_Insert] 
-	@Name varchar,
-	@Description varchar,
-	@OneTimePrice decimal,
-	@IsDeleted bit
+	@Name varchar (50),
+	@Description varchar (500),
+	@OneTimePrice decimal (10, 0)
 AS
 BEGIN
 	insert into dbo.[Service]
 	([Name],
 	 [Description],
-	 [OneTimePrice],
-	 [IsDeleted])
+	 [OneTimePrice])
 	values
 	(@Name,
 	 @Description,
-	 @OneTimePrice,
-	 @IsDeleted)
+	 @OneTimePrice)
 	select scope_identity()
 end

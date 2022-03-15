@@ -12,8 +12,8 @@ namespace MarvelousService.DataLayer.Repositories
     {
         private const string _serviceAddProcedure = "dbo.Service_Insert";
         private const string _serviceGetByIdProcedure = "dbo.Service_SelectById";
-        private const string _serviseUpdateProcedure = "dbo.Service_Update";
-        private const string _serviceSoftDeletedProcedure = "dbo.Service_SoftDeleted";
+        private const string _serviceUpdateProcedure = "dbo.Service_Update";
+        private const string _serviceSoftDeleteProcedure = "dbo.Service_SoftDelete";
         private static Logger _logger;
 
         public ServiceRepository(IOptions<DbConfiguration> options) : base(options)
@@ -27,17 +27,17 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.Debug("Подключение к базе данных произведено");
 
-            var newService = connection.QueryFirstOrDefault<Service>(_serviceAddProcedure,
+            var id = connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
                 new
                 {
                     service.Name,
                     service.OneTimePrice,
-                    service.Description,
-                    service.IsDeleted
+                    service.Description
                 },
                 commandType: CommandType.StoredProcedure);
+
             _logger.Debug("Услуга добавлена в базу данных");
-            return newService.Id;
+            return id;
         }
 
         public Service GetServiceById(int id)
@@ -54,28 +54,26 @@ namespace MarvelousService.DataLayer.Repositories
             return listService;
         }
 
-        public Service SoftDeleted(Service service)
+        public void SoftDelete(Service service)
         {
             _logger.Debug("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
             _logger.Debug("Подключение к базе данных произведено");
 
-            var newService = connection.QueryFirstOrDefault<Service>(_serviceSoftDeletedProcedure,
+            var newService = connection.QueryFirstOrDefault<Service>(_serviceSoftDeleteProcedure,
                 new{IsDeleted = service.IsDeleted},
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Debug("Услуга сменила статус на удалена в базе данных");
-
-            return newService;
+            _logger.Debug("Услуга сменила статус на 'Удалена' в базе данных");
         }
 
-        public Service UpdateService(Service service)
+        public void UpdateService(Service service)
         {
             _logger.Debug("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
             _logger.Debug("Подключение к базе данных произведено");
 
-            var newService = connection.QueryFirstOrDefault<Service>(_serviseUpdateProcedure,
+            var newService = connection.QueryFirstOrDefault<Service>(_serviceUpdateProcedure,
                 new 
                 {
                     Name =  service.Name,
@@ -85,7 +83,6 @@ namespace MarvelousService.DataLayer.Repositories
                 commandType: CommandType.StoredProcedure);
 
             _logger.Debug("Услуга изменена в базе данных");
-            return newService;
         }
     }
 }
