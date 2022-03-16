@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
@@ -23,7 +22,7 @@ namespace MarvelousService.BusinessLayer.Services
 
         public int AddService(ServiceModel serviceModel)
         {
-            _logger.Debug("запрос на добавление услуги");
+            _logger.Info("запрос на добавление услуги");
             var service = _mapper.Map<Service>(serviceModel);
             var newService =  _serviceRepository.AddService(service);
             return newService;
@@ -33,34 +32,22 @@ namespace MarvelousService.BusinessLayer.Services
         {
             _logger.Debug("запрос на получение услуги по id");
             var service = _serviceRepository.GetServiceById(id);
-            CheckService(id, service);
             return _mapper.Map<ServiceModel>(service);
         }
 
         public void SoftDeleted(int id, ServiceModel serviceModel)
         {
             _logger.Debug("запрос на удаление услуги");
-         
-
             var service = _mapper.Map<Service>(serviceModel);
-            _serviceRepository.SoftDelete(service);
-        
-
-
-             _serviceRepository.SoftDeleted(id, service);
-
+            _serviceRepository.SoftDeleted(id, service);
         }
 
         public void UpdateService(int id, ServiceModel serviceModel)
         {
             _logger.Debug("запрос на изменение услуги");
-
             var oldService = _serviceRepository.GetServiceById(id);
-
             var service = _mapper.Map<Service>(serviceModel);
-
             _serviceRepository.UpdateService(oldService, service);
-         
         }
     }
 }

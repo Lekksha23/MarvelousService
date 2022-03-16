@@ -1,6 +1,4 @@
-﻿using MarvelousService.DataLayer.Entities;
-
-namespace MarvelousService.BusinessLayer.Models
+﻿namespace MarvelousService.BusinessLayer.Models
 {
     public class ServiceModel
     {

@@ -3,7 +3,7 @@ as
 begin
 	select
 	     sl.[Id],
-		 sl.[Period],
+		 sl.[PeriodId],
 	     sl.[Price],
 	     sl.[Status],
 		 sl.[LeadId],

@@ -21,7 +21,7 @@ namespace MarvelousService.DataLayer.Repositories
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public int AddPeriod(Period period)
+        public int AddPeriod(ServicePeriod period)
         {
             _logger.Debug("Подключение к базе данных");
 
@@ -30,7 +30,7 @@ namespace MarvelousService.DataLayer.Repositories
             _logger.Debug("Подключение к базе данных произведено");
 
             var newPeriod = connection.QueryFirstOrDefault<int>(_periodProcedure,
-                new{period.Season},
+                new{period.Period},
                 commandType: CommandType.StoredProcedure);
 
             _logger.Debug("Периуд добавлена в базу данных");
