@@ -1,6 +1,11 @@
-﻿CREATE PROCEDURE [dbo].[ServicePeriod_SelectById]
-	@param1 int = 0,
-	@param2 int
-AS
-	SELECT @param1, @param2
-RETURN 0
+﻿create procedure [dbo].[ServicePeriod_SelectById]
+        @Id int,
+	    @Period varchar (20)
+as
+begin
+    select
+        [Id],
+        [Period]
+    from dbo.[ServicePeriod]
+	where Id = @Id
+end

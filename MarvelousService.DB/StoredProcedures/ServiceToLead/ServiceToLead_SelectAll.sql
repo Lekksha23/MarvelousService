@@ -3,7 +3,7 @@ as
 begin
 	select
 	     sl.[Id],
-		 sl.[PeriodId],
+		 sl.[ServicePeriodId],
 	     sl.[Price],
 	     sl.[Status],
 		 sl.[LeadId],
@@ -12,6 +12,10 @@ begin
 		 s.[Name],
 		 s.[Type],
 		 s.[Description],
-		 s.[Price]
-	from dbo.[ServiceToLead] sl inner join dbo.[Service] s ON sl.ServiceId = s.Id
+		 s.[Price],
+		 p.[Id],
+		 p.[Period]
+	from dbo.[ServiceToLead] sl 
+	inner join dbo.[Service] s ON sl.ServiceId = s.Id
+	inner join dbo.[ServicePeriod] p ON sl.ServicePeriodId = p.Id
 end
