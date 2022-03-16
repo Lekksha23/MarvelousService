@@ -14,7 +14,6 @@ namespace MarvelousService.DataLayer.Repositories
         private const string _serviceGetByIdProcedure = "dbo.Service_SelectById";
         private const string _serviceUpdateProcedure = "dbo.Service_Update";
         private const string _serviceSoftDeleteProcedure = "dbo.Service_SoftDelete";
-        private const string _periodProcedure = "dbo.ServicePeriod_Insert";
         private static Logger _logger;
 
         public ServiceRepository(IOptions<DbConfiguration> options) : base(options)
@@ -22,22 +21,6 @@ namespace MarvelousService.DataLayer.Repositories
             _logger = LogManager.GetCurrentClassLogger();
         }
 
-        public int AddPeriod(ServicePeriod period)
-        {
-            _logger.Debug("Подключение к базе данных");
-
-            using IDbConnection connection = ProvideConnection();
-
-            _logger.Debug("Подключение к базе данных произведено");
-
-            var newPeriod = connection.QueryFirstOrDefault<int>(_periodProcedure,
-                new { period.Period },
-                commandType: CommandType.StoredProcedure);
-
-            _logger.Debug("Периуд добавлена в базу данных");
-
-            return newPeriod;
-        }
 
         public int AddService(Service service)
         {
@@ -86,7 +69,7 @@ namespace MarvelousService.DataLayer.Repositories
 
         }
 
-        public void UpdateService(Service oldService, Service service)
+        public void UpdateService(int id, Service service)
         {
             _logger.Debug("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();

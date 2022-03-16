@@ -4,7 +4,7 @@ as
 begin
 	select
 	     sl.[Id],
-		 sl.[PeriodId],
+		 sl.[Period],
 	     sl.[Price],
 	     sl.[Status],
 		 sl.[LeadId],
