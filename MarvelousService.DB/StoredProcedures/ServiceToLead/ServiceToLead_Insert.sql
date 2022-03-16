@@ -4,25 +4,21 @@
 	@Price decimal,
 	@Status int,
 	@LeadId int,
-	@ServiceId int,
-	@TransactionId int
+	@ServiceId int
 as
 begin
 	insert into dbo.[ServiceToLead]
 		([Type],
-		 [Period],
 	     [Price],
 	     [Status],
 		 [LeadId],
-		 [ServiceId],
-		 [TransactionId])
+		 [ServiceId])
 	values
 		(@Type,
 		 @Period,
 		 @Price,
 		 @Status,
 		 @LeadId,
-		 @ServiceId,
-		 @TransactionId)
+		 @ServiceId)
 	select scope_identity()
 end

@@ -3,11 +3,9 @@ as
 begin
 	select
 		 [Type],
-		 [Period],
 	     [Price],
 	     [Status],
 		 [LeadId],
-		 [ServiceId],
-		 [TransactionId]
+		 [ServiceId]
 	from dbo.[ServiceToLead]
 end

@@ -60,6 +60,8 @@
     <Folder Include="Tables" />
     <Folder Include="StoredProcedures\ServiceToLead" />
     <Folder Include="StoredProcedures\Service" />
+    <Folder Include="StoredProcedures\TransactionFromService" />
+    <Folder Include="StoredProcedures\Period" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ServiceToLead.sql" />
@@ -70,7 +72,11 @@
     <Build Include="Tables\Service.sql" />
     <Build Include="StoredProcedures\Service\Service_Insert.sql" />
     <Build Include="StoredProcedures\Service\Service_Update.sql" />
-    <Build Include="StoredProcedures\Service\Service_SelectById.sql" />
-    <Build Include="StoredProcedures\Service\Service_SoftDelete.sql" />
+    <Build Include="StoredProcedures\Service\Servise_SelectById.sql" />
+    <Build Include="StoredProcedures\Service\Service_SoftDeleted.sql" />
+    <Build Include="Tables\TransactionFromService.sql" />
+    <Build Include="StoredProcedures\TransactionFromService\TransactionFromService_Insert.sql" />
+    <Build Include="Tables\Period.sql" />
+    <Build Include="StoredProcedures\Period\Period_Insert.sql" />
   </ItemGroup>
 </Project>

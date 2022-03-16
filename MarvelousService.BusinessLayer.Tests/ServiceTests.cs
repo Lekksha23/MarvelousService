@@ -60,6 +60,25 @@ namespace MarvelousService.BusinessLayer.Tests
 
         }
 
-       
+        [TestCaseSource(typeof(UpdateServiceTestCaseSourse))]
+        public void UpdateServiceTest(ServiceModel services, ServiceModel updateService , ServiceModel expected)
+        {
+            //given
+            _serviceRepositoryMock.Setup(a => a.AddService(It.IsAny<Service>())).Returns(expected.Id);
+
+            var newService = _service.AddService(services);
+
+            //when
+            _service.UpdateService(updateService.Id, updateService);
+
+            var actual = _service.GetServiceById(newService);
+            //then
+
+            _serviceRepositoryMock.Verify(a => a.AddService(It.IsAny<Service>()), Times.Once);
+            Assert.AreEqual(expected, actual);
+
+        }
+
+
     }
 }
