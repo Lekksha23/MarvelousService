@@ -2,7 +2,6 @@
 as
 begin
 	select
-		 [Type],
 		 [Period],
 	     [Price],
 	     [Status],

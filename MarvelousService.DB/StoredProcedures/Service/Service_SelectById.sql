@@ -5,7 +5,7 @@ BEGIN
 	SELECT 
 	 [Name],
 	 [Description],
-	 [OneTimePrice]
+	 [Price]
 	FROM dbo.[Service]
 	WHERE Id = @Id
 END

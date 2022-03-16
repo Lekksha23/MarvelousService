@@ -1,15 +1,15 @@
 ﻿CREATE PROCEDURE [dbo].[Service_Update]
 	@Name varchar,
 	@Description varchar,
-	@OneTimePrice decimal
+	@Price decimal
 AS
 BEGIN
 	insert into dbo.[Service]
 	([Name],
 	 [Description],
-	 [OneTimePrice])
+	 [Price])
 	values
 	(@Name,
 	 @Description,
-	 @OneTimePrice)
+	 @Price)
 end
