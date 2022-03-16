@@ -7,13 +7,13 @@ using NLog;
 
 namespace MarvelousService.BusinessLayer.Services
 {
-    public class ServiceService : IServiceService
+    public class ServiceToService : IServiceToService
     {
         private readonly IServiceRepository _serviceRepository;
         private readonly IMapper _mapper;
         private readonly Logger _logger;
 
-        public ServiceService(IServiceRepository serviceRepository, IMapper mapper)
+        public ServiceToService(IServiceRepository serviceRepository, IMapper mapper)
         {
             _serviceRepository = serviceRepository;
             _mapper = mapper;

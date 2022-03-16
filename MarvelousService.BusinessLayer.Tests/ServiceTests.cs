@@ -13,7 +13,7 @@ namespace MarvelousService.BusinessLayer.Tests
 {
     public class ServiceTests
     {
-        private ServiceService _service;
+        private ServiceToService _service;
         private Mock<IServiceRepository> _serviceRepositoryMock;
         private ServiceRepository _serviceRepository;
         private IMapper _mapper;
@@ -23,7 +23,7 @@ namespace MarvelousService.BusinessLayer.Tests
         {
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _serviceRepositoryMock = new Mock<IServiceRepository>();
-            _service = new ServiceService(_serviceRepositoryMock.Object, _mapper);
+            _service = new ServiceToService(_serviceRepositoryMock.Object, _mapper);
         }
 
         [TestCaseSource(typeof(GetServiceByIdTestCaseSource))]

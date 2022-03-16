@@ -3,7 +3,7 @@ using MarvelousService.DataLayer.Entities;
 
 namespace MarvelousService.BusinessLayer.Services.Interfaces
 {
-    public interface IServiceService
+    public interface IServiceToService
     {
         int AddService(ServiceModel serviceModel);
         void SoftDeleted(int id, ServiceModel serviceModel);
