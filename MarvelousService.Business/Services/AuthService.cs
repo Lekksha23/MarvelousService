@@ -1,6 +1,5 @@
 ﻿using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
-using Newtonsoft.Json;
 using RestSharp;
 
 namespace MarvelousService.BusinessLayer.Services

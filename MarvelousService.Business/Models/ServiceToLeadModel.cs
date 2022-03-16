@@ -1,5 +1,4 @@
-﻿using MarvelousService.DataLayer.Entities;
-using MarvelousService.DataLayer.Enums;
+﻿using MarvelousService.DataLayer.Enums;
 
 namespace MarvelousService.BusinessLayer.Models
 {
