@@ -4,7 +4,6 @@ as
 begin
     select
          [Type],
-         [Period],
          [Price]
     from dbo.[ServiceToLead]
     where Id = @Id

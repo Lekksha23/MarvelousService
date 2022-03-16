@@ -4,7 +4,7 @@
 	@OneTimePrice decimal
 AS
 BEGIN
-	update into dbo.[Service]
+	 into dbo.[Service]
 	([Name],
 	 [Description],
 	 [OneTimePrice])

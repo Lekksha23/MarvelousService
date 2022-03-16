@@ -44,7 +44,7 @@ namespace MarvelousService.BusinessLayer.Services
 
             var service = _mapper.Map<Service>(serviceModel);
             _serviceRepository.SoftDelete(service);
-        }
+        
 
 
              _serviceRepository.SoftDeleted(id, service);
