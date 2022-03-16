@@ -1,10 +1,4 @@
 ﻿using MarvelousService.DataLayer.Entities;
-using MarvelousService.DataLayer.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelousService.DataLayer.Interfaces
 {
@@ -14,6 +8,5 @@ namespace MarvelousService.DataLayer.Interfaces
         int AddServiceToLead(ServiceToLead service);
         int AddPeriod(Period period);
         List<ServiceToLead> GetByLeadId(int id);
-        
     }
 }

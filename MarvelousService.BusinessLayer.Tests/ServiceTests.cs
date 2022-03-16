@@ -8,7 +8,6 @@ using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace MarvelousService.BusinessLayer.Tests
 {

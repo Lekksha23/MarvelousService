@@ -35,7 +35,7 @@
       "applicationUrl": "https://localhost:7294;http://localhost:5294",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "CRM_CONNECTION_STRING": "Data Source=80.78.240.16;Initial Catalog=MarvelousService.Db;Persist Security Info=True;User ID=student;Password=qwe!23"
+        "SERVICE_CONNECTION_STRING": "Data Source=80.78.240.16;Initial Catalog=MarvelousService.DB;Persist Security Info=True;User ID=student;Password=qwe!23"
       }
     },
     "Local": {
@@ -46,7 +46,7 @@
       "applicationUrl": "https://localhost:7294;http://localhost:5294",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "CRM_CONNECTION_STRING": "Data Source=(local);Initial Catalog=LocalMarvelousService;Integrated Security=True"
+        "SERVICE_CONNECTION_STRING": "Data Source=(local);Initial Catalog=MarvelousService.DB;Integrated Security=True"
       }
     },
     "Debug Config Shokhin": {
@@ -56,7 +56,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "BEAR_CONNECTION_STRING": "Data Source=DESKTOP-5HF0J14\\SQLEXPRESS;Initial Catalog=BGKdb;Integrated Security=True"
+        "SERVICE_CONNECTION_STRING": "Data Source=DESKTOP-5HF0J14\\SQLEXPRESS;Initial Catalog=MarvelousService.DB;Integrated Security=True"
       }
     }
   }

@@ -1,6 +1,6 @@
 ﻿namespace MarvelousService.DataLayer.Enums
 {
-    public enum Status 
+    public enum Status
     {
         Paid = 1,
         Suspended
