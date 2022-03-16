@@ -13,29 +13,11 @@ namespace MarvelousService.DataLayer.Repositories
         private const string _serviceAddProcedure = "dbo.ServiceToLead_Insert";
         private const string _serviceGetByLeadIdProcedure = "dbo.ServiceToLead_SelectByLead";
         private const string _serviceGetByIdProcedure = "dbo.ServiceToLead_SelectById";
-        private const string _periodProcedure = "dbo.Period_Insert";
         private static Logger _logger;
 
         public ServiceToLeadRepository(IOptions<DbConfiguration> options) : base(options)
         {
             _logger = LogManager.GetCurrentClassLogger();
-        }
-
-        public int AddPeriod(Period period)
-        {
-            _logger.Debug("Подключение к базе данных");
-
-            using IDbConnection connection = ProvideConnection();
-
-            _logger.Debug("Подключение к базе данных произведено");
-
-            var newPeriod = connection.QueryFirstOrDefault<int>(_periodProcedure,
-                new{period.Season},
-                commandType: CommandType.StoredProcedure);
-
-            _logger.Debug("Периуд добавлена в базу данных");
-
-            return newPeriod;
         }
 
         public int AddServiceToLead(ServiceToLead serviceToLead)

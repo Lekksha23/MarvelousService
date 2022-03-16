@@ -3,11 +3,17 @@
 as
 begin
 	select
-		 [Type],
-	     [Price],
-	     [Status],
-		 [LeadId],
-		 [ServiceId]
-	from dbo.[ServiceToLead]
+	     sl.[Id],
+		 sl.[PeriodId],
+	     sl.[Price],
+	     sl.[Status],
+		 sl.[LeadId],
+		 sl.[ServiceId],
+		 s.[Id],
+		 s.[Name],
+		 s.[Type],
+		 s.[Description],
+		 s.[Price]
+    from dbo.[ServiceToLead] sl inner join dbo.[Service] s ON sl.ServiceId = s.Id
 	where LeadId = @LeadId
 end

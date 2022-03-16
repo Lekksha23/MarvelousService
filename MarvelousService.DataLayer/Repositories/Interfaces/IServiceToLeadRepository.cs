@@ -6,7 +6,6 @@ namespace MarvelousService.DataLayer.Interfaces
     {
         public ServiceToLead GetServiceToLeadById(int id);
         int AddServiceToLead(ServiceToLead service);
-        int AddPeriod(Period period);
         List<ServiceToLead> GetByLeadId(int id);
     }
 }
