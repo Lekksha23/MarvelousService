@@ -1,15 +1,16 @@
-﻿CREATE PROCEDURE [dbo].[Service_Update]
-	@Name varchar,
-	@Description varchar,
-	@Price decimal
-AS
-BEGIN
-	insert into dbo.[Service]
-	([Name],
-	 [Description],
-	 [Price])
-	values
-	(@Name,
-	 @Description,
-	 @Price)
+﻿create procedure [dbo].[Service_Update]
+	@Id int,
+	@Name varchar (50),
+	@Type int,
+	@Description varchar (500),
+	@Price decimal (10, 0)
+as
+begin
+	update dbo.[Service]
+	set
+		[Name] = @Name,
+		[Type] = @Type,
+		[Description] = @Description,
+		[Price] = @Price
+	where Id = @Id
 end

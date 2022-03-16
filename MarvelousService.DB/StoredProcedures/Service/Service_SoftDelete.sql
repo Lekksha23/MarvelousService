@@ -1,9 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[Service_SoftDelete]
+﻿create procedure [dbo].[Service_SoftDelete]
+	@Id int,
 	@IsDeleted bit
-AS
-BEGIN
-	insert into dbo.[Service]
-	([IsDeleted])
-	values
-	(@IsDeleted)
+as
+begin
+	update [dbo].[Service]
+	set
+		[IsDeleted] = @IsDeleted
+	where Id = @Id
 end

@@ -1,4 +1,4 @@
-﻿create procedure [dbo].[Service_SelectById]
+﻿create procedure [dbo].[Transaction_SelectById]
 	 @Id int
 as
 begin
