@@ -8,12 +8,20 @@ using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 
 string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
+string _logDirectoryVariableName = "LOG_DIRECTORY";
+
 string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);
+string logDirectory = builder.Configuration.GetValue<string>(_logDirectoryVariableName);
 
 builder.Services.Configure<DbConfiguration>(opt =>
 {
     opt.ConnectionString = connString;
 });
+
+var config = new ConfigurationBuilder()
+           .SetBasePath(logDirectory)
+           .AddXmlFile("NLog.config", optional: true, reloadOnChange: true)
+           .Build();
 
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
