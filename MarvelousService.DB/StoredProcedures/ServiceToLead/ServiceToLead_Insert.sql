@@ -7,6 +7,7 @@
 as
 begin
 	insert into dbo.[ServiceToLead]
+		([Type],
 		([Period],
 	     [Price],
 	     [Status],

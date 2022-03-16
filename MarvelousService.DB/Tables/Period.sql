@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[Period]
+(
+	[Id] INT NOT NULL PRIMARY KEY,
+	[Season] VARCHAR(20) NOT NULL,
+)
