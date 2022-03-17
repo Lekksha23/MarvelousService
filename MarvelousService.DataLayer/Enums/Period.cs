@@ -2,7 +2,8 @@
 {
     public enum Period
     {
-        Week  = 1,
+        OneTime = 1,
+        Week,
         Month,
         Year
     }

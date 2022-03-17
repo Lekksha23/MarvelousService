@@ -22,14 +22,13 @@ namespace MarvelousService.DataLayer.Repositories
 
         public int AddServiceToLead(ServiceToLead serviceToLead)
         {
-            _logger.Debug("Подключение к базе данных");
+            _logger.Info("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
-            _logger.Debug("Подключение к базе данных произведено");
+            _logger.Info("Подключение к базе данных произведено");
 
             var newServiceToLead =  connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
                 new
                 {
-                    serviceToLead.Type,
                     serviceToLead.Period,
                     serviceToLead.Price,
                     serviceToLead.Status,
@@ -38,32 +37,32 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Debug("Услуга добавлена в базу данных");
+            _logger.Info("Услуга добавлена в базу данных");
             return newServiceToLead;
         }
 
         public List<ServiceToLead> GetByLeadId(int id)
         {
-            _logger.Debug("Подключение к базе данных");
+            _logger.Info("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
-            _logger.Debug("Подключение к базе данных произведено");
+            _logger.Info("Подключение к базе данных произведено");
 
             var listServiceToLead =  connection.Query<ServiceToLead>(_serviceGetByLeadIdProcedure,new { LeadId = id },commandType: CommandType.StoredProcedure)
                 .ToList();
 
-            _logger.Debug("Услуги по LeadId получены");
+            _logger.Info("Услуги по LeadId получены");
             return listServiceToLead;
         }
 
         public ServiceToLead GetServiceToLeadById(int id)
         {
-            _logger.Debug("Подключение к базе данных");
+            _logger.Info("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
-            _logger.Debug("Подключение к базе данных произведено");
+            _logger.Info("Подключение к базе данных произведено");
 
             var service = connection.QuerySingle<ServiceToLead>(_serviceGetByIdProcedure, new { Id = id },commandType: CommandType.StoredProcedure);
 
-            _logger.Debug($"Услуга под id = {id} получена");
+            _logger.Info($"Услуга под id = {id} получена");
             return service;
         }
     }

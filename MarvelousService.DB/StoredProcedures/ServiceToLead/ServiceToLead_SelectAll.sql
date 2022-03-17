@@ -7,7 +7,6 @@ begin
 	     sl.[Price],
 	     sl.[Status],
 		 sl.[LeadId],
-		 sl.[ServiceId],
 		 s.[Id],
 		 s.[Name],
 		 s.[Type],
