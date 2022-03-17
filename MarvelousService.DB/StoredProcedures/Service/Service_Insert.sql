@@ -1,7 +1,7 @@
 ﻿create procedure [dbo].[Service_Insert] 
 	@Name varchar (50),
 	@Type int,
-	@Description varchar (500),
+	@Description varchar (1000),
 	@Price decimal (10, 0)
 as
 begin

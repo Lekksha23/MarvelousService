@@ -6,6 +6,7 @@ begin
 	 [Name],
      [Type],
      [Description],
-     [Price]
+     [Price],
+	 [IsDeleted]
 	from dbo.[Service]
 end

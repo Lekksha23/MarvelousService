@@ -47,15 +47,15 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.Info("Подключение к базе данных произведено");
 
-            var listService = connection.QueryFirstOrDefault<Service>(_serviceGetByIdProcedure, 
+            var service = connection.QueryFirstOrDefault<Service>(_serviceGetByIdProcedure, 
                 new { Id = id }, 
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Info("Услуги по Id получены");
-            return listService;
+            _logger.Info("Услуга по Id получены");
+            return service;
         }
 
-        public void SoftDeleted(int id, Service service)
+        public void SoftDelete(int id, Service service)
         {
             _logger.Info("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
@@ -65,7 +65,7 @@ namespace MarvelousService.DataLayer.Repositories
                 new{IsDeleted = service.IsDeleted},
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Info("Услуга сменила статус на удалена в базе данных");
+            _logger.Info("Услуга сменила статус на 'Удалена' в базе данных");
 
         }
 
@@ -75,7 +75,7 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.Info("Подключение к базе данных произведено");
 
-            var newService = connection.QueryFirstOrDefault<Service>(_serviceUpdateProcedure,
+            connection.QueryFirstOrDefault(_serviceUpdateProcedure,
                 new 
                 {
                     service.Name,
