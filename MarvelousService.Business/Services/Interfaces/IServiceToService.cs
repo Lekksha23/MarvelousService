@@ -1,5 +1,4 @@
 ﻿using MarvelousService.BusinessLayer.Models;
-using MarvelousService.DataLayer.Entities;
 
 namespace MarvelousService.BusinessLayer.Services.Interfaces
 {

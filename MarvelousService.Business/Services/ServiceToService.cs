@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
@@ -30,24 +31,52 @@ namespace MarvelousService.BusinessLayer.Services
 
         public ServiceModel GetServiceById(int id)
         {
-            _logger.Debug("запрос на получение услуги по id");
+            _logger.Info("запрос на получение услуги по id");
+           
             var service = _serviceRepository.GetServiceById(id);
+
+            if (service == null)
+            {
+                _logger.Error("Ошибка в получении услуги по Id ");
+
+                throw new NotFoundServiceException("Такой услуги не существует.");
+            }
+
             return _mapper.Map<ServiceModel>(service);
         }
 
         public void SoftDeleted(int id, ServiceModel serviceModel)
         {
-            _logger.Debug("запрос на удаление услуги");
+            _logger.Info("запрос на удаление услуги");
+
+            var oldService = _serviceRepository.GetServiceById(id);
+
+            if (oldService == null)
+            {
+                _logger.Error("Ошибка в получении услуги по Id ");
+
+                throw new NotFoundServiceException("Такой услуги не существует.");
+            }
+
             var service = _mapper.Map<Service>(serviceModel);
             _serviceRepository.SoftDeleted(id, service);
         }
 
         public void UpdateService(int id, ServiceModel serviceModel)
         {
-            _logger.Debug("запрос на изменение услуги");
+            _logger.Info("запрос на изменение услуги");
+
             var oldService = _serviceRepository.GetServiceById(id);
+
+            if (oldService == null)
+            {
+                _logger.Error("Ошибка в получении услуги по Id ");
+
+                throw new NotFoundServiceException("Такой услуги не существует.");
+            }
+
             var service = _mapper.Map<Service>(serviceModel);
-            _serviceRepository.UpdateService(oldService, service);
+            _serviceRepository.UpdateService(id, service);
         }
     }
 }

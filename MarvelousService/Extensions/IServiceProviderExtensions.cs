@@ -5,6 +5,7 @@ using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
+using NLog.Extensions.Logging;
 
 namespace MarvelousService.API.Extensions
 {
@@ -26,6 +27,17 @@ namespace MarvelousService.API.Extensions
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(AutoMapperFromApi), typeof(AutoMapperToData));
+        }
+
+        public static void RegisterLogger(this IServiceCollection service, IConfiguration config)
+        {
+            service.Configure<ConsoleLifetimeOptions>(opts => opts.SuppressStatusMessages = true);
+            service.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.SetMinimumLevel(LogLevel.Information);
+                loggingBuilder.AddNLog(config);
+            });
         }
     }
 }

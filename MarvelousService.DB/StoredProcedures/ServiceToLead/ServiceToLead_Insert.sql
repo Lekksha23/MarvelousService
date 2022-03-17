@@ -1,5 +1,5 @@
 ﻿create procedure [dbo].[ServiceToLead_Insert]
-	@PeriodId int,
+	@Period int,
 	@Price decimal,
 	@Status int,
 	@LeadId int,
@@ -7,13 +7,13 @@
 as
 begin
 	insert into dbo.[ServiceToLead]
-		([ServicePeriodId],
+		([Period],
 	     [Price],
 	     [Status],
 		 [LeadId],
 		 [ServiceId])
 	values
-		(@PeriodId,
+		(@Period,
 		 @Price,
 		 @Status,
 		 @LeadId,

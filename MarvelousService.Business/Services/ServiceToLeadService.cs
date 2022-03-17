@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
@@ -22,19 +23,28 @@ namespace MarvelousService.BusinessLayer.Services
 
         public int AddServiceToLead(ServiceToLeadModel serviceToLeadModel)
         {
+
             var service = _mapper.Map<ServiceToLead>(serviceToLeadModel);
 
-            _logger.Debug("запрос на добавление услуги");
+            _logger.Info("запрос на добавление услуги");
 
             return _serviceToLeadRepository.AddServiceToLead(service);
         }
 
         public List<ServiceToLeadModel> GetLeadById(int id)
         {
-            
-            _logger.Debug("запрос на получение лида по id");
+                
+            _logger.Info("запрос на получение лида по id");
 
             var lead = _serviceToLeadRepository.GetByLeadId(id);
+
+            if (lead == null)
+            {
+                _logger.Error("Ошибка в получении лида по Id ");
+
+                throw new NotFoundServiceException("Такого  лида не существует.");
+            }
+                
 
             return _mapper.Map<List<ServiceToLeadModel>>(lead);
 
@@ -42,9 +52,17 @@ namespace MarvelousService.BusinessLayer.Services
 
         public ServiceToLeadModel GetServiceToLeadById(int id)
         {
-            _logger.Debug("запрос на получение услуги по id");
+            _logger.Info("запрос на получение услуги по id");
 
             var service = _serviceToLeadRepository.GetServiceToLeadById(id);
+
+            if (service == null)
+            {
+                _logger.Error("Ошибка в получении услуги по Id ");
+
+                throw new NotFoundServiceException("Такой услуги не существует.");
+            }    
+                
 
             return  _mapper.Map<ServiceToLeadModel>(service);
         }
