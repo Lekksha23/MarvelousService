@@ -29,7 +29,6 @@ namespace MarvelousService.DataLayer.Repositories
             var newServiceToLead =  connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
                 new
                 {
-                    serviceToLead.Type,
                     serviceToLead.Period,
                     serviceToLead.Price,
                     serviceToLead.Status,
