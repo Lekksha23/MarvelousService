@@ -24,9 +24,9 @@ namespace MarvelousService.DataLayer.Repositories
 
         public int AddService(Service service)
         {
-            _logger.Debug("Подключение к базе данных");
+            _logger.Info("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
-            _logger.Debug("Подключение к базе данных произведено");
+            _logger.Info("Подключение к базе данных произведено");
 
             var id = connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
                 new
@@ -37,43 +37,43 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Debug("Услуга добавлена в базу данных");
+            _logger.Info("Услуга добавлена в базу данных");
             return id;
         }
 
         public Service GetServiceById(int id)
         {
-            _logger.Debug("Подключение к базе данных");
+            _logger.Info("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
-            _logger.Debug("Подключение к базе данных произведено");
+            _logger.Info("Подключение к базе данных произведено");
 
             var listService = connection.QueryFirstOrDefault<Service>(_serviceGetByIdProcedure, 
                 new { Id = id }, 
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Debug("Услуги по Id получены");
+            _logger.Info("Услуги по Id получены");
             return listService;
         }
 
         public void SoftDeleted(int id, Service service)
         {
-            _logger.Debug("Подключение к базе данных");
+            _logger.Info("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
-            _logger.Debug("Подключение к базе данных произведено");
+            _logger.Info("Подключение к базе данных произведено");
 
             var newService = connection.QueryFirstOrDefault<Service>(_serviceSoftDeleteProcedure,
                 new{IsDeleted = service.IsDeleted},
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Debug("Услуга сменила статус на удалена в базе данных");
+            _logger.Info("Услуга сменила статус на удалена в базе данных");
 
         }
 
         public void UpdateService(int id, Service service)
         {
-            _logger.Debug("Подключение к базе данных");
+            _logger.Info("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
-            _logger.Debug("Подключение к базе данных произведено");
+            _logger.Info("Подключение к базе данных произведено");
 
             var newService = connection.QueryFirstOrDefault<Service>(_serviceUpdateProcedure,
                 new 
@@ -84,7 +84,7 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Debug("Услуга изменена в базе данных");
+            _logger.Info("Услуга изменена в базе данных");
 
         }
     }
