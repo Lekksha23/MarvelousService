@@ -24,8 +24,11 @@ namespace MarvelousService.BusinessLayer.Services
         public int AddService(ServiceModel serviceModel)
         {
             _logger.Info("запрос на добавление услуги");
+
             var service = _mapper.Map<Service>(serviceModel);
+
             var newService =  _serviceRepository.AddService(service);
+
             return newService;
         }
 
@@ -41,7 +44,7 @@ namespace MarvelousService.BusinessLayer.Services
 
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }
-
+           
             return _mapper.Map<ServiceModel>(service);
         }
 
@@ -56,9 +59,10 @@ namespace MarvelousService.BusinessLayer.Services
                 _logger.Error("Ошибка в получении услуги по Id ");
 
                 throw new NotFoundServiceException("Такой услуги не существует.");
-            }
+            }           
 
             var service = _mapper.Map<Service>(serviceModel);
+
             _serviceRepository.SoftDelete(id, service);
         }
 
@@ -75,7 +79,10 @@ namespace MarvelousService.BusinessLayer.Services
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }
 
+            _logger.Debug("запрос на изменение услуги прошел успешно");
+
             var service = _mapper.Map<Service>(serviceModel);
+
             _serviceRepository.UpdateService(id, service);
         }
     }
