@@ -13,11 +13,7 @@ begin
 		 s.[Name],
 		 s.[Type],
 		 s.[Description],
-		 s.[Price],
-		 p.[Id],
-		 p.[Period]
-    from dbo.[ServiceToLead] sl 
-	inner join dbo.[Service] s ON sl.ServiceId = s.Id
-	inner join dbo.[ServicePeriod] p ON sl.ServicePeriodId = p.Id
+		 s.[Price]
+    from dbo.[ServiceToLead] sl inner join dbo.[Service] s ON sl.ServiceId = s.Id
 	where LeadId = @LeadId
 end

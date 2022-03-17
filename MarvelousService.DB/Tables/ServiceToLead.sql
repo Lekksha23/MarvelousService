@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[PaymentService]
+﻿CREATE TABLE [dbo].[ServiceToLead]
 (
 	[Id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY,
 	[Price] decimal(10,0) NOT NULL,
