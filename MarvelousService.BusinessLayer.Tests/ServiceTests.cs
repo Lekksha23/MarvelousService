@@ -6,6 +6,7 @@ using MarvelousService.BusinessLayer.Tests.TestCaseSource;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -17,13 +18,14 @@ namespace MarvelousService.BusinessLayer.Tests
         private Mock<IServiceRepository> _serviceRepositoryMock;
         private ServiceRepository _serviceRepository;
         private IMapper _mapper;
+        private ILogger<ServiceToService> _logger;
 
         [SetUp]
         public void Setup()
         {
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _serviceRepositoryMock = new Mock<IServiceRepository>();
-            _service = new ServiceToService(_serviceRepositoryMock.Object, _mapper);
+            _service = new ServiceToService(_serviceRepositoryMock.Object, _mapper, _logger);
         }
 
         [TestCaseSource(typeof(GetServiceByIdTestCaseSource))]

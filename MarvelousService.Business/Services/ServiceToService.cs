@@ -5,7 +5,6 @@ using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
-using NLog;
 
 namespace MarvelousService.BusinessLayer.Services
 {
