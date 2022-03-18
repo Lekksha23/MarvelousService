@@ -2,6 +2,7 @@
 using MarvelousService.DataLayer.Configuration;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NLog;
 using System.Data;
@@ -13,20 +14,20 @@ namespace MarvelousService.DataLayer.Repositories
         private const string _serviceAddProcedure = "dbo.ServiceToLead_Insert";
         private const string _serviceGetByLeadIdProcedure = "dbo.ServiceToLead_SelectByLead";
         private const string _serviceGetByIdProcedure = "dbo.ServiceToLead_SelectById";
-        private static Logger _logger;
+        private readonly ILogger<ServiceRepository> _logger;
 
-        public ServiceToLeadRepository(IOptions<DbConfiguration> options) : base(options)
+        public ServiceToLeadRepository(IOptions<DbConfiguration> options, ILogger<ServiceRepository> logger) : base(options)
         {
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger = logger;
         }
 
         public int AddServiceToLead(ServiceToLead serviceToLead)
         {
-            _logger.Info("Подключение к базе данных");
+            _logger.LogInformation("Подключение к базе данных");
 
             using IDbConnection connection = ProvideConnection();
 
-            _logger.Info("Подключение к базе данных произведено");
+            _logger.LogInformation("Подключение к базе данных произведено");
 
             var newServiceToLead =  connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
                 new
@@ -39,38 +40,38 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.Trace($"Услуга  добавлена в базу данных");
+            _logger.LogInformation($"Услуга  добавлена в базу данных");
 
             return newServiceToLead;
         }
 
         public List<ServiceToLead> GetByLeadId(int id)
         {
-            _logger.Info("Запрашиваем id");
-            _logger.Info("Подключение к базе данных");
+            _logger.LogInformation("Запрашиваем id");
+            _logger.LogInformation("Подключение к базе данных");
 
             using IDbConnection connection = ProvideConnection();
 
-            _logger.Info("Подключение к базе данных произведено");
+            _logger.LogInformation("Подключение к базе данных произведено");
 
             var listServiceToLead =  connection.Query<ServiceToLead>(_serviceGetByLeadIdProcedure,new { LeadId = id },commandType: CommandType.StoredProcedure)
                 .ToList();
 
-            _logger.Trace("Услуги по LeadId  получены");
+            _logger.LogInformation("Услуги по LeadId  получены");
             return listServiceToLead;
         }
 
         public ServiceToLead GetServiceToLeadById(int id)
         {
-            _logger.Info("Подключение к базе данных");
+            _logger.LogInformation("Подключение к базе данных");
 
             using IDbConnection connection = ProvideConnection();
 
-            _logger.Info("Подключение к базе данных произведено");
+            _logger.LogInformation("Подключение к базе данных произведено");
 
             var service = connection.QuerySingle<ServiceToLead>(_serviceGetByIdProcedure, new { Id = id },commandType: CommandType.StoredProcedure);
 
-            _logger.Trace($"Услуга под id = {id} получена");
+            _logger.LogInformation($"Услуга под id = {id} получена");
 
             return service;
         }

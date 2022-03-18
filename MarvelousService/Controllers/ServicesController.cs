@@ -18,14 +18,14 @@ namespace MarvelousService.API.Controllers
         private readonly IServiceToService _serviceService;
         private readonly IServiceToLeadService _serviceToLeadService;
         private readonly IMapper _autoMapper;
-        private static Logger _logger;
+        private readonly ILogger<ServicesController> _logger;
 
-        public ServicesController(IServiceToService serviceService, IMapper autoMapper, IServiceToLeadService serviceToLead)
+        public ServicesController(IServiceToService serviceService, IMapper autoMapper, IServiceToLeadService serviceToLead, ILogger<ServicesController> logger)
         {
             _serviceService = serviceService;
             _serviceToLeadService = serviceToLead;
             _autoMapper = autoMapper;
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger = logger;
         }
 
         //api/services
@@ -37,10 +37,10 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
         public ActionResult<int> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
         {
-            _logger.Info($"Получен запрос на добавление новой услуги.");
+            _logger.LogInformation($"Получен запрос на добавление новой услуги.");
             var serviceModel = _autoMapper.Map<ServiceModel>(serviceInsertRequest);
             var id = _serviceService.AddService(serviceModel);
-            _logger.Info($"Услуга с id = {id} успешно добавлена.");
+            _logger.LogInformation($"Услуга с id = {id} успешно добавлена.");
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -50,10 +50,10 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(ServiceToLeadResponse), StatusCodes.Status201Created)]
         public ActionResult<ServiceToLeadResponse> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
         {
-            _logger.Info($"Получен запрос на добавление услуги лиду с id = .");
+            _logger.LogInformation($"Получен запрос на добавление услуги лиду с id = .");
             var serviceToLeadModel = _autoMapper.Map<ServiceToLeadModel>(serviceToLeadInsertRequest);
             var serviceToLead = _serviceToLeadService.AddServiceToLead(serviceToLeadModel);
-            _logger.Info($"Услуга с id = {serviceToLeadModel.ServiceId} успешно добавлена лиду с id = .");
+            _logger.LogInformation($"Услуга с id = {serviceToLeadModel.ServiceId} успешно добавлена лиду с id = .");
             return StatusCode(StatusCodes.Status201Created, serviceToLead);
         }
     }
