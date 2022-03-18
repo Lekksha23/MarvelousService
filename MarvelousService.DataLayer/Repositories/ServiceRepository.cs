@@ -4,7 +4,6 @@ using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NLog;
 using System.Data;
 
 namespace MarvelousService.DataLayer.Repositories
