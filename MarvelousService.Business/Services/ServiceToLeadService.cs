@@ -4,6 +4,7 @@ using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Interfaces;
+using Microsoft.Extensions.Logging;
 using NLog;
 
 namespace MarvelousService.BusinessLayer.Services
@@ -12,13 +13,13 @@ namespace MarvelousService.BusinessLayer.Services
     {
         private readonly IServiceToLeadRepository _serviceToLeadRepository;
         private readonly IMapper _mapper;
-        private readonly Logger _logger;
+        private readonly ILogger<ServiceToService> _logger;
 
-        public ServiceToLeadService(IServiceToLeadRepository serviceToLeadRepository, IMapper mapper)
+        public ServiceToLeadService(IServiceToLeadRepository serviceToLeadRepository, IMapper mapper, ILogger<ServiceToService> logger)
         {
             _serviceToLeadRepository = serviceToLeadRepository;
             _mapper = mapper;
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger = logger;
         }
 
         public int AddServiceToLead(ServiceToLeadModel serviceToLeadModel)
@@ -26,7 +27,7 @@ namespace MarvelousService.BusinessLayer.Services
 
             var service = _mapper.Map<ServiceToLead>(serviceToLeadModel);
 
-            _logger.Info("запрос на добавление услуги");
+            _logger.LogInformation("запрос на добавление услуги");
 
             return _serviceToLeadRepository.AddServiceToLead(service);
         }
@@ -34,13 +35,13 @@ namespace MarvelousService.BusinessLayer.Services
         public List<ServiceToLeadModel> GetLeadById(int id)
         {
                 
-            _logger.Info("запрос на получение лида по id");
+            _logger.LogInformation("запрос на получение лида по id");
 
             var lead = _serviceToLeadRepository.GetByLeadId(id);
 
             if (lead == null)
             {
-                _logger.Error("Ошибка в получении лида по Id ");
+                _logger.LogError("Ошибка в получении лида по Id ");
 
                 throw new NotFoundServiceException("Такого  лида не существует.");
             }
@@ -52,13 +53,13 @@ namespace MarvelousService.BusinessLayer.Services
 
         public ServiceToLeadModel GetServiceToLeadById(int id)
         {
-            _logger.Info("запрос на получение услуги по id");
+            _logger.LogInformation("запрос на получение услуги по id");
 
             var service = _serviceToLeadRepository.GetServiceToLeadById(id);
 
             if (service == null)
             {
-                _logger.Error("Ошибка в получении услуги по Id ");
+                _logger.LogError("Ошибка в получении услуги по Id ");
 
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }    
