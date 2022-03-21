@@ -21,49 +21,36 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public async Task<long> AddServiceToLead(ServiceToLeadModel serviceToLeadModel)
+        public async Task<int> AddServiceToLead(ServiceToLeadModel serviceToLeadModel)
         {
-
             var service = _mapper.Map<ServiceToLead>(serviceToLeadModel);
-
             _logger.LogInformation("запрос на добавление услуги");
-
             return await _serviceToLeadRepository.AddServiceToLead(service);
         }
 
-        public async Task<List<ServiceToLeadModel>> GetLeadById(long id)
+        public async Task<List<ServiceToLeadModel>> GetLeadById(int id)
         {
-                
             _logger.LogInformation("запрос на получение лида по id");
-
             var lead = await _serviceToLeadRepository.GetByLeadId(id);
 
             if (lead == null)
             {
                 _logger.LogError("Ошибка в получении лида по Id ");
-
                 throw new NotFoundServiceException("Такого  лида не существует.");
             }
-                
-
             return _mapper.Map<List<ServiceToLeadModel>>(lead);
-
         }
 
-        public async Task<ServiceToLeadModel> GetServiceToLeadById(long id)
+        public async Task<ServiceToLeadModel> GetServiceToLeadById(int id)
         {
             _logger.LogInformation("запрос на получение услуги по id");
-
             var service = await _serviceToLeadRepository.GetServiceToLeadById(id);
 
             if (service == null)
             {
                 _logger.LogError("Ошибка в получении услуги по Id ");
-
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }    
-                
-
             return  _mapper.Map<ServiceToLeadModel>(service);
         }
     }

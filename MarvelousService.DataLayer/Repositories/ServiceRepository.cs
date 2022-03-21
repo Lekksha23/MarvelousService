@@ -18,42 +18,35 @@ namespace MarvelousService.DataLayer.Repositories
 
         private readonly ILogger<ServiceRepository> _logger;
 
-
         public ServiceRepository(IOptions<DbConfiguration> options, ILogger<ServiceRepository> logger) : base(options)
         {
             _logger = logger;
         }
 
-
-        public async Task<long> AddService(Service service)
+        public async Task<int> AddService(Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var id = await connection.QueryFirstOrDefaultAsync<long>(_serviceAddProcedure,
+            var id = await connection.QueryFirstOrDefaultAsync<int>(_serviceAddProcedure,
                 new
                 {
                     service.Name,
-                    service.OneTimePrice,
+                    service.Price,
                     service.Description
                 },
                 commandType: CommandType.StoredProcedure) ;
 
-            _logger.LogInformation("Услуга добавлена в базу данных"+ service.Name);
-
+            _logger.LogInformation($"Услуга {service.Name} добавлена в базу данных");
             return id;  
         }
 
-        public async Task<Service> GetServiceById(long id)
+        public async Task<Service> GetServiceById(int id)
         {
             _logger.LogInformation("Запрашиваем услугу по id");
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
             var service = await connection.QueryFirstOrDefaultAsync<Service>(_serviceGetByIdProcedure, 
@@ -61,7 +54,6 @@ namespace MarvelousService.DataLayer.Repositories
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation("Выборка прошла успешно выбрана услуга с id - " + id);
-
             return service;
         }
 
@@ -69,9 +61,7 @@ namespace MarvelousService.DataLayer.Repositories
         {
             _logger.LogInformation("Запрашиваем транзакция по id");
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
             var service = await connection.QueryFirstOrDefaultAsync<ServicePayment>(_serviceGetTrancactionByServiceToLead,
@@ -96,28 +86,24 @@ namespace MarvelousService.DataLayer.Repositories
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга - {service.Name} сменила статус на 'Удалена' в базе данных");
-
         }
 
         public async Task UpdateService(long id, Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
             connection.QueryFirstOrDefault(_serviceUpdateProcedure,
                 new 
                 {
                     service.Name,
-                    service.OneTimePrice,
+                    service.Price,
                     service.Description,
                 },
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга- {service.Name}, изменена в базе данных");
-
         }
     }
 }

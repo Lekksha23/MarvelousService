@@ -20,15 +20,13 @@ namespace MarvelousService.DataLayer.Repositories
             _logger = logger;
         }
 
-        public async Task<long> AddServiceToLead(ServiceToLead serviceToLead)
+        public async Task<int> AddServiceToLead(ServiceToLead serviceToLead)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var newServiceToLead = await connection.QueryFirstOrDefaultAsync<long>(_serviceAddProcedure,
+            var newServiceToLead = await connection.QueryFirstOrDefaultAsync<int>(_serviceAddProcedure,
                 new
                 {
                     serviceToLead.Period,
@@ -40,40 +38,37 @@ namespace MarvelousService.DataLayer.Repositories
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга  добавлена в базу данных");
-
             return newServiceToLead;
         }
 
-        public async Task<List<ServiceToLead>> GetByLeadId(long id)
+        public async Task<List<ServiceToLead>> GetByLeadId(int id)
         {
             _logger.LogInformation("Запрашиваем id");
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var listServiceToLead = (await connection.QueryAsync<ServiceToLead>(_serviceGetByLeadIdProcedure,new { LeadId = id },
-                commandType: CommandType.StoredProcedure))
-                .ToList();
+            var listServiceToLead = await connection.QueryAsync<ServiceToLead>(
+                _serviceGetByLeadIdProcedure,
+                new { LeadId = id },
+                commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation("Услуги по LeadId  получены");
-            return listServiceToLead;
+            return listServiceToLead.ToList();
         }
 
-        public async Task<ServiceToLead> GetServiceToLeadById(long id)
+        public async Task<ServiceToLead> GetServiceToLeadById(int id)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var service = await connection.QuerySingleAsync<ServiceToLead>(_serviceGetByIdProcedure, new { Id = id },
+            var service = await connection.QuerySingleAsync<ServiceToLead>(
+                _serviceGetByIdProcedure,
+                new { Id = id },
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга под id = {id} получена");
-
             return service;
         }
     }

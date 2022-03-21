@@ -4,12 +4,9 @@ namespace MarvelousService.DataLayer.Repositories.Interfaces
 {
     public interface IServiceRepository
     {
-        Task<long> AddService(Service service);
-        Task SoftDelete(long id,Service service);
-        Task UpdateService(long id, Service service);
-        Task<Service> GetServiceById(long id);
-        Task<ServicePayment> GetTransactionByServiceToleadId(long id);
-
-
+        Task<int> AddService(Service service);
+        void SoftDelete(int id,Service service);
+        void UpdateService(int id, Service service);
+        Task<Service> GetServiceById(int id);
     }
 } 

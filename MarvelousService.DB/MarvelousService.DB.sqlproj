@@ -65,7 +65,6 @@
   <ItemGroup>
     <Build Include="Tables\ServiceToLead.sql" />
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_Insert.sql" />
-    <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectAll.sql" />
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectByLead.sql" />
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectById.sql" />
     <Build Include="Tables\Service.sql" />
@@ -76,8 +75,7 @@
     <Build Include="StoredProcedures\Service\Service_SelectById.sql" />
     <Build Include="StoredProcedures\Service\Service_SoftDelete.sql" />
     <Build Include="StoredProcedures\Service\Service_SelectAll.sql" />
-    <Build Include="StoredProcedures\ServicePayment\ServicePayment_SelectByTransactionId.sql" />
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_UpdateStatus.sql" />
-    <Build Include="StoredProcedures\ServicePayment\ServicePayment_SelectByServiseToLeadId.sql" />
+    <Build Include="StoredProcedures\ServicePayment\ServicePayment_SelectByServiceToLead.sql" />
   </ItemGroup>
 </Project>

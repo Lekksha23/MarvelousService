@@ -19,7 +19,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 1,
                 Name = "Тренинг",
                 Description = "БлаБлаБла",
-                OneTimePrice = 1500
+                Price = 1500
             };
 
 
@@ -28,7 +28,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 1,
                 Name = "Тренинг",
                 Description = "БлаБлаБла",
-                OneTimePrice = 1500
+                Price = 1500
             };
 
             yield return new object[] { service, expected };
@@ -38,7 +38,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 30,
                 Name = "ЕНКГЕКГЕКГЕК",
                 Description = "32123132",
-                OneTimePrice = 20000
+                Price = 20000
             };
 
 
@@ -47,7 +47,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 30,
                 Name = "ЕНКГЕКГЕКГЕК",
                 Description = "32123132",
-                OneTimePrice = 20000
+                Price = 20000
             };
 
             yield return new object[] { service1, expected1 };

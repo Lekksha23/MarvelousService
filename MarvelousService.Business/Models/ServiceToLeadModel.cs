@@ -11,5 +11,6 @@ namespace MarvelousService.BusinessLayer.Models
         public Status Status { get; set; }
         public int LeadId { get; set; }
         public int ServiceId { get; set; }
+        public List<ServicePaymentModel> servicePayments { get; set; }
     }
 }

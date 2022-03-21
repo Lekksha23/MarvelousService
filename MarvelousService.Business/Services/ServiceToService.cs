@@ -21,32 +21,23 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public async Task<long> AddService(ServiceModel serviceModel)
+        public async Task<int> AddService(ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на добавление услуги");
-
-            var service = _mapper.Map<Service>(serviceModel);          
-
-            return await _serviceRepository.AddService(service);
+            var service = _mapper.Map<Service>(serviceModel);
+            var newService =  await _serviceRepository.AddService(service);
+            return newService;
         }
 
-        public async Task<ServiceModel> GetServiceById(long id)
+        public async Task<ServiceModel> GetServiceById(int id)
         {
             _logger.LogInformation("запрос на получение услуги по id");
-           
             var service = await _serviceRepository.GetServiceById(id);
-
-            if (service == null)
-            {
-                _logger.LogError("Ошибка в получении услуги по Id ");
-
-                throw new NotFoundServiceException("Такой услуги не существует.");
-            }
-           
+            CheckService(service);
             return _mapper.Map<ServiceModel>(service);
         }
 
-        public async Task<ServicePaymentModel> GetTransactionByServiceToLeadId(long id)
+        public async void SoftDelete(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на получение услуги по id");
 
@@ -65,39 +56,29 @@ namespace MarvelousService.BusinessLayer.Services
         public async Task SoftDelete(long id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на удаление услуги");
-
             var oldService = await _serviceRepository.GetServiceById(id);
-
-            if (oldService == null)
-            {
-                _logger.LogError("Ошибка в получении услуги по Id ");
-
-                throw new NotFoundServiceException("Такой услуги не существует.");
-            }           
-
+            CheckService(oldService);        
             var service = _mapper.Map<Service>(serviceModel);
-
-            await _serviceRepository.SoftDelete(id, service);
+            _serviceRepository.SoftDelete(id, service);
         }
 
-        public async Task UpdateService(long id, ServiceModel serviceModel)
+        public async void UpdateService(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на изменение услуги");
-
             var oldService = await _serviceRepository.GetServiceById(id);
+            CheckService(oldService);
+            _logger.LogInformation("запрос на изменение услуги прошел успешно");
+            var service = _mapper.Map<Service>(serviceModel);
+            _serviceRepository.UpdateService(id, service);
+        }
 
-            if (oldService == null)
+        private void CheckService(Service service)
+        {
+            if (service is null)
             {
                 _logger.LogError("Ошибка в получении услуги по Id ");
-
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }
-
-            _logger.LogInformation("запрос на изменение услуги прошел успешно");
-
-            var service = _mapper.Map<Service>(serviceModel);
-
-            await _serviceRepository.UpdateService(id, service);
         }
     }
 }
