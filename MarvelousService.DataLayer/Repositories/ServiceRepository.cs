@@ -14,6 +14,8 @@ namespace MarvelousService.DataLayer.Repositories
         private const string _serviceGetByIdProcedure = "dbo.Service_SelectById";
         private const string _serviceUpdateProcedure = "dbo.Service_Update";
         private const string _serviceSoftDeleteProcedure = "dbo.Service_SoftDelete";
+        private const string _serviceGetTrancactionByServiceToLead = "dbo.ServicePayment_SelectByServiseToLeadId";
+
         private readonly ILogger<ServiceRepository> _logger;
 
 
@@ -59,6 +61,24 @@ namespace MarvelousService.DataLayer.Repositories
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation("Выборка прошла успешно выбрана услуга с id - " + id);
+
+            return service;
+        }
+
+        public async Task<ServicePayment> GetTransactionByServiceToleadId(long id)
+        {
+            _logger.LogInformation("Запрашиваем транзакция по id");
+            _logger.LogInformation("Подключение к базе данных");
+
+            using IDbConnection connection = ProvideConnection();
+
+            _logger.LogInformation("Подключение к базе данных произведено");
+
+            var service = await connection.QueryFirstOrDefaultAsync<ServicePayment>(_serviceGetTrancactionByServiceToLead,
+                new { Id = id },
+                commandType: CommandType.StoredProcedure);
+
+            _logger.LogInformation("Выборка прошла успешно выбрана транзакция с id - " + id);
 
             return service;
         }
