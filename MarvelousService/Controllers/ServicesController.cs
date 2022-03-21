@@ -49,7 +49,7 @@ namespace MarvelousService.API.Controllers
 
 
         //api/services/
-        [HttpGet("services/{id}")]
+        [HttpGet("id")]
         [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Get services by id")]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceResponse>))]
