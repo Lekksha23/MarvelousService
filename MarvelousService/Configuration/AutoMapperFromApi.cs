@@ -8,12 +8,10 @@ namespace MarvelousService.API.Configuration
     {
         public AutoMapperFromApi()
         {
-            CreateMap<AuthRequest, AuthModel>();
-
-            CreateMap<ServiceInsertRequest, ServiceModel>();
-            CreateMap<ServiceToLeadInsertRequest, ServiceToLeadModel>();
-
-            CreateMap<LeadInsertRequest, LeadModel>();
+            CreateMap<AuthRequest, AuthModel>().ReverseMap(); 
+            CreateMap<ServiceInsertRequest, ServiceModel>().ReverseMap();
+            CreateMap<ServiceToLeadInsertRequest, ServiceToLeadModel>().ReverseMap();
+            CreateMap<LeadInsertRequest, LeadModel>().ReverseMap();
         }
     }
 }

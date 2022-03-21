@@ -5,5 +5,6 @@
         public int ServiceId { get; set; }
         public int Type { get; set; }
         public int? Period { get; set; }
+
     }
 }

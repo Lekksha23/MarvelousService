@@ -6,7 +6,6 @@ using MarvelousService.API.Models.ExceptionModel;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using NLog;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MarvelousService.API.Controllers
@@ -45,7 +44,7 @@ namespace MarvelousService.API.Controllers
         }
 
         //api/services
-        [HttpPost("toLead")]
+        [HttpPost("service")]
         [SwaggerOperation("Add service to lead")]
         [ProducesResponseType(typeof(ServiceToLeadResponse), StatusCodes.Status201Created)]
         public async Task<ActionResult<ServiceToLeadResponse>> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
@@ -55,6 +54,22 @@ namespace MarvelousService.API.Controllers
             var serviceToLead = await _serviceToLeadService.AddServiceToLead(serviceToLeadModel);
             _logger.LogInformation($"Услуга с id = {serviceToLeadModel.ServiceId} успешно добавлена лиду с id = .");
             return StatusCode(StatusCodes.Status201Created, serviceToLead);
+        }
+
+        //api/services/
+        [HttpGet("services/{id}")]
+        [SwaggerOperation("Get services by id")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceResponse>))]
+        public async Task<ActionResult<List<ServiceResponse>>> GetServiceById(long id)
+        {
+            _logger.LogInformation($"Запрос на получение всех услуг по id = {id}");
+
+            var serviceModel = await _serviceService.GetServiceById(id);
+            var result = _autoMapper.Map<List<ServiceResponse>>(serviceModel);
+
+            _logger.LogInformation($"Услуги по id = {id} получены");
+
+            return Ok(result);
         }
     }
 }
