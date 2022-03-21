@@ -65,7 +65,6 @@
   <ItemGroup>
     <Build Include="Tables\ServiceToLead.sql" />
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_Insert.sql" />
-    <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectAll.sql" />
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectByLead.sql" />
     <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectById.sql" />
     <Build Include="Tables\Service.sql" />

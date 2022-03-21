@@ -23,9 +23,7 @@ namespace MarvelousService.DataLayer.Repositories
         public int AddServiceToLead(ServiceToLead serviceToLead)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
             var newServiceToLead =  connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
@@ -48,9 +46,7 @@ namespace MarvelousService.DataLayer.Repositories
         {
             _logger.LogInformation("Запрашиваем id");
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
             var listServiceToLead =  connection.Query<ServiceToLead>(_serviceGetByLeadIdProcedure,new { LeadId = id },commandType: CommandType.StoredProcedure)
@@ -63,15 +59,15 @@ namespace MarvelousService.DataLayer.Repositories
         public ServiceToLead GetServiceToLeadById(int id)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var service = connection.QuerySingle<ServiceToLead>(_serviceGetByIdProcedure, new { Id = id },commandType: CommandType.StoredProcedure);
+            var service = connection.QuerySingle<ServiceToLead>(
+                _serviceGetByIdProcedure,
+                new { Id = id },
+                commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга под id = {id} получена");
-
             return service;
         }
     }

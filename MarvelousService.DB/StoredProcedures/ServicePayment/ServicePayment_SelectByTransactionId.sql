@@ -11,5 +11,5 @@ begin
 	    sl.[Status],
 		sl.[LeadId]
     from dbo.[ServicePayment] sp inner join dbo.[ServiceToLead] sl ON sp.ServiceToLeadId = sl.Id
-	where TransactionId = @TransactionId
+	where sp.TransactionId = @TransactionId
 end

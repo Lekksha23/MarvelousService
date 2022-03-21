@@ -35,7 +35,7 @@ namespace MarvelousService.DataLayer.Repositories
                 new
                 {
                     service.Name,
-                    service.OneTimePrice,
+                    service.Price,
                     service.Description
                 },
                 commandType: CommandType.StoredProcedure);
@@ -82,22 +82,19 @@ namespace MarvelousService.DataLayer.Repositories
         public void UpdateService(int id, Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
             connection.QueryFirstOrDefault(_serviceUpdateProcedure,
                 new 
                 {
                     service.Name,
-                    service.OneTimePrice,
+                    service.Price,
                     service.Description,
                 },
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга- {service.Name}, изменена в базе данных");
-
         }
     }
 }

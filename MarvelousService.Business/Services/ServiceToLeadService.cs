@@ -62,7 +62,6 @@ namespace MarvelousService.BusinessLayer.Services
 
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }    
-                
 
             return  _mapper.Map<ServiceToLeadModel>(service);
         }

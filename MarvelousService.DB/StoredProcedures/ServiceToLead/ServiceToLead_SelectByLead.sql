@@ -15,5 +15,5 @@ begin
 		 s.[Description],
 		 s.[Price]
     from dbo.[ServiceToLead] sl inner join dbo.[Service] s ON sl.ServiceId = s.Id
-	where LeadId = @LeadId
+	where sl.LeadId = @LeadId
 end
