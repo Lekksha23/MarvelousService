@@ -46,6 +46,22 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<ServiceModel>(service);
         }
 
+        public async Task<ServicePaymentModel> GetTransactionByServiceToLeadId(long id)
+        {
+            _logger.LogInformation("запрос на получение услуги по id");
+
+            var service = await _serviceRepository.GetTransactionByServiceToleadId(id);
+
+            if (service == null)
+            {
+                _logger.LogError("Ошибка в получении услуги по Id ");
+
+                throw new NotFoundServiceException("Такой услуги не существует.");
+            }
+
+            return _mapper.Map<ServicePaymentModel>(service);
+        }
+
         public async Task SoftDelete(long id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на удаление услуги");

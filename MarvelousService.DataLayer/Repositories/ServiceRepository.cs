@@ -75,7 +75,7 @@ namespace MarvelousService.DataLayer.Repositories
             _logger.LogInformation("Подключение к базе данных произведено");
 
             var service = await connection.QueryFirstOrDefaultAsync<ServicePayment>(_serviceGetTrancactionByServiceToLead,
-                new { Id = id },
+                new { ServiceToLeadId = id },
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation("Выборка прошла успешно выбрана транзакция с id - " + id);
