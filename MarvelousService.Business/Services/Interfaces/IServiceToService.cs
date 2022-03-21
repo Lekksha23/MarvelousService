@@ -8,5 +8,6 @@ namespace MarvelousService.BusinessLayer.Services.Interfaces
         Task SoftDelete(long id, ServiceModel serviceModel);
         Task UpdateService(long id, ServiceModel serviceModel);
         Task<ServiceModel> GetServiceById(long id);
+        Task<ServicePaymentModel> GetTransactionByServiceToLeadId(long id);
     }
 }
