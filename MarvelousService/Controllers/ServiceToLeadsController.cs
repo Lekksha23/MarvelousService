@@ -29,8 +29,7 @@ namespace MarvelousService.API.Controllers
 
         //api/servicesToLead/
         [HttpPost("servicesToLead")]
-        [AuthorizeRole(Role.Regular,Role.Vip)]
-        
+        [AuthorizeRole(Role.Regular,Role.Vip)]       
         [SwaggerOperation("Add new serviceToLead")]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         public async Task<ActionResult<long>> AddServiceToLead([FromBody] ServiceToLeadInsertRequestAdd serviceInsertRequest)
@@ -47,6 +46,7 @@ namespace MarvelousService.API.Controllers
 
         //api/servicesToLead/
         [HttpGet("servicesToLead/{id}")]
+        [AuthorizeRole(Role.Regular, Role.Vip)]
         [SwaggerOperation("Get servicesToLead by id")]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceToLeadResponse>))]
         public async Task<ActionResult<List<ServiceToLeadResponse>>> GetServiceToLeadByIdId(long id)
