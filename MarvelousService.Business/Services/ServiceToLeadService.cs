@@ -21,22 +21,22 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public int AddServiceToLead(ServiceToLeadModel serviceToLeadModel)
+        public async Task<long> AddServiceToLead(ServiceToLeadModel serviceToLeadModel)
         {
 
             var service = _mapper.Map<ServiceToLead>(serviceToLeadModel);
 
             _logger.LogInformation("запрос на добавление услуги");
 
-            return _serviceToLeadRepository.AddServiceToLead(service);
+            return await _serviceToLeadRepository.AddServiceToLead(service);
         }
 
-        public List<ServiceToLeadModel> GetLeadById(int id)
+        public async Task<List<ServiceToLeadModel>> GetLeadById(long id)
         {
                 
             _logger.LogInformation("запрос на получение лида по id");
 
-            var lead = _serviceToLeadRepository.GetByLeadId(id);
+            var lead = await _serviceToLeadRepository.GetByLeadId(id);
 
             if (lead == null)
             {
@@ -50,11 +50,11 @@ namespace MarvelousService.BusinessLayer.Services
 
         }
 
-        public ServiceToLeadModel GetServiceToLeadById(int id)
+        public async Task<ServiceToLeadModel> GetServiceToLeadById(long id)
         {
             _logger.LogInformation("запрос на получение услуги по id");
 
-            var service = _serviceToLeadRepository.GetServiceToLeadById(id);
+            var service = await _serviceToLeadRepository.GetServiceToLeadById(id);
 
             if (service == null)
             {

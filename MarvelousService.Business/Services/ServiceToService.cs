@@ -21,22 +21,20 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public int AddService(ServiceModel serviceModel)
+        public async Task<long> AddService(ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на добавление услуги");
 
-            var service = _mapper.Map<Service>(serviceModel);
+            var service = _mapper.Map<Service>(serviceModel);          
 
-            var newService =  _serviceRepository.AddService(service);
-
-            return newService;
+            return await _serviceRepository.AddService(service);
         }
 
-        public ServiceModel GetServiceById(int id)
+        public async Task<ServiceModel> GetServiceById(long id)
         {
             _logger.LogInformation("запрос на получение услуги по id");
            
-            var service = _serviceRepository.GetServiceById(id);
+            var service = await _serviceRepository.GetServiceById(id);
 
             if (service == null)
             {
@@ -48,11 +46,11 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<ServiceModel>(service);
         }
 
-        public void SoftDelete(int id, ServiceModel serviceModel)
+        public async Task SoftDelete(long id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на удаление услуги");
 
-            var oldService = _serviceRepository.GetServiceById(id);
+            var oldService = await _serviceRepository.GetServiceById(id);
 
             if (oldService == null)
             {
@@ -63,14 +61,14 @@ namespace MarvelousService.BusinessLayer.Services
 
             var service = _mapper.Map<Service>(serviceModel);
 
-            _serviceRepository.SoftDelete(id, service);
+            await _serviceRepository.SoftDelete(id, service);
         }
 
-        public void UpdateService(int id, ServiceModel serviceModel)
+        public async Task UpdateService(long id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на изменение услуги");
 
-            var oldService = _serviceRepository.GetServiceById(id);
+            var oldService = await _serviceRepository.GetServiceById(id);
 
             if (oldService == null)
             {
@@ -83,7 +81,7 @@ namespace MarvelousService.BusinessLayer.Services
 
             var service = _mapper.Map<Service>(serviceModel);
 
-            _serviceRepository.UpdateService(id, service);
+            await _serviceRepository.UpdateService(id, service);
         }
     }
 }

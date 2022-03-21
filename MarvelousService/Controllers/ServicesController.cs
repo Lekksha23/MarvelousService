@@ -35,11 +35,11 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
-        public ActionResult<int> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
+        public async Task<ActionResult<long>> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
         {
             _logger.LogInformation($"Получен запрос на добавление новой услуги.");
             var serviceModel = _autoMapper.Map<ServiceModel>(serviceInsertRequest);
-            var id = _serviceService.AddService(serviceModel);
+            var id = await _serviceService.AddService(serviceModel);
             _logger.LogInformation($"Услуга с id = {id} успешно добавлена.");
             return StatusCode(StatusCodes.Status201Created, id);
         }
@@ -48,11 +48,11 @@ namespace MarvelousService.API.Controllers
         [HttpPost("toLead")]
         [SwaggerOperation("Add service to lead")]
         [ProducesResponseType(typeof(ServiceToLeadResponse), StatusCodes.Status201Created)]
-        public ActionResult<ServiceToLeadResponse> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
+        public async Task<ActionResult<ServiceToLeadResponse>> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
         {
             _logger.LogInformation($"Получен запрос на добавление услуги лиду с id = .");
             var serviceToLeadModel = _autoMapper.Map<ServiceToLeadModel>(serviceToLeadInsertRequest);
-            var serviceToLead = _serviceToLeadService.AddServiceToLead(serviceToLeadModel);
+            var serviceToLead = await _serviceToLeadService.AddServiceToLead(serviceToLeadModel);
             _logger.LogInformation($"Услуга с id = {serviceToLeadModel.ServiceId} успешно добавлена лиду с id = .");
             return StatusCode(StatusCodes.Status201Created, serviceToLead);
         }

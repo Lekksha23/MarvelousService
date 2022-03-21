@@ -25,10 +25,10 @@ namespace MarvelousService.API.Controllers
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [SwaggerOperation("Authentication")]
-        public ActionResult Login([FromBody] AuthRequest auth)
+        public async Task<ActionResult> Login([FromBody] AuthRequest auth)
         {
             var authModel = _autoMapper.Map<AuthModel>(auth);
-            var token = _authService.GetToken(authModel);
+            var token = await _authService.GetToken(authModel);
             return Json(token);
         }
     }

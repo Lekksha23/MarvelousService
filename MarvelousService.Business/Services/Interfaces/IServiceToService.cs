@@ -4,9 +4,9 @@ namespace MarvelousService.BusinessLayer.Services.Interfaces
 {
     public interface IServiceToService
     {
-        int AddService(ServiceModel serviceModel);
-        void SoftDelete(int id, ServiceModel serviceModel);
-        void UpdateService(int id, ServiceModel serviceModel);
-        ServiceModel GetServiceById(int id);
+        Task<long> AddService(ServiceModel serviceModel);
+        Task SoftDelete(long id, ServiceModel serviceModel);
+        Task UpdateService(long id, ServiceModel serviceModel);
+        Task<ServiceModel> GetServiceById(long id);
     }
 }

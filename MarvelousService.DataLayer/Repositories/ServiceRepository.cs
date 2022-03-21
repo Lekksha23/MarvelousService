@@ -23,7 +23,7 @@ namespace MarvelousService.DataLayer.Repositories
         }
 
 
-        public int AddService(Service service)
+        public async Task<long> AddService(Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
 
@@ -31,21 +31,21 @@ namespace MarvelousService.DataLayer.Repositories
 
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var id = connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
+            var id = await connection.QueryFirstOrDefaultAsync<long>(_serviceAddProcedure,
                 new
                 {
                     service.Name,
                     service.OneTimePrice,
                     service.Description
                 },
-                commandType: CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure) ;
 
             _logger.LogInformation("Услуга добавлена в базу данных"+ service.Name);
 
             return id;  
         }
 
-        public Service GetServiceById(int id)
+        public async Task<Service> GetServiceById(long id)
         {
             _logger.LogInformation("Запрашиваем услугу по id");
             _logger.LogInformation("Подключение к базе данных");
@@ -54,7 +54,7 @@ namespace MarvelousService.DataLayer.Repositories
 
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var service = connection.QueryFirstOrDefault<Service>(_serviceGetByIdProcedure, 
+            var service = await connection.QueryFirstOrDefaultAsync<Service>(_serviceGetByIdProcedure, 
                 new { Id = id }, 
                 commandType: CommandType.StoredProcedure);
 
@@ -63,7 +63,7 @@ namespace MarvelousService.DataLayer.Repositories
             return service;
         }
 
-        public void SoftDelete(int id, Service service)
+        public async Task SoftDelete(long id, Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
 
@@ -71,7 +71,7 @@ namespace MarvelousService.DataLayer.Repositories
 
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var newService = connection.QueryFirstOrDefault<Service>(_serviceSoftDeleteProcedure,
+            var newService = await connection.QueryFirstOrDefaultAsync<Service>(_serviceSoftDeleteProcedure,
                 new{IsDeleted = service.IsDeleted},
                 commandType: CommandType.StoredProcedure);
 
@@ -79,7 +79,7 @@ namespace MarvelousService.DataLayer.Repositories
 
         }
 
-        public void UpdateService(int id, Service service)
+        public async Task UpdateService(long id, Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
 

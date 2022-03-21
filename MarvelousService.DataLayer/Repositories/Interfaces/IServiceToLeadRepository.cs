@@ -4,8 +4,8 @@ namespace MarvelousService.DataLayer.Interfaces
 {
     public interface IServiceToLeadRepository
     {
-        public ServiceToLead GetServiceToLeadById(int id);
-        int AddServiceToLead(ServiceToLead service);
-        List<ServiceToLead> GetByLeadId(int id);
+        Task<ServiceToLead> GetServiceToLeadById(long id);
+        Task<long> AddServiceToLead(ServiceToLead service);
+        Task<List<ServiceToLead>> GetByLeadId(long id);
     }
 }
