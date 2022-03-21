@@ -21,69 +21,48 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public int AddService(ServiceModel serviceModel)
+        public async Task<int> AddService(ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на добавление услуги");
-
             var service = _mapper.Map<Service>(serviceModel);
-
-            var newService =  _serviceRepository.AddService(service);
-
+            var newService =  await _serviceRepository.AddService(service);
             return newService;
         }
 
-        public ServiceModel GetServiceById(int id)
+        public async Task<ServiceModel> GetServiceById(int id)
         {
             _logger.LogInformation("запрос на получение услуги по id");
-           
-            var service = _serviceRepository.GetServiceById(id);
-
-            if (service == null)
-            {
-                _logger.LogError("Ошибка в получении услуги по Id ");
-
-                throw new NotFoundServiceException("Такой услуги не существует.");
-            }
-           
+            var service = await _serviceRepository.GetServiceById(id);
+            CheckService(service);
             return _mapper.Map<ServiceModel>(service);
         }
 
-        public void SoftDelete(int id, ServiceModel serviceModel)
+        public async void SoftDelete(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на удаление услуги");
-
-            var oldService = _serviceRepository.GetServiceById(id);
-
-            if (oldService == null)
-            {
-                _logger.LogError("Ошибка в получении услуги по Id ");
-
-                throw new NotFoundServiceException("Такой услуги не существует.");
-            }           
-
+            var oldService = await _serviceRepository.GetServiceById(id);
+            CheckService(oldService);        
             var service = _mapper.Map<Service>(serviceModel);
-
             _serviceRepository.SoftDelete(id, service);
         }
 
-        public void UpdateService(int id, ServiceModel serviceModel)
+        public async void UpdateService(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на изменение услуги");
+            var oldService = await _serviceRepository.GetServiceById(id);
+            CheckService(oldService);
+            _logger.LogInformation("запрос на изменение услуги прошел успешно");
+            var service = _mapper.Map<Service>(serviceModel);
+            _serviceRepository.UpdateService(id, service);
+        }
 
-            var oldService = _serviceRepository.GetServiceById(id);
-
-            if (oldService == null)
+        private void CheckService(Service service)
+        {
+            if (service is null)
             {
                 _logger.LogError("Ошибка в получении услуги по Id ");
-
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }
-
-            _logger.LogInformation("запрос на изменение услуги прошел успешно");
-
-            var service = _mapper.Map<Service>(serviceModel);
-
-            _serviceRepository.UpdateService(id, service);
         }
     }
 }

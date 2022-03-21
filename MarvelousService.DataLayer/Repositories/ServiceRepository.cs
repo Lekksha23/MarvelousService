@@ -16,22 +16,18 @@ namespace MarvelousService.DataLayer.Repositories
         private const string _serviceSoftDeleteProcedure = "dbo.Service_SoftDelete";
         private readonly ILogger<ServiceRepository> _logger;
 
-
         public ServiceRepository(IOptions<DbConfiguration> options, ILogger<ServiceRepository> logger) : base(options)
         {
             _logger = logger;
         }
 
-
-        public int AddService(Service service)
+        public async Task<int> AddService(Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var id = connection.QueryFirstOrDefault<int>(_serviceAddProcedure,
+            var id = await connection.QueryFirstOrDefaultAsync<int>(_serviceAddProcedure,
                 new
                 {
                     service.Name,
@@ -40,35 +36,29 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation("Услуга добавлена в базу данных"+ service.Name);
-
+            _logger.LogInformation($"Услуга {service.Name} добавлена в базу данных");
             return id;  
         }
 
-        public Service GetServiceById(int id)
+        public async Task<Service> GetServiceById(int id)
         {
             _logger.LogInformation("Запрашиваем услугу по id");
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var service = connection.QueryFirstOrDefault<Service>(_serviceGetByIdProcedure, 
+            var service = await connection.QueryFirstOrDefaultAsync<Service>(_serviceGetByIdProcedure, 
                 new { Id = id }, 
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation("Выборка прошла успешно выбрана услуга с id - " + id);
-
             return service;
         }
 
         public void SoftDelete(int id, Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
-
             using IDbConnection connection = ProvideConnection();
-
             _logger.LogInformation("Подключение к базе данных произведено");
 
             var newService = connection.QueryFirstOrDefault<Service>(_serviceSoftDeleteProcedure,
@@ -76,7 +66,6 @@ namespace MarvelousService.DataLayer.Repositories
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга - {service.Name} сменила статус на 'Удалена' в базе данных");
-
         }
 
         public void UpdateService(int id, Service service)

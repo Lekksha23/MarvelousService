@@ -18,7 +18,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 1,
                 Name = "Тренинг",
                 Description = "БлаБлаБла",
-                OneTimePrice = 1500
+                Price = 1500
             };
 
             var expected = 1;

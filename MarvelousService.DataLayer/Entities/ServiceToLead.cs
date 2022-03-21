@@ -10,6 +10,6 @@ namespace MarvelousService.DataLayer.Entities
         public Status Status{ get; set; }
         public int LeadId{ get; set; }
         public int ServiceId { get; set; }
-       
+        public List<ServicePayment> servicePayments { get; set; }   
     }
 }

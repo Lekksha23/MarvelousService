@@ -42,7 +42,7 @@ namespace MarvelousService.BusinessLayer.Tests
             Assert.AreEqual(actual.Id, expected.Id);
             Assert.AreEqual(actual.Name, expected.Name);
             Assert.AreEqual(actual.Description, expected.Description);
-            Assert.AreEqual(actual.OneTimePrice, expected.OneTimePrice);
+            Assert.AreEqual(actual.Price, expected.Price);
             
             _serviceRepositoryMock.Verify(g => g.GetServiceById(id), Times.Once);
         }

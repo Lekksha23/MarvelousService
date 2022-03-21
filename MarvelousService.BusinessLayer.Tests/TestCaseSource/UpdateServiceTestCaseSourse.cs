@@ -18,7 +18,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 1,
                 Name = "Тренинг",
                 Description = "БлаБлаБла",
-                OneTimePrice = 1500
+                Price = 1500
             };
 
             var updateService = new ServiceModel
@@ -26,7 +26,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 1,
                 Name = "qwewqe",
                 Description = "asdasd",
-                OneTimePrice = 1233
+                Price = 1233
             };
 
 
@@ -35,7 +35,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 1,
                 Name = "qwewqe",
                 Description = "asdasd",
-                OneTimePrice = 1233
+                Price = 1233
             };
 
             yield return new object[] { service, updateService, expected };

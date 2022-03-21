@@ -1,5 +1,5 @@
-﻿create procedure [dbo].[ServicePayment_SelectByTransactionId]
-		@TransactionId int
+﻿create procedure [dbo].[ServicePayment_SelectByServiceToLead]
+		@ServiceToLeadId int
 as
 begin
 	select
@@ -11,5 +11,5 @@ begin
 	    sl.[Status],
 		sl.[LeadId]
     from dbo.[ServicePayment] sp inner join dbo.[ServiceToLead] sl ON sp.ServiceToLeadId = sl.Id
-	where sp.TransactionId = @TransactionId
+	where sp.ServiceToLeadId = @ServiceToLeadId
 end

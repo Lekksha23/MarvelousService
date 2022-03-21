@@ -3,6 +3,7 @@ using MarvelousService.DataLayer.Configuration;
 using MarvelousService.DataLayer.Entities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Data;
 
 namespace MarvelousService.DataLayer.Repositories
@@ -10,7 +11,7 @@ namespace MarvelousService.DataLayer.Repositories
     public class ServicePaymentRepository : BaseRepository
     {
         private const string _insertProcedure = "dbo.ServicePayment_Insert";
-        private const string _selectByTransactionIdProcedure = "dbo.ServicePayment_SelectByTransactionId";
+        private const string _selectByServiceToLeadProcedure = "dbo.ServicePayment_SelectByServiceToLead";
         private readonly ILogger<ServicePaymentRepository> _logger;
 
         public ServicePaymentRepository(IOptions<DbConfiguration> options, ILogger<ServicePaymentRepository> logger) : base(options)
@@ -18,13 +19,13 @@ namespace MarvelousService.DataLayer.Repositories
             _logger = logger;
         }
 
-        public int AddServicePayment(ServicePayment servicePayment)
+        public async Task<int> AddServicePayment(ServicePayment servicePayment)
         {
             _logger.LogInformation("Подключение к базе данных.");
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Произведено подключение к базе данных.");
 
-            var id = connection.QueryFirstOrDefault<int>(
+            var id = await connection.QueryFirstOrDefaultAsync<int>(
                     _insertProcedure,
                     new
                     {
@@ -33,30 +34,30 @@ namespace MarvelousService.DataLayer.Repositories
                     },
                     commandType: CommandType.StoredProcedure
                 );
-            _logger.LogDebug($"Оплата услуги добавлена в базу данных.");
+            _logger.LogInformation($"Оплата услуги добавлена в базу данных.");
             return id;
         }
 
-        public ServicePayment GetServicePaymentByTransactionId(int id)
+        public async Task<List<ServicePayment>> GetServicePaymentsByServiceToLeadId(int id)
         {
-            _logger.LogDebug("Подключение к базе данных.");
+            _logger.LogInformation("Подключение к базе данных.");
             using IDbConnection connection = ProvideConnection();
-            _logger.LogDebug("Произведено подключение к базе данных.");
+            _logger.LogInformation("Произведено подключение к базе данных.");
 
-            var servicePayment = connection
-                .Query<ServicePayment, ServiceToLead, ServicePayment>(
-                _selectByTransactionIdProcedure,
+            var servicePayments = await connection
+                .QueryAsync<ServicePayment, ServiceToLead, ServicePayment>(
+                _selectByServiceToLeadProcedure,
                 (servicePayment, serviceToLead) =>
                 {
-                    //servicePayment.TransactionId = serviceToLead;
+                    servicePayment.ServiceToLeadId = serviceToLead;
                     return servicePayment;
                 },
                 new { Id = id },
-                splitOn: "Id",
-                commandType: CommandType.StoredProcedure).FirstOrDefault();
-            _logger.LogDebug($"Информация об услуге с транзакцией = {id} была возвращена.");
+                splitOn: "ServiceToLeadId",
+                commandType: CommandType.StoredProcedure);
 
-            return servicePayment;
+            _logger.LogInformation($"Информация о подписке/разовом платеже с = {id} была возвращена.");
+            return servicePayments.ToList();
         }
     }
 }
