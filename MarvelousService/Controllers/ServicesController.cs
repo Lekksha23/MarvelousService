@@ -88,6 +88,7 @@ namespace MarvelousService.API.Controllers
         //api/services/
         [HttpPatch("id")]
         [AuthorizeRole(Role.Admin)]
+        [SwaggerOperation("Deleted services")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
