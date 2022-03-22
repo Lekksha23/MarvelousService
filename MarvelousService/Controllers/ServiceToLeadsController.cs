@@ -32,7 +32,7 @@ namespace MarvelousService.API.Controllers
         [AuthorizeRole(Role.Regular,Role.Vip)]       
         [SwaggerOperation("Add new serviceToLead")]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        public async Task<ActionResult<long>> AddServiceToLead([FromBody] ServiceToLeadInsertRequestAdd serviceInsertRequest)
+        public async Task<ActionResult<int>> AddServiceToLead([FromBody] ServiceToLeadInsertRequestAdd serviceInsertRequest)
         {
             _logger.LogInformation($"Получен запрос на добавление новой услуги.");
 
@@ -49,7 +49,7 @@ namespace MarvelousService.API.Controllers
         [AuthorizeRole(Role.Regular, Role.Vip)]
         [SwaggerOperation("Get servicesToLead by id")]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceToLeadResponse>))]
-        public async Task<ActionResult<List<ServiceToLeadResponse>>> GetServiceToLeadByIdId(long id)
+        public async Task<ActionResult<List<ServiceToLeadResponse>>> GetServiceToLeadById(int id)
         {
             _logger.LogInformation($"Запрос на получение всех услуг по id = {id}");
 
@@ -60,5 +60,6 @@ namespace MarvelousService.API.Controllers
 
             return Ok(result);
         }
+
     }
 }

@@ -57,19 +57,22 @@ namespace MarvelousService.DataLayer.Repositories
             return listServiceToLead.ToList();
         }
 
-        public async Task<ServiceToLead> GetServiceToLeadById(int id)
+        public async Task<List<ServiceToLead>> GetServiceToLeadById(int id)
         {
             _logger.LogInformation("Подключение к базе данных");
+
             using IDbConnection connection = ProvideConnection();
+
             _logger.LogInformation("Подключение к базе данных произведено");
 
-            var service = await connection.QuerySingleAsync<ServiceToLead>(
+            var service = await connection.QueryAsync<ServiceToLead>(
                 _serviceGetByIdProcedure,
                 new { Id = id },
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга под id = {id} получена");
-            return service;
+
+            return service.ToList();
         }
     }
 }
