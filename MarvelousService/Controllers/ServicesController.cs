@@ -16,14 +16,12 @@ namespace MarvelousService.API.Controllers
     public class ServicesController : Controller
     {
         private readonly IServiceToService _serviceService;
-        private readonly IServiceToLeadService _serviceToLeadService;
         private readonly IMapper _autoMapper;
         private readonly ILogger<ServicesController> _logger;
 
-        public ServicesController(IServiceToService serviceService, IMapper autoMapper, IServiceToLeadService serviceToLead, ILogger<ServicesController> logger)
+        public ServicesController(IServiceToService serviceService, IMapper autoMapper, ILogger<ServicesController> logger)
         {
             _serviceService = serviceService;
-            _serviceToLeadService = serviceToLead;
             _autoMapper = autoMapper;
             _logger = logger;
         }

@@ -28,57 +28,57 @@ namespace MarvelousService.BusinessLayer.Tests
             _service = new ServiceToService(_serviceRepositoryMock.Object, _mapper, _logger);
         }
 
-        [TestCaseSource(typeof(GetServiceByIdTestCaseSource))]
-        public void  GetServiceByIdTest(Service services, ServiceModel expected)
-        {
-            var id = 1;
-            //given
-             _serviceRepositoryMock.Setup(g => g.GetServiceById(id)).ReturnsAsync(services);
+        //[TestCaseSource(typeof(GetServiceByIdTestCaseSource))]
+        //public void  GetServiceByIdTest(Service services, ServiceModel expected)
+        //{
+        //    var id = 1;
+        //    //given
+        //     _serviceRepositoryMock.Setup(g => g.GetServiceById(id)).ReturnsAsync(services);
 
 
-            //when
-            var actual =  _service.GetServiceById(id);
+        //    //when
+        //    var actual =  _service.GetServiceById(id);
            
-            //then
-            Assert.AreEqual(actual, expected);
+        //    //then
+        //    Assert.AreEqual(actual, expected);
 
 
-            _serviceRepositoryMock.Verify(g => g.GetServiceById(id), Times.Once);
-        }
+        //    _serviceRepositoryMock.Verify(g => g.GetServiceById(id), Times.Once);
+        //}
 
-        [TestCaseSource(typeof(AddServiceTestCaseSourse))]
-        public void AddServiceTest(ServiceModel services, int expected)
-        {
-            //given
-            _serviceRepositoryMock.Setup(a => a.AddService(It.IsAny<Service>())).ReturnsAsync(expected);
+        //[TestCaseSource(typeof(AddServiceTestCaseSourse))]
+        //public void AddServiceTest(ServiceModel services, int expected)
+        //{
+        //    //given
+        //    _serviceRepositoryMock.Setup(a => a.AddService(It.IsAny<Service>())).ReturnsAsync(expected);
 
-            //when
-            var actual = _service.AddService(services);
+        //    //when
+        //    var actual = _service.AddService(services);
 
-            //then
-            _serviceRepositoryMock.Verify(a => a.AddService(It.IsAny<Service>()), Times.Once);
-            Assert.AreEqual(expected, actual);
+        //    //then
+        //    _serviceRepositoryMock.Verify(a => a.AddService(It.IsAny<Service>()), Times.Once);
+        //    Assert.AreEqual(expected, actual);
 
-        }
+        //}
 
-        [TestCaseSource(typeof(UpdateServiceTestCaseSourse))]
-        public void UpdateServiceTest(ServiceModel services, ServiceModel updateService, ServiceModel expected)
-        {
-            //given
-            _serviceRepositoryMock.Setup(a => a.AddService(It.IsAny<Service>())).ReturnsAsync(expected.Id);
+        //[TestCaseSource(typeof(UpdateServiceTestCaseSourse))]
+        //public void UpdateServiceTest(ServiceModel services, ServiceModel updateService, ServiceModel expected)
+        //{
+        //    //given
+        //    _serviceRepositoryMock.Setup(a => a.AddService(It.IsAny<Service>())).ReturnsAsync(expected.Id);
 
-            var newService = _service.AddService(services);
+        //    var newService = _service.AddService(services);
 
-            //when
-            _service.UpdateService(updateService.Id, updateService);
+        //    //when
+        //    _service.UpdateService(updateService.Id, updateService);
 
-            var actual = _service.GetServiceById(newService.Id);
-            //then
+        //    var actual = _service.GetServiceById(newService.Id);
+        //    //then
 
-            _serviceRepositoryMock.Verify(a => a.AddService(It.IsAny<Service>()), Times.Once);
-            Assert.AreEqual(expected, actual);
+        //    _serviceRepositoryMock.Verify(a => a.AddService(It.IsAny<Service>()), Times.Once);
+        //    Assert.AreEqual(expected, actual);
 
-        }
+        //}
 
 
     }
