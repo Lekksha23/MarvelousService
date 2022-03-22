@@ -35,7 +35,7 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<long>> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
+        public async Task<ActionResult<int>> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
         {
             _logger.LogInformation($"Получен запрос на добавление новой услуги.");
 
