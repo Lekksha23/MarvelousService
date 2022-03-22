@@ -29,16 +29,16 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         //[TestCaseSource(typeof(GetServiceByIdTestCaseSource))]
-        //public void  GetServiceByIdTest(Service services, ServiceModel expected)
+        //public void GetServiceByIdTest(Service services, ServiceModel expected)
         //{
         //    var id = 1;
         //    //given
-        //     _serviceRepositoryMock.Setup(g => g.GetServiceById(id)).ReturnsAsync(services);
+        //    _serviceRepositoryMock.Setup(g => g.GetServiceById(id)).ReturnsAsync(services);
 
 
         //    //when
-        //    var actual =  _service.GetServiceById(id);
-           
+        //    var actual = _service.GetServiceById(id);
+
         //    //then
         //    Assert.AreEqual(actual, expected);
 

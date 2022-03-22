@@ -16,8 +16,7 @@ namespace MarvelousService.BusinessLayer.Services
             var request = new RestRequest(_loginPath, Method.Post);
             request.AddJsonBody(authModel);
             var response = await client.PostAsync<string>(request);
-            //var result = JsonConvert.DeserializeObject<dynamic>(response.Content);
-            //var token = result.access_token;
+
 
             return response;
         }
