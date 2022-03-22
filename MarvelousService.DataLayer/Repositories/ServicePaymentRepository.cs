@@ -8,7 +8,7 @@ using System.Data;
 
 namespace MarvelousService.DataLayer.Repositories
 {
-    public class ServicePaymentRepository : BaseRepository
+    public class ServicePaymentRepository : BaseRepository, IServicePaymentRepository
     {
         private const string _insertProcedure = "dbo.ServicePayment_Insert";
         private const string _selectByServiceToLeadProcedure = "dbo.ServicePayment_SelectByServiceToLead";

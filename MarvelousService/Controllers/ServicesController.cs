@@ -16,14 +16,12 @@ namespace MarvelousService.API.Controllers
     public class ServicesController : Controller
     {
         private readonly IServiceToService _serviceService;
-        private readonly IServiceToLeadService _serviceToLeadService;
         private readonly IMapper _autoMapper;
         private readonly ILogger<ServicesController> _logger;
 
-        public ServicesController(IServiceToService serviceService, IMapper autoMapper, IServiceToLeadService serviceToLead, ILogger<ServicesController> logger)
+        public ServicesController(IServiceToService serviceService, IMapper autoMapper, ILogger<ServicesController> logger)
         {
             _serviceService = serviceService;
-            _serviceToLeadService = serviceToLead;
             _autoMapper = autoMapper;
             _logger = logger;
         }
@@ -35,7 +33,7 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<long>> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
+        public async Task<ActionResult<int>> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
         {
             _logger.LogInformation($"Получен запрос на добавление новой услуги.");
 
@@ -53,7 +51,7 @@ namespace MarvelousService.API.Controllers
         [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Get services by id")]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceResponse>))]
-        public async Task<ActionResult<List<ServiceResponse>>> GetServiceById(long id)
+        public async Task<ActionResult<List<ServiceResponse>>> GetServiceById(int id)
         {
             _logger.LogInformation($"Запрос на получение всех услуг по id = {id}");
 
@@ -73,7 +71,7 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status503ServiceUnavailable)]
-        public async Task<ActionResult<ServiceUpdateRequest>> UpdateService(long id, ServiceUpdateRequest serviceUpdateRequest)
+        public async Task<ActionResult<ServiceUpdateRequest>> UpdateService(int id, ServiceUpdateRequest serviceUpdateRequest)
         {
             ServiceModel service = _autoMapper.Map<ServiceModel>(serviceUpdateRequest);
 
@@ -81,8 +79,6 @@ namespace MarvelousService.API.Controllers
 
             return Ok(service);
         }
-
-
 
 
         //api/services/
@@ -93,7 +89,7 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status503ServiceUnavailable)]
-        public async Task<ActionResult<ServiceDeletedRequest>> SoftDelete(long id, ServiceDeletedRequest serviceDeletedRequest)
+        public async Task<ActionResult<ServiceDeletedRequest>> SoftDelete(int id, ServiceDeletedRequest serviceDeletedRequest)
         {
             ServiceModel service = _autoMapper.Map<ServiceModel>(serviceDeletedRequest);
 

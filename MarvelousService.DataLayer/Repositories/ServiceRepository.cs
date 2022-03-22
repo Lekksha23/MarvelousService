@@ -57,7 +57,7 @@ namespace MarvelousService.DataLayer.Repositories
             return service;
         }
 
-        public async Task<ServicePayment> GetTransactionByServiceToleadId(long id)
+        public async Task<ServicePayment> GetTransactionByServiceToleadId(int id)
         {
             _logger.LogInformation("Запрашиваем транзакция по id");
             _logger.LogInformation("Подключение к базе данных");
@@ -73,7 +73,7 @@ namespace MarvelousService.DataLayer.Repositories
             return service;
         }
 
-        public async Task SoftDelete(long id, Service service)
+        public async Task SoftDelete(int id, Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
 
@@ -88,7 +88,7 @@ namespace MarvelousService.DataLayer.Repositories
             _logger.LogInformation($"Услуга - {service.Name} сменила статус на 'Удалена' в базе данных");
         }
 
-        public async Task UpdateService(long id, Service service)
+        public async Task UpdateService(int id, Service service)
         {
             _logger.LogInformation("Подключение к базе данных");
             using IDbConnection connection = ProvideConnection();
