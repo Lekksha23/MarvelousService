@@ -45,9 +45,16 @@ builder.Services.AddMvc()
             return new UnprocessableEntityObjectResult(exc);
         };
     });
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.RegisterSwaggerAuth();
+
+builder.Services.RegisterAuthJwtToken();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddAuthorization();
 
 builder.Services.RegisterMarvelousServiceRepositories();
 builder.Services.RegisterMarvelousServiceServices();
