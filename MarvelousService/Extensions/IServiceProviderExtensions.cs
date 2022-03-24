@@ -89,9 +89,9 @@ namespace MarvelousService.API.Extensions
             });
         }
 
-        public static void RegisterAuthJwtToken(this IServiceCollection jwt)
+        public static void RegisterAuthJwtToken(this IServiceCollection services)
         {
-            jwt.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters

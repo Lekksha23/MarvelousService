@@ -23,14 +23,6 @@ var config = new ConfigurationBuilder()
            .AddXmlFile("NLog.config", optional: true, reloadOnChange: true)
            .Build();
 
-builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
-builder.Services.AddSwaggerGen(config =>
-{
-    config.EnableAnnotations();
-});
-
 builder.Services.AddMvc()
     .AddJsonOptions(options =>
     {
@@ -45,15 +37,16 @@ builder.Services.AddMvc()
             return new UnprocessableEntityObjectResult(exc);
         };
     });
-builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddControllers().AddJsonOptions(x =>x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.RegisterSwaggerAuth();
-
 builder.Services.RegisterAuthJwtToken();
 
+builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddAuthorization();
 
 builder.Services.RegisterMarvelousServiceRepositories();
@@ -67,7 +60,6 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
