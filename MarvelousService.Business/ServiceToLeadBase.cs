@@ -1,8 +1,9 @@
-﻿using MarvelousService.DataLayer.Enums;
+﻿using MarvelousService.BusinessLayer.Models;
+using MarvelousService.DataLayer.Enums;
 
-namespace MarvelousService.BusinessLayer.Models
+namespace MarvelousService.BusinessLayer
 {
-    public class ServiceToLeadModel : ServiceToLeadBase, IServiceToLead
+    public abstract class ServiceToLeadBase
     {
         public int Id { get; set; }
         public ServiceType Type { get; set; }
@@ -12,10 +13,5 @@ namespace MarvelousService.BusinessLayer.Models
         public int LeadId { get; set; }
         public int ServiceId { get; set; }
         public List<ServicePaymentModel> servicePayments { get; set; }
-
-        public decimal GetPrice(decimal price)
-        {
-            return price;
-        }
     }
 }

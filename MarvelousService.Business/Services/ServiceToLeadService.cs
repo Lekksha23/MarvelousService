@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Marvelous.Contracts;
 using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
+using MarvelousService.DataLayer.Enums;
 using MarvelousService.DataLayer.Interfaces;
+using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace MarvelousService.BusinessLayer.Services
@@ -11,32 +14,58 @@ namespace MarvelousService.BusinessLayer.Services
     public class ServiceToLeadService : IServiceToLeadService
     {
         private readonly IServiceToLeadRepository _serviceToLeadRepository;
+        private readonly IServiceRepository _serviceRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<ServiceToService> _logger;
+        private readonly ITransactionService _transactionService;
 
-        public ServiceToLeadService(IServiceToLeadRepository serviceToLeadRepository, IMapper mapper, ILogger<ServiceToService> logger)
+        private const double _discount = 0.9;
+
+        public ServiceToLeadService(IServiceToLeadRepository serviceToLeadRepository,
+            IMapper mapper,
+            ILogger<ServiceToService> logger,
+            IServiceRepository serviceRepository,
+            ITransactionService transactionService)
         {
             _serviceToLeadRepository = serviceToLeadRepository;
+            _serviceRepository = serviceRepository;
+            _transactionService = transactionService;
             _mapper = mapper;
             _logger = logger;
         }
 
-        public async Task<int> AddServiceToLead(ServiceToLeadModel serviceToLeadModel)
+        public async Task<int> AddServiceToLead(ServiceToLeadModel serviceToLeadModel, int role)
         {
-            var service = _mapper.Map<ServiceToLead>(serviceToLeadModel);
-            _logger.LogInformation("запрос на добавление услуги");
-            return await _serviceToLeadRepository.AddServiceToLead(service);
+            Service service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId);
+            var totalPrice = serviceToLeadModel.GetPrice(service.Price);
+            if (role == (int)Role.Vip)
+            {
+                serviceToLeadModel.Price = totalPrice * (decimal)_discount;
+            }
+            else
+            {
+                serviceToLeadModel.Price = totalPrice;
+            }
+            var serviceToLead = _mapper.Map<ServiceToLead>(serviceToLeadModel);
+            TransactionRequestModel serviceTransactionModel = new TransactionRequestModel {
+                Amount = serviceToLeadModel.Price,
+                Currency = Currency.RUB,
+                AccountId = 23};
+            _transactionService.AddTransaction(serviceTransactionModel);
+            serviceToLeadModel.Status = Status.Active;
+            _logger.LogInformation("Запрос на добавление услуги");
+            return await _serviceToLeadRepository.AddServiceToLead(serviceToLead);
         }
 
         public async Task<List<ServiceToLeadModel>> GetLeadById(int id)
         {
-            _logger.LogInformation("запрос на получение лида по id");
+            _logger.LogInformation("Запрос на получение лида по id");
             var lead = await _serviceToLeadRepository.GetByLeadId(id);
 
             if (lead == null)
             {
                 _logger.LogError("Ошибка в получении лида по Id ");
-                throw new NotFoundServiceException("Такого  лида не существует.");
+                throw new NotFoundServiceException("Такого лида не существует.");
             }
             return _mapper.Map<List<ServiceToLeadModel>>(lead);
         }
@@ -50,8 +79,8 @@ namespace MarvelousService.BusinessLayer.Services
             {
                 _logger.LogError("Ошибка в получении услуги по Id ");
                 throw new NotFoundServiceException("Такой услуги не существует.");
-            }    
-            return  _mapper.Map<List<ServiceToLeadModel>>(service);
+            }
+            return _mapper.Map<List<ServiceToLeadModel>>(service);
         }
     }
 }

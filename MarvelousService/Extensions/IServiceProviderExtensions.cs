@@ -19,13 +19,16 @@ namespace MarvelousService.API.Extensions
         {
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IServiceToLeadRepository, ServiceToLeadRepository>();
+            services.AddScoped<IServicePaymentRepository, ServicePaymentRepository>();
         }
 
         public static void RegisterMarvelousServiceServices(this IServiceCollection services)
         {
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICRMService, CRMService>();
             services.AddScoped<IServiceToService, ServiceToService>();
+            services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
+            services.AddScoped<ITransactionService, TransactionService>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)

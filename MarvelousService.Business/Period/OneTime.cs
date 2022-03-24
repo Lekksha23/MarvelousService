@@ -1,8 +1,8 @@
 ﻿namespace MarvelousService.BusinessLayer.Models
 {
-    public class OneTimePeriod
+    public class OneTime
     {
-        public virtual double GetPrice(double price)
+        public decimal GetPrice(decimal price)
         {
             return price;
         }
