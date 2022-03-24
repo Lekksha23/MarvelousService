@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CRM.APILayer.Attribites;
 using Marvelous.Contracts;
+using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
-using MarvelousService.API.Models.Request;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -27,24 +27,24 @@ namespace MarvelousService.API.Controllers
             _logger = logger;
         }
 
-        //api/servicesToLead/
+        //api/servicesToLead
         [HttpPost]
-        [AuthorizeRole(Role.Regular,Role.Vip)]       
-        [SwaggerOperation("Add new serviceToLead")]
+        [AuthorizeRole(Role.Vip, Role.Regular)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        public async Task<ActionResult<int>> AddServiceToLead([FromBody] ServiceToLeadInsertRequestAdd serviceInsertRequest)
+        [SwaggerOperation("Add service to a lead")]
+        public async Task<ActionResult<int>> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
         {
-            _logger.LogInformation($"Получен запрос на добавление новой услуги.");
-
-            var serviceToLeadModel = _autoMapper.Map<ServiceToLeadModel>(serviceInsertRequest);
-            var id = await _serviceToLeadService.AddServiceToLead(serviceToLeadModel);
-
-            _logger.LogInformation($"Услуга с id = {id} успешно добавлена.");
-
+            var leadIdentity = this.GetLeadFromToken();
+            _logger.LogInformation($"Получен запрос на оформление услуги лиду c id = {leadIdentity.Id}.");
+            var serviceToLeadModel = _autoMapper.Map<ServiceToLeadModel>(serviceToLeadInsertRequest);
+            serviceToLeadModel.LeadId = leadIdentity.Id;
+            Role role = leadIdentity.Role;
+            var id = await _serviceToLeadService.AddServiceToLead(serviceToLeadModel, (int)role);
+            _logger.LogInformation($"Подписка/разовая услуга с id = {id} добавлена лиду с id = {serviceToLeadModel.LeadId}.");
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
-        //api/servicesToLead/
+        //api/servicesToLead
         [HttpGet("id")]
         [AuthorizeRole(Role.Regular, Role.Vip)]
         [SwaggerOperation("Get servicesToLead by id")]

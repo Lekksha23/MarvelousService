@@ -10,6 +10,7 @@ namespace MarvelousService.BusinessLayer.Configurations
         {
             CreateMap<Service, ServiceModel>().ReverseMap();
             CreateMap<ServiceToLead, ServiceToLeadModel>().ReverseMap();
+            CreateMap<ServicePayment, ServicePaymentModel>().ReverseMap();
         }
     }
 }

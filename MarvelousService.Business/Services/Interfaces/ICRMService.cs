@@ -1,11 +1,10 @@
 ﻿using MarvelousService.BusinessLayer.Models;
-using RestSharp;
 
 namespace MarvelousService.BusinessLayer.Services.Interfaces
 {
-    public interface IAuthService
+    public interface ICRMService
     {
         Task<string> GetToken(AuthModel authModel);
-        Task<RestResponse> RegistrateLead(LeadModel leadModel);
+        Task<int> RegistrateLead(LeadModel leadModel);
     }
 }

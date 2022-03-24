@@ -37,11 +37,9 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<ServiceModel>(service);
         }
 
-
         public async Task SoftDelete(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на получение услуги по id");
-
             var oldService = await _serviceRepository.GetServiceById(id);          
 
             if (oldService == null)
@@ -50,18 +48,13 @@ namespace MarvelousService.BusinessLayer.Services
 
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }
-
             var newService =  _mapper.Map<Service>(serviceModel);
-
             await _serviceRepository.SoftDelete(id, newService);
-           
         }
-
 
         public async Task UpdateService(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на изменение услуги");
-
             var oldService = await _serviceRepository.GetServiceById(id);
             CheckService(oldService);
             _logger.LogInformation("запрос на изменение услуги прошел успешно");
