@@ -1,6 +1,6 @@
 ﻿namespace MarvelousService.API.Consumer
 {
-    public class TransactionConsumer
+    public class ReportConsumer
     {
     }
 }

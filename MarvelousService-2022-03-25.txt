@@ -1,0 +1,4 @@
+2022-03-25 22:26:17.6823 | $(callsite)| INFO | Now listening on: https://localhost:5001 $(newline)
+2022-03-25 22:26:18.0494 | $(callsite)| INFO | Now listening on: http://localhost:5000 $(newline)
+2022-03-25 22:26:39.8929 | $(callsite)| INFO | Poluchen zapros na authentikaciu leada c email = test. $(newline)
+2022-03-25 22:26:41.2183 | $(callsite)| INFO | Authentikacia leada c email = test proshhla uspeshno. $(newline)

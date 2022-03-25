@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Marvelous.Contracts;
 using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
@@ -14,6 +15,8 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly IMapper _mapper;
         private readonly ILogger<ServiceToService> _logger;
 
+        private const double _discount = 0.9;
+
         public ServiceToService(IServiceRepository serviceRepository, IMapper mapper, ILogger<ServiceToService> logger)
         {
             _serviceRepository = serviceRepository;
@@ -21,9 +24,20 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public async Task<int> AddService(ServiceModel serviceModel)
+        public async Task<int> AddService(ServiceModel serviceModel,int role)
         {
+            Service serviceGet = await _serviceRepository.GetServiceById(serviceModel.Id);
+            var totalPrice = serviceModel.GetPrice(serviceGet.Price);
+            if (role == (int)Role.Vip)
+            {
+                serviceModel.Price = totalPrice * (decimal)_discount;
+            }
+            else
+            {
+                serviceModel.Price = totalPrice;
+            }
             _logger.LogInformation("запрос на добавление услуги");
+
             var service = _mapper.Map<Service>(serviceModel);
             var newService =  await _serviceRepository.AddService(service);
             return newService;

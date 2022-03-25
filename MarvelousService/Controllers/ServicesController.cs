@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRM.APILayer.Attribites;
-using Marvelous.Contracts;
+using Marvelous.Contracts.Enums;
+using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.API.Models.ExceptionModel;
 using MarvelousService.API.Models.Request;
@@ -30,14 +31,20 @@ namespace MarvelousService.API.Controllers
         //api/services
         [HttpPost]
         [SwaggerOperation("Add new service")]
+        [AuthorizeRole(Role.Admin)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<int>> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
         {
+            var leadIdentity = this.GetLeadFromToken();
+
             _logger.LogInformation($"Получен запрос на добавление новой услуги.");
+
             var serviceModel = _autoMapper.Map<ServiceModel>(serviceInsertRequest);
-            var id = await _serviceService.AddService(serviceModel);
+            serviceModel.Id = leadIdentity.Id;
+            Role role = leadIdentity.Role;
+            var id = await _serviceService.AddService(serviceModel, (int)role);
             _logger.LogInformation($"Услуга с id = {id} успешно добавлена.");
             return StatusCode(StatusCodes.Status201Created, id);
         }

@@ -66,27 +66,32 @@ namespace MarvelousService.API.Extensions
                 });
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter token",
+                    //In = ParameterLocation.Header,
+                    //Description = "Please enter token",
+                    //Name = "Authorization",
+                    //Type = SecuritySchemeType.Http,
+                    //BearerFormat = "JWT",
+                    //Scheme = "bearer"
                     Name = "Authorization",
                     Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
                     BearerFormat = "JWT",
-                    Scheme = "bearer"
+                    Description = "JWT Authorization header using the Bearer scheme."
                 });
 
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
-                        new OpenApiSecurityScheme
-                        {
-                        Reference = new OpenApiReference
-                        {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
-                        }
-                    },
-                    new string[]{}
-                }
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                         new string[] {}
+                    }
                 });
             });
         }
@@ -107,6 +112,7 @@ namespace MarvelousService.API.Extensions
                         ValidateIssuerSigningKey = true,
                     };
                 });
+            jwt.AddAuthorization();
         }
 
         public static void AddMassTransit(this IServiceCollection services)

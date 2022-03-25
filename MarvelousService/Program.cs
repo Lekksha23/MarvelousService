@@ -26,10 +26,7 @@ var config = new ConfigurationBuilder()
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.AddSwaggerGen(config =>
-{
-    config.EnableAnnotations();
-});
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddMvc()
     .AddJsonOptions(options =>
@@ -59,6 +56,7 @@ builder.Services.AddAuthorization();
 builder.Services.RegisterMarvelousServiceRepositories();
 builder.Services.RegisterMarvelousServiceServices();
 builder.Services.RegisterMarvelousServiceAutomappers();
+builder.Services.RegisterLogger(config);
 
 var app = builder.Build();
 
