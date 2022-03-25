@@ -1,4 +1,5 @@
 ﻿using Marvelous.Contracts;
+using Marvelous.Contracts.Enums;
 using MarvelousService.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

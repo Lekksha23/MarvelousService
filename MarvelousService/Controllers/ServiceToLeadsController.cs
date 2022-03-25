@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRM.APILayer.Attribites;
 using Marvelous.Contracts;
+using Marvelous.Contracts.Enums;
 using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.BusinessLayer.Models;
@@ -29,7 +30,7 @@ namespace MarvelousService.API.Controllers
 
         //api/servicesToLead
         [HttpPost]
-        [AuthorizeRole(Role.Vip, Role.Regular)]
+        [AuthorizeRole(Role.Regular, Role.Vip)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [SwaggerOperation("Add service to a lead")]
         public async Task<ActionResult<int>> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)

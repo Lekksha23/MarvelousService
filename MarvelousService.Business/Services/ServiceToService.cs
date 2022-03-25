@@ -30,7 +30,7 @@ namespace MarvelousService.BusinessLayer.Services
         }
 
         public async Task<ServiceModel> GetServiceById(int id)
-        {
+        {   
             _logger.LogInformation("запрос на получение услуги по id");
             var service = await _serviceRepository.GetServiceById(id);
             CheckService(service);

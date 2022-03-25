@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
+using MassTransit;
+using MarvelousService.API.Consumer;
 
 namespace MarvelousService.API.Extensions
 {
@@ -28,7 +30,7 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IServiceToService, ServiceToService>();
             services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
-            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<ITransactionService, TransactionClient>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -105,6 +107,30 @@ namespace MarvelousService.API.Extensions
                         ValidateIssuerSigningKey = true,
                     };
                 });
+        }
+
+        public static void AddMassTransit(this IServiceCollection services)
+        {
+            services.AddMassTransit(x =>
+            {
+                //x.AddConsumer<>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("rabbitmq://80.78.240.16", hst =>
+                    {
+                        hst.Username("nafanya");
+                        hst.Password("qwe!23");
+                    });
+
+                    cfg.ReceiveEndpoint("transactionQueue", e =>
+                    {
+                        //e.ConfigureConsumer<>(context);
+                    });
+
+
+                });
+            });
         }
     }
 }
