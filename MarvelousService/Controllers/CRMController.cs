@@ -36,14 +36,5 @@ namespace MarvelousService.API.Controllers
             return Json(token);
         }
 
-        [HttpPost("registrate")]
-        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-        [SwaggerOperation("Registrate new lead")]
-        public async Task<ActionResult> Registrate([FromBody] LeadInsertRequest lead)
-        {
-            var leadModel = _autoMapper.Map<LeadModel>(lead);
-            var id = await _crmService.RegistrateLead(leadModel);
-            return StatusCode(StatusCodes.Status201Created, id);
-        }
     }
 }
