@@ -30,8 +30,8 @@ namespace MarvelousService.API.Controllers
 
         //api/services
         [HttpPost]
-        [SwaggerOperation("Add new service")]
         [AuthorizeRole(Role.Admin)]
+        [SwaggerOperation("Add new service")]       
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
@@ -51,12 +51,15 @@ namespace MarvelousService.API.Controllers
 
         //api/services/
         [HttpGet("id")]
+        [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Get service by id")]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceResponse>))]
         public async Task<ActionResult<List<ServiceResponse>>> GetServiceById(int id)
         {
+            var leadIdentity = this.GetLeadFromToken().Id;
+
             _logger.LogInformation($"Запрос на получение услуги по id = {id}");
-            var serviceModel = await _serviceService.GetServiceById(id);
+            var serviceModel = await _serviceService.GetServiceById(leadIdentity);
             var result = _autoMapper.Map<List<ServiceResponse>>(serviceModel);
             _logger.LogInformation($"Услуга по id = {id} получена");
             return Ok(result);
@@ -64,6 +67,7 @@ namespace MarvelousService.API.Controllers
 
         //api/services/
         [HttpPut("id")]
+        [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Update services")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
@@ -71,13 +75,22 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<ServiceUpdateRequest>> UpdateService(int id, ServiceUpdateRequest serviceUpdateRequest)
         {
+            var leadIdentity = this.GetLeadFromToken();
+
+            _logger.LogInformation($"Poluchen zapros na obnovlenie service s id = {id}.");
+
             ServiceModel service = _autoMapper.Map<ServiceModel>(serviceUpdateRequest);
-            await _serviceService.UpdateService(id, service);
+
+            var serviceId = leadIdentity.Id;
+            service.Id = id;
+            await _serviceService.UpdateService(serviceId, service);
+            _logger.LogInformation($"Service c id = {id} uspeshno obnovlen.");
             return Ok(service);
         }
 
         //api/services/
         [HttpPatch("id")]
+        [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Deleted services")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
@@ -85,8 +98,16 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<ServiceDeletedRequest>> SoftDelete(int id, ServiceDeletedRequest serviceDeletedRequest)
         {
+            var leadIdentity = this.GetLeadFromToken();
+
+            _logger.LogInformation($"Poluchen zapros na ydalenie service s id = {id}.");
+
             ServiceModel service = _autoMapper.Map<ServiceModel>(serviceDeletedRequest);
-            await _serviceService.SoftDelete(id, service);
+
+            var serviceId = leadIdentity.Id;
+            service.Id = id;
+            await _serviceService.SoftDelete(serviceId, service);
+            _logger.LogInformation($"Service c id = {id} uspeshno ydalen.");
             return Ok(service);
         }
     }

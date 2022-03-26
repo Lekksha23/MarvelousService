@@ -6,12 +6,11 @@ using MarvelousService.API.ExceptionResponse;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
-
-string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
 string _logDirectoryVariableName = "LOG_DIRECTORY";
+string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
 
-string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);
 string logDirectory = builder.Configuration.GetValue<string>(_logDirectoryVariableName);
+string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);
 
 builder.Services.Configure<DbConfiguration>(opt =>
 {
@@ -26,7 +25,12 @@ var config = new ConfigurationBuilder()
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.RegisterSwaggerAuth();
+builder.Services.AddAuthorization();
+
 
 builder.Services.AddMvc()
     .AddJsonOptions(options =>
@@ -42,16 +46,16 @@ builder.Services.AddMvc()
             return new UnprocessableEntityObjectResult(exc);
         };
     });
-builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.RegisterSwaggerAuth();
+
+
 
 builder.Services.RegisterAuthJwtToken();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddAuthorization();
+
 
 builder.Services.RegisterMarvelousServiceRepositories();
 builder.Services.RegisterMarvelousServiceServices();

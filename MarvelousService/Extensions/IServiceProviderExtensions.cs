@@ -13,6 +13,7 @@ using NLog.Extensions.Logging;
 using MassTransit;
 using MarvelousService.API.Consumer;
 
+
 namespace MarvelousService.API.Extensions
 {
     public static class IServiceProviderExtensions
@@ -66,17 +67,13 @@ namespace MarvelousService.API.Extensions
                 });
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    //In = ParameterLocation.Header,
-                    //Description = "Please enter token",
-                    //Name = "Authorization",
-                    //Type = SecuritySchemeType.Http,
-                    //BearerFormat = "JWT",
-                    //Scheme = "bearer"
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
                     Name = "Authorization",
                     Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer",
                     BearerFormat = "JWT",
-                    Description = "JWT Authorization header using the Bearer scheme."
+                    Scheme = "bearer"
+        
                 });
 
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -90,7 +87,7 @@ namespace MarvelousService.API.Extensions
                                   Id = "Bearer"
                               }
                           },
-                         new string[] {}
+                         new string[]  {}
                     }
                 });
             });
@@ -112,7 +109,6 @@ namespace MarvelousService.API.Extensions
                         ValidateIssuerSigningKey = true,
                     };
                 });
-            jwt.AddAuthorization();
         }
 
         public static void AddMassTransit(this IServiceCollection services)

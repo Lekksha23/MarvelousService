@@ -50,9 +50,10 @@ namespace MarvelousService.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceToLeadResponse>))]
         public async Task<ActionResult<List<ServiceToLeadResponse>>> GetServiceToLeadById(int id)
         {
+            var leadIdentity = this.GetLeadFromToken().Id;
             _logger.LogInformation($"Запрос на получение всех услуг по id = {id}");
 
-            var serviceToLeadModel = await _serviceToLeadService.GetServiceToLeadById(id);
+            var serviceToLeadModel = await _serviceToLeadService.GetServiceToLeadById(leadIdentity);
             var result = _autoMapper.Map<List<ServiceToLeadResponse>>(serviceToLeadModel);
 
             _logger.LogInformation($"Услуги по id = {id} получены");
