@@ -14,9 +14,9 @@ namespace MarvelousService.API.Controllers
     public class CRMController : Controller
     {
         private readonly IMapper _autoMapper;
-        private readonly ICRMService _crmService;
+        private readonly ICRMClient _crmService;
 
-        public CRMController(IMapper autoMapper, ICRMService crmService)
+        public CRMController(IMapper autoMapper, ICRMClient crmService)
         {
             _autoMapper = autoMapper;
             _crmService = crmService;
