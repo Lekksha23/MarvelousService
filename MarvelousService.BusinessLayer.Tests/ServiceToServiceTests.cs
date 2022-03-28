@@ -12,7 +12,7 @@ using NUnit.Framework;
 
 namespace MarvelousService.BusinessLayer.Tests
 {
-    public class ServiceTests
+    public class ServiceToServiceTests
     {
         private ServiceToService _service;
         private Mock<IServiceRepository> _serviceRepositoryMock;

@@ -5,7 +5,6 @@ using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Enums;
-using MarvelousService.DataLayer.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -38,7 +37,7 @@ namespace MarvelousService.BusinessLayer.Services
 
         public async Task<int> AddServiceToLead(ServiceToLeadModel serviceToLeadModel, int role)
         {
-            var service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId);
+            var service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId.Id);
             //var totalPrice = serviceToLeadModel.GetPrice(service.Price);
 
             //if (role == (int)Role.Vip)
@@ -57,6 +56,7 @@ namespace MarvelousService.BusinessLayer.Services
                 AccountId = 23
             };
             var transactionId = _transactionStoreClient.AddTransaction(serviceTransactionModel);
+
             var servicePayment = new ServicePayment {
                 ServiceToLeadId = serviceToLead,
                 TransactionId = transactionId.Id

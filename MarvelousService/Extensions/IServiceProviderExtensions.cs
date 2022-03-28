@@ -3,7 +3,6 @@ using MarvelousService.BusinessLayer.Configuration;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Services.Interfaces;
-using MarvelousService.DataLayer.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

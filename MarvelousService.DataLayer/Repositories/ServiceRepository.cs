@@ -29,7 +29,8 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var id = await connection.QueryFirstOrDefaultAsync<int>(_serviceAddProcedure,
+            var id = await connection.QueryFirstOrDefaultAsync<int>(
+                _serviceAddProcedure,
                 new
                 {
                     service.Name,
@@ -49,7 +50,8 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var service = await connection.QueryFirstOrDefaultAsync<Service>(_serviceGetByIdProcedure, 
+            var service = await connection.QueryFirstOrDefaultAsync<Service>(
+                _serviceGetByIdProcedure, 
                 new { Id = id }, 
                 commandType: CommandType.StoredProcedure);
 
@@ -64,7 +66,8 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var service = await connection.QueryFirstOrDefaultAsync<ServicePayment>(_serviceGetTrancactionByServiceToLead,
+            var service = await connection.QueryFirstOrDefaultAsync<ServicePayment>(
+                _serviceGetTrancactionByServiceToLead,
                 new { ServiceToLeadId = id },
                 commandType: CommandType.StoredProcedure);
 
@@ -79,8 +82,9 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var newService = await connection.QueryFirstOrDefaultAsync<Service>(_serviceSoftDeleteProcedure,
-                new{IsDeleted = service.IsDeleted},
+            var newService = await connection.QueryFirstOrDefaultAsync<Service>(
+                _serviceSoftDeleteProcedure,
+                new { IsDeleted = service.IsDeleted },
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Услуга - {service.Name} сменила статус на 'Удалена' в базе данных");
@@ -92,7 +96,8 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            connection.QueryFirstOrDefault(_serviceUpdateProcedure,
+            connection.QueryFirstOrDefault(
+                _serviceUpdateProcedure,
                 new 
                 {
                     service.Name,

@@ -20,18 +20,18 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public async Task<int> AddServicePayment(ServicePayment servicePaymentModel)
+        public async Task<int> AddServicePayment(ServicePaymentModel servicePaymentModel)
         {
-            _logger.LogInformation("Запрос на добавление оплаты услуги");
+            _logger.LogInformation("Query for adding service payment");
             var servicePayment = _mapper.Map<ServicePayment>(servicePaymentModel);
             var id = await _servicePaymentRepository.AddServicePayment(servicePayment);
-            _logger.LogInformation($"Оплата услуги добавлена. ServiceToLeadId = {servicePayment.ServiceToLeadId}");
+            _logger.LogInformation($"Service payment was added. ServiceToLeadId = {servicePayment.ServiceToLeadId}");
             return id;
         }
 
-        public async Task<List<ServicePaymentModel>> GetServiceById(int serviceToLeadId)
+        public async Task<List<ServicePaymentModel>> GetServicePaymentsById(int serviceToLeadId)
         {
-            _logger.LogInformation("запрос на получение услуги по id");
+            _logger.LogInformation("Query for receiving service payments by id");
             var servicePayments = await _servicePaymentRepository.GetServicePaymentsByServiceToLeadId(serviceToLeadId);
             CheckServicePayments(servicePayments);
             return _mapper.Map<List<ServicePaymentModel>>(servicePayments);
@@ -39,10 +39,10 @@ namespace MarvelousService.BusinessLayer.Services
 
         private void CheckServicePayments(List<ServicePayment> servicePayments)
         {
-            if (servicePayments.Count == 0)
+            if (servicePayments is null)
             {
-                _logger.LogError("Ошибка в получении информации об оплате услуги");
-                throw new NotFoundServiceException("Оплата для услуги не найдена");
+                _logger.LogError("Error in receiving information about service payment");
+                throw new NotFoundServiceException("Service payment not found");
             }
         }
     }

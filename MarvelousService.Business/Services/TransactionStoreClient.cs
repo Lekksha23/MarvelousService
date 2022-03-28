@@ -1,6 +1,6 @@
-﻿using RestSharp;
-using Marvelous.Contracts;
+﻿using Marvelous.Contracts;
 using Microsoft.Extensions.Logging;
+using RestSharp;
 
 namespace MarvelousService.BusinessLayer.Services
 {
@@ -15,13 +15,13 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public async Task<int> AddTransaction(TransactionRequestModel transactionRequestModel)
+        public async Task<long> AddTransaction(TransactionRequestModel transactionRequestModel)
         {
             var client = new RestClient(_url);
             var request = new RestRequest(_transactionPath, Method.Post);
             request.AddJsonBody(transactionRequestModel);
-            _logger.LogInformation("Запрос на добавление транзакции для оплаты услуги");
-            var response = await client.PostAsync<int>(request);
+            _logger.LogInformation("Query for adding a transaction for service payment");
+            var response = await client.PostAsync<long>(request);
             return response;
         }
     }
