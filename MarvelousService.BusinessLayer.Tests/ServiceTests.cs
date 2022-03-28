@@ -1,85 +1,111 @@
 using AutoMapper;
+using Marvelous.Contracts;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Tests.TestCaseSource;
 using MarvelousService.DataLayer.Entities;
-using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarvelousService.BusinessLayer.Tests
 {
     public class ServiceTests
     {
-        private ServiceToService _service;
-        private Mock<IServiceRepository> _serviceRepositoryMock;
-        private ServiceRepository _serviceRepository;
-        private IMapper _mapper;
-        private ILogger<ServiceToService> _logger;
 
-        [SetUp]
-        public void Setup()
+        private Mock<IServiceRepository> _serviceRepositoryMock;
+        private readonly ServiceToServiceTestCaseSource _serviceTest;
+        private readonly IMapper _autoMapper;
+        private readonly Mock<ILogger<ServiceToService>> _logger;
+
+
+        public ServiceTests()
         {
-            _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _serviceRepositoryMock = new Mock<IServiceRepository>();
-            _service = new ServiceToService(_serviceRepositoryMock.Object, _mapper, _logger);
+            _serviceTest = new ServiceToServiceTestCaseSource();
+            _autoMapper = new Mapper(
+                new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
+            _logger = new Mock<ILogger<ServiceToService>>();
         }
 
-        //[TestCaseSource(typeof(GetServiceByIdTestCaseSource))]
-        //public void GetServiceByIdTest(Service services, ServiceModel expected)
-        //{
-        //    var id = 1;
-        //    //given
-        //    _serviceRepositoryMock.Setup(g => g.GetServiceById(id)).ReturnsAsync(services);
+        [SetUp]
+        public async Task Setup()
+        {
+            _serviceRepositoryMock = new Mock<IServiceRepository>();
+        }
+
+        [Test]
+        public async Task AddServiceTest()
+        {
+            //given
+            var serviceModel = _serviceTest.AddServiceModelTest();
+            var service = new Service();
+            _serviceRepositoryMock.Setup(m => m.GetServiceById(It.IsAny<int>())).ReturnsAsync(service);
+            var sut = new ServiceToService( _serviceRepositoryMock.Object, _autoMapper, _logger.Object);
+            int role = 3;
+            //when
+            sut.AddService(serviceModel, role);
+
+            //then
+            _serviceRepositoryMock.Verify(m => m.AddService(It.IsAny<Service>()), Times.Once());
+        }
+        [Test]
+        public async Task UpdateServiceTest()
+        {
+            //given
+            var serviceModel = _serviceTest.AddServiceTest();
+            _serviceRepositoryMock.Setup(m => m.GetServiceById(It.IsAny<int>())).ReturnsAsync(serviceModel);
+            var sut = new ServiceToService(_serviceRepositoryMock.Object, _autoMapper, _logger.Object);
+
+            //when
+            sut.UpdateService(1, new ServiceModel());
+
+            //then
+            _serviceRepositoryMock.Verify(m => m.GetServiceById(It.IsAny<int>()), Times.Once());
+            _serviceRepositoryMock.Verify(m => m.UpdateService(It.IsAny<Service>()), Times.Once());
+        }
+
+        [Test]
+        public async Task DeletedServiceTest()
+        {
+            //given
+            var service = new Service();
+            _serviceRepositoryMock.Setup(m => m.GetServiceById(It.IsAny<int>())).ReturnsAsync(service);
+            var sut = new ServiceToService(_serviceRepositoryMock.Object, _autoMapper, _logger.Object);
+
+            //when
+            sut.SoftDelete(1, new ServiceModel());
+
+            //then
+            _serviceRepositoryMock.Verify(m => m.GetServiceById(It.IsAny<int>()), Times.Once());
+            _serviceRepositoryMock.Verify(m => m.SoftDelete(It.IsAny<Service>()), Times.Once()); ;
+        }
 
 
-        //    //when
-        //    var actual = _service.GetServiceById(id);
+        [Test]
+        public async Task GetByIdTest()
+        {
+            //given
+            var service = _serviceTest.AddServiceTest();
+            _serviceRepositoryMock.Setup(m => m.GetServiceById(It.IsAny<int>())).ReturnsAsync(service);
+            var sut = new ServiceToService(_serviceRepositoryMock.Object, _autoMapper, _logger.Object);
 
-        //    //then
-        //    Assert.AreEqual(actual, expected);
+            //when
+            var actual = sut.GetServiceById(It.IsAny<int>()).Result;
 
+            //then
+            Assert.IsNotNull(actual);
+            Assert.IsNotNull(actual.Id);
+            Assert.IsNotNull(actual.Name);
+            Assert.IsNotNull(actual.Price);
+            Assert.IsNotNull(actual.IsDeleted);
+            Assert.IsNotNull(actual.Description);
 
-        //    _serviceRepositoryMock.Verify(g => g.GetServiceById(id), Times.Once);
-        //}
-
-        //[TestCaseSource(typeof(AddServiceTestCaseSourse))]
-        //public void AddServiceTest(ServiceModel services, int expected)
-        //{
-        //    //given
-        //    _serviceRepositoryMock.Setup(a => a.AddService(It.IsAny<Service>())).ReturnsAsync(expected);
-
-        //    //when
-        //    var actual = _service.AddService(services,Role);
-
-        //    //then
-        //    _serviceRepositoryMock.Verify(a => a.AddService(It.IsAny<Service>()), Times.Once);
-        //    Assert.AreEqual(expected, actual);
-
-        //}
-
-        //[TestCaseSource(typeof(UpdateServiceTestCaseSourse))]
-        //public void UpdateServiceTest(ServiceModel services, ServiceModel updateService, ServiceModel expected)
-        //{
-        //    //given
-        //    _serviceRepositoryMock.Setup(a => a.AddService(It.IsAny<Service>())).ReturnsAsync(expected.Id);
-
-        //    var newService = _service.AddService(services);
-
-        //    //when
-        //    _service.UpdateService(updateService.Id, updateService);
-
-        //    var actual = _service.GetServiceById(newService.Id);
-        //    //then
-
-        //    _serviceRepositoryMock.Verify(a => a.AddService(It.IsAny<Service>()), Times.Once);
-        //    Assert.AreEqual(expected, actual);
-
-        //}
-
+        }
 
     }
 }

@@ -24,6 +24,7 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
+
         public async Task<int> AddService(ServiceModel serviceModel,int role)
         {
             Service serviceGet = await _serviceRepository.GetServiceById(serviceModel.Id);
@@ -63,17 +64,17 @@ namespace MarvelousService.BusinessLayer.Services
                 throw new NotFoundServiceException("Такой услуги не существует.");
             }
             var newService =  _mapper.Map<Service>(serviceModel);
-            await _serviceRepository.SoftDelete(id, newService);
+            await _serviceRepository.SoftDelete(newService);
         }
 
         public async Task UpdateService(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("запрос на изменение услуги");
-            var oldService = await _serviceRepository.GetServiceById(id);
+            var oldService = await _serviceRepository.GetServiceById(serviceModel.Id);
             CheckService(oldService);
             _logger.LogInformation("запрос на изменение услуги прошел успешно");
             var service = _mapper.Map<Service>(serviceModel);
-            _serviceRepository.UpdateService(id, service);
+            await _serviceRepository.UpdateService(service);
         }
 
         private void CheckService(Service service)
