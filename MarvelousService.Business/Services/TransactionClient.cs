@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MarvelousService.BusinessLayer.Services
 {
-    public class TransactionClient : ITransactionService
+    public class TransactionClient 
     {
         private const string _url = "https://piter-education.ru:6060";
         private const string _transactionPath = "/api/service-payment/";

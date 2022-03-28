@@ -3,7 +3,6 @@ using MarvelousService.BusinessLayer.Configuration;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Services.Interfaces;
-using MarvelousService.DataLayer.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,7 +30,6 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IServiceToService, ServiceToService>();
             services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
-            services.AddScoped<ITransactionService, TransactionClient>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)

@@ -20,42 +20,21 @@ var config = new ConfigurationBuilder()
            .Build();
 
 
-
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.RegisterSwaggerAuth();
-builder.Services.AddAuthorization();
+
+builder.Services.AddCustomAuth();
 
 
-builder.Services.AddMvc()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    })
-
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory = context =>
-        {
-            var exc = new ValidationExceptionResponse(context.ModelState);
-            return new UnprocessableEntityObjectResult(exc);
-        };
-    });
-
-
-
-
-builder.Services.RegisterAuthJwtToken();
-
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-
 
 builder.Services.RegisterMarvelousServiceRepositories();
 builder.Services.RegisterMarvelousServiceServices();
 builder.Services.RegisterMarvelousServiceAutomappers();
 builder.Services.RegisterLogger(config);
+builder.Services.AddMassTransit();
 
 var app = builder.Build();
 

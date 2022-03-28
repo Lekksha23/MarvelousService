@@ -5,7 +5,6 @@ using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Enums;
-using MarvelousService.DataLayer.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
