@@ -3,12 +3,11 @@ using MarvelousService.API.Infrastructure;
 using MarvelousService.DataLayer.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-
-string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
 string _logDirectoryVariableName = "LOG_DIRECTORY";
+string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
 
-string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);
 string logDirectory = builder.Configuration.GetValue<string>(_logDirectoryVariableName);
+string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);
 
 builder.Services.Configure<DbConfiguration>(opt =>
 {
@@ -21,24 +20,21 @@ var config = new ConfigurationBuilder()
            .Build();
 
 
-builder.Services.AddSwaggerGen(config =>
-{
-    config.EnableAnnotations();
-});
-
-
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddSwaggerGen();
 builder.Services.RegisterSwaggerAuth();
 
 builder.Services.AddCustomAuth();
 
-builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.RegisterMarvelousServiceRepositories();
 builder.Services.RegisterMarvelousServiceServices();
 builder.Services.RegisterMarvelousServiceAutomappers();
+builder.Services.RegisterLogger(config);
+builder.Services.AddMassTransit();
 
 var app = builder.Build();
 

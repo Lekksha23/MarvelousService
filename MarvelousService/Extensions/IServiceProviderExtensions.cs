@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
+using MassTransit;
+using MarvelousService.API.Consumer;
+
 
 namespace MarvelousService.API.Extensions
 {
@@ -27,7 +30,6 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IServiceToService, ServiceToService>();
             services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
-            services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -69,21 +71,22 @@ namespace MarvelousService.API.Extensions
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
                     Scheme = "bearer"
+        
                 });
 
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
-                        new OpenApiSecurityScheme
-                        {
-                        Reference = new OpenApiReference
-                        {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
-                        }
-                    },
-                    new string[]{}
-                }
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                         new string[]  {}
+                    }
                 });
             });
         }
@@ -105,6 +108,30 @@ namespace MarvelousService.API.Extensions
                     };
                 });
             services.AddAuthorization();
+        }
+
+        public static void AddMassTransit(this IServiceCollection services)
+        {
+            services.AddMassTransit(x =>
+            {
+                //x.AddConsumer<>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("rabbitmq://80.78.240.16", hst =>
+                    {
+                        hst.Username("nafanya");
+                        hst.Password("qwe!23");
+                    });
+
+                    cfg.ReceiveEndpoint("transactionQueue", e =>
+                    {
+                        //e.ConfigureConsumer<>(context);
+                    });
+
+
+                });
+            });
         }
     }
 }

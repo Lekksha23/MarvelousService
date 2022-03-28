@@ -15,9 +15,11 @@ namespace MarvelousService.API.Controllers
     {
         private readonly IMapper _autoMapper;
         private readonly ICRMClient _crmService;
+        private readonly ILogger<CRMController> _logger;
 
-        public CRMController(IMapper autoMapper, ICRMClient crmService)
+        public CRMController(IMapper autoMapper, ICRMClient crmService, ILogger<CRMController> logger)
         {
+            _logger = logger;
             _autoMapper = autoMapper;
             _crmService = crmService;
         }
@@ -27,19 +29,12 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Authentication")]
         public async Task<ActionResult> Login([FromBody] AuthRequest auth)
         {
+            _logger.LogInformation($"Poluchen zapros na authentikaciu leada c email = {auth.Email}.");
             var authModel = _autoMapper.Map<AuthModel>(auth);
             var token = await _crmService.GetToken(authModel);
+            _logger.LogInformation($"Authentikacia leada c email = {auth.Email} proshhla uspeshno.");
             return Json(token);
         }
 
-        [HttpPost("registrate")]
-        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-        [SwaggerOperation("Registrate new lead")]
-        public async Task<ActionResult> Registrate([FromBody] LeadInsertRequest lead)
-        {
-            var leadModel = _autoMapper.Map<LeadModel>(lead);
-            var id = await _crmService.RegistrateLead(leadModel);
-            return StatusCode(StatusCodes.Status201Created, id);
-        }
     }
 }

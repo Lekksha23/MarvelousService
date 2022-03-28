@@ -76,7 +76,7 @@ namespace MarvelousService.DataLayer.Repositories
             return service;
         }
 
-        public async Task SoftDelete(int id, Service service)
+        public async Task SoftDelete(Service service)
         {
             _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
@@ -90,14 +90,13 @@ namespace MarvelousService.DataLayer.Repositories
             _logger.LogInformation($"Услуга - {service.Name} сменила статус на 'Удалена' в базе данных");
         }
 
-        public async Task UpdateService(int id, Service service)
+        public async Task UpdateService( Service service)
         {
             _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            connection.QueryFirstOrDefault(
-                _serviceUpdateProcedure,
+            await connection.ExecuteAsync(_serviceUpdateProcedure,
                 new 
                 {
                     service.Name,

@@ -19,13 +19,5 @@ namespace MarvelousService.BusinessLayer.Services
             return response;
         }
 
-        public async Task<int> RegistrateLead(LeadModel leadModel)
-        {
-            var client = new RestClient(_url);
-            var request = new RestRequest(_addLeadPath, Method.Post);
-            request.AddJsonBody(leadModel);
-            var response = await client.PostAsync<int>(request);
-            return response;
-        }
     }
 }
