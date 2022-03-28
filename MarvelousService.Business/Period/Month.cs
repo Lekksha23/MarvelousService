@@ -1,10 +1,10 @@
 ﻿namespace MarvelousService.BusinessLayer
 {
-    public class Month : ServiceToLeadBase, IServiceToLead
+    public class Month : SubscriptionTime
     {
-        private const int _monthCoef = 5;
+        private const int _monthCoef = 4;
 
-        public decimal GetPrice(decimal price)
+        public override decimal GetPrice(decimal price)
         {
             return price * _monthCoef;
         }

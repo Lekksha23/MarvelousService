@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRM.APILayer.Attribites;
 using Marvelous.Contracts;
+using Marvelous.Contracts.Enums;
 using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.BusinessLayer.Models;
@@ -14,14 +15,12 @@ namespace MarvelousService.API.Controllers
     [Route("api/servicesToLead")]
     public class ServiceToLeadsController : Controller
     {
-        private readonly IServiceToService _serviceService;
         private readonly IServiceToLeadService _serviceToLeadService;
         private readonly IMapper _autoMapper;
         private readonly ILogger<ServicesController> _logger;
 
-        public ServiceToLeadsController(IServiceToService serviceService, IMapper autoMapper, IServiceToLeadService serviceToLead, ILogger<ServicesController> logger)
+        public ServiceToLeadsController(IMapper autoMapper, IServiceToLeadService serviceToLead, ILogger<ServicesController> logger)
         {
-            _serviceService = serviceService;
             _serviceToLeadService = serviceToLead;
             _autoMapper = autoMapper;
             _logger = logger;
@@ -29,7 +28,7 @@ namespace MarvelousService.API.Controllers
 
         //api/servicesToLead
         [HttpPost]
-        [AuthorizeRole(Role.Vip, Role.Regular)]
+        [AuthorizeRole(Role.Regular, Role.Vip)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [SwaggerOperation("Add service to a lead")]
         public async Task<ActionResult<int>> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
@@ -51,9 +50,10 @@ namespace MarvelousService.API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceToLeadResponse>))]
         public async Task<ActionResult<List<ServiceToLeadResponse>>> GetServiceToLeadById(int id)
         {
+            var leadIdentity = this.GetLeadFromToken().Id;
             _logger.LogInformation($"Запрос на получение всех услуг по id = {id}");
 
-            var serviceToLeadModel = await _serviceToLeadService.GetServiceToLeadById(id);
+            var serviceToLeadModel = await _serviceToLeadService.GetServiceToLeadById(leadIdentity);
             var result = _autoMapper.Map<List<ServiceToLeadResponse>>(serviceToLeadModel);
 
             _logger.LogInformation($"Услуги по id = {id} получены");

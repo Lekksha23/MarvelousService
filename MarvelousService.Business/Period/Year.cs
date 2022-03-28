@@ -1,10 +1,10 @@
 ﻿namespace MarvelousService.BusinessLayer
 {
-    public class Year : ServiceToLeadBase, IServiceToLead
+    public class Year : SubscriptionTime
     {
-        private const int _yearCoef = 50;
+        private const int _yearCoef = 20;
 
-        public decimal GetPrice(decimal price)
+        public override decimal GetPrice(decimal price)
         {
             return price * _yearCoef;
         }

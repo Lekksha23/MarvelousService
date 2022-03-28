@@ -3,13 +3,15 @@ using MarvelousService.BusinessLayer.Configuration;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Services.Interfaces;
-using MarvelousService.DataLayer.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
+using MassTransit;
+using MarvelousService.API.Consumer;
+
 
 namespace MarvelousService.API.Extensions
 {
@@ -24,11 +26,10 @@ namespace MarvelousService.API.Extensions
 
         public static void RegisterMarvelousServiceServices(this IServiceCollection services)
         {
-            services.AddScoped<ICRMService, CRMService>();
+            services.AddScoped<ICRMClient, CRMClient>();
             services.AddScoped<IServiceToService, ServiceToService>();
             services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
-            services.AddScoped<ITransactionService, TransactionService>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -70,28 +71,29 @@ namespace MarvelousService.API.Extensions
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
                     Scheme = "bearer"
+        
                 });
 
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
-                        new OpenApiSecurityScheme
-                        {
-                        Reference = new OpenApiReference
-                        {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
-                        }
-                    },
-                    new string[]{}
-                }
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                         new string[]  {}
+                    }
                 });
             });
         }
 
-        public static void RegisterAuthJwtToken(this IServiceCollection jwt)
+        public static void AddCustomAuth(this IServiceCollection services)
         {
-            jwt.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -102,9 +104,34 @@ namespace MarvelousService.API.Extensions
                         ValidAudience = AuthOptions.Audience,
                         ValidateLifetime = true,
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuerSigningKey = true
                     };
                 });
+            services.AddAuthorization();
+        }
+
+        public static void AddMassTransit(this IServiceCollection services)
+        {
+            services.AddMassTransit(x =>
+            {
+                //x.AddConsumer<>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("rabbitmq://80.78.240.16", hst =>
+                    {
+                        hst.Username("nafanya");
+                        hst.Password("qwe!23");
+                    });
+
+                    cfg.ReceiveEndpoint("transactionQueue", e =>
+                    {
+                        //e.ConfigureConsumer<>(context);
+                    });
+
+
+                });
+            });
         }
     }
 }

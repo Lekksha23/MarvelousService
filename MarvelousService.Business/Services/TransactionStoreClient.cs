@@ -4,13 +4,13 @@ using Microsoft.Extensions.Logging;
 
 namespace MarvelousService.BusinessLayer.Services
 {
-    public class TransactionService : ITransactionService
+    public class TransactionStoreClient : ITransactionStoreClient
     {
         private const string _url = "https://piter-education.ru:6060";
         private const string _transactionPath = "/api/service-payment/";
         private readonly ILogger<ServiceToService> _logger;
 
-        public TransactionService(ILogger<ServiceToService> logger)
+        public TransactionStoreClient(ILogger<ServiceToService> logger)
         {
             _logger = logger;
         }

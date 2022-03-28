@@ -10,6 +10,7 @@ namespace MarvelousService.API.Configuration
         {
             CreateMap<AuthRequest, AuthModel>().ReverseMap(); 
             CreateMap<ServiceInsertRequest, ServiceModel>().ReverseMap();
+            CreateMap<ServiceResponse, ServiceModel>().ReverseMap();
             CreateMap<ServiceToLeadInsertRequest, ServiceToLeadModel>().ReverseMap();
             CreateMap<LeadInsertRequest, LeadModel>().ReverseMap();
         }

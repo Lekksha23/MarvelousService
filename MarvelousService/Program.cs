@@ -1,17 +1,13 @@
-using MarvelousService.API.Infrastructure;
 using MarvelousService.API.Extensions;
+using MarvelousService.API.Infrastructure;
 using MarvelousService.DataLayer.Configuration;
-using System.Text.Json.Serialization;
-using MarvelousService.API.ExceptionResponse;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
-
-string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
 string _logDirectoryVariableName = "LOG_DIRECTORY";
+string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
 
-string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);
 string logDirectory = builder.Configuration.GetValue<string>(_logDirectoryVariableName);
+string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);
 
 builder.Services.Configure<DbConfiguration>(opt =>
 {
@@ -23,42 +19,22 @@ var config = new ConfigurationBuilder()
            .AddXmlFile("NLog.config", optional: true, reloadOnChange: true)
            .Build();
 
-builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
-builder.Services.AddSwaggerGen(config =>
-{
-    config.EnableAnnotations();
-});
-
-builder.Services.AddMvc()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    })
-
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory = context =>
-        {
-            var exc = new ValidationExceptionResponse(context.ModelState);
-            return new UnprocessableEntityObjectResult(exc);
-        };
-    });
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.RegisterSwaggerAuth();
-
-builder.Services.RegisterAuthJwtToken();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.RegisterSwaggerAuth();
 
-builder.Services.AddAuthorization();
+builder.Services.AddCustomAuth();
+
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.RegisterMarvelousServiceRepositories();
 builder.Services.RegisterMarvelousServiceServices();
 builder.Services.RegisterMarvelousServiceAutomappers();
+builder.Services.RegisterLogger(config);
+builder.Services.AddMassTransit();
 
 var app = builder.Build();
 
