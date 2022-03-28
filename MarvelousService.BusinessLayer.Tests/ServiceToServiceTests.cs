@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousService.BusinessLayer.Tests
 {
-    public class ServiceTests
+    public class ServiceToServiceTests
     {
 
         private Mock<IServiceRepository> _serviceRepositoryMock;
