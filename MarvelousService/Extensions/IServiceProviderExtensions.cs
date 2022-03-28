@@ -27,7 +27,7 @@ namespace MarvelousService.API.Extensions
 
         public static void RegisterMarvelousServiceServices(this IServiceCollection services)
         {
-            services.AddScoped<ICRMService, CRMService>();
+            services.AddScoped<ICRMClient, CRMClient>();
             services.AddScoped<IServiceToService, ServiceToService>();
             services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
@@ -93,9 +93,9 @@ namespace MarvelousService.API.Extensions
             });
         }
 
-        public static void RegisterAuthJwtToken(this IServiceCollection jwt)
+        public static void AddCustomAuth(this IServiceCollection services)
         {
-            jwt.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -106,9 +106,10 @@ namespace MarvelousService.API.Extensions
                         ValidAudience = AuthOptions.Audience,
                         ValidateLifetime = true,
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuerSigningKey = true
                     };
                 });
+            services.AddAuthorization();
         }
 
         public static void AddMassTransit(this IServiceCollection services)

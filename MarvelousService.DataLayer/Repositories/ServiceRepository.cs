@@ -25,9 +25,9 @@ namespace MarvelousService.DataLayer.Repositories
 
         public async Task<int> AddService(Service service)
         {
-            _logger.LogInformation("Подключение к базе данных");
+            _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
-            _logger.LogInformation("Подключение к базе данных произведено");
+            _logger.LogInformation("Connection succedded");
 
             var id = await connection.QueryFirstOrDefaultAsync<int>(_serviceAddProcedure,
                 new
@@ -45,9 +45,9 @@ namespace MarvelousService.DataLayer.Repositories
         public async Task<Service> GetServiceById(int id)
         {
             _logger.LogInformation("Запрашиваем услугу по id");
-            _logger.LogInformation("Подключение к базе данных");
+            _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
-            _logger.LogInformation("Подключение к базе данных произведено");
+            _logger.LogInformation("Connection succedded");
 
             var service = await connection.QueryFirstOrDefaultAsync<Service>(_serviceGetByIdProcedure, 
                 new { Id = id }, 
@@ -60,9 +60,9 @@ namespace MarvelousService.DataLayer.Repositories
         public async Task<ServicePayment> GetTransactionByServiceToleadId(int id)
         {
             _logger.LogInformation("Запрашиваем транзакция по id");
-            _logger.LogInformation("Подключение к базе данных");
+            _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
-            _logger.LogInformation("Подключение к базе данных произведено");
+            _logger.LogInformation("Connection succedded");
 
             var service = await connection.QueryFirstOrDefaultAsync<ServicePayment>(_serviceGetTrancactionByServiceToLead,
                 new { ServiceToLeadId = id },
@@ -75,11 +75,9 @@ namespace MarvelousService.DataLayer.Repositories
 
         public async Task SoftDelete(int id, Service service)
         {
-            _logger.LogInformation("Подключение к базе данных");
-
+            _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
-
-            _logger.LogInformation("Подключение к базе данных произведено");
+            _logger.LogInformation("Connection succedded");
 
             var newService = await connection.QueryFirstOrDefaultAsync<Service>(_serviceSoftDeleteProcedure,
                 new{IsDeleted = service.IsDeleted},
@@ -90,9 +88,9 @@ namespace MarvelousService.DataLayer.Repositories
 
         public async Task UpdateService(int id, Service service)
         {
-            _logger.LogInformation("Подключение к базе данных");
+            _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
-            _logger.LogInformation("Подключение к базе данных произведено");
+            _logger.LogInformation("Connection succedded");
 
             connection.QueryFirstOrDefault(_serviceUpdateProcedure,
                 new 

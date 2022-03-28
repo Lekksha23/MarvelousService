@@ -6,6 +6,7 @@ using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Enums;
 using MarvelousService.DataLayer.Interfaces;
+using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -15,45 +16,55 @@ namespace MarvelousService.BusinessLayer.Services
     {
         private readonly IServiceToLeadRepository _serviceToLeadRepository;
         private readonly IServiceRepository _serviceRepository;
+        private readonly IServicePaymentRepository _servicePaymentRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<ServiceToService> _logger;
-        private readonly ITransactionService _transactionService;
+        private readonly ITransactionStoreClient _transactionStoreClient;
 
-        private const double _discount = 0.9;
+        private const double _discountVIP = 0.9;
 
         public ServiceToLeadService(IServiceToLeadRepository serviceToLeadRepository,
             IMapper mapper,
             ILogger<ServiceToService> logger,
             IServiceRepository serviceRepository,
-            ITransactionService transactionService)
+            ITransactionStoreClient transactionService)
         {
             _serviceToLeadRepository = serviceToLeadRepository;
             _serviceRepository = serviceRepository;
-            _transactionService = transactionService;
+            _transactionStoreClient = transactionService;
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task<int> AddServiceToLead(ServiceToLeadModel serviceToLeadModel, int role)
         {
-            Service service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId);
-            var totalPrice = serviceToLeadModel.GetPrice(service.Price);
-            if (role == (int)Role.Vip)
-            {
-                serviceToLeadModel.Price = totalPrice * (decimal)_discount;
-            }
-            else
-            {
-                serviceToLeadModel.Price = totalPrice;
-            }
+            var service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId);
+            //var totalPrice = serviceToLeadModel.GetPrice(service.Price);
+
+            //if (role == (int)Role.Vip)
+            //{
+            //    serviceToLeadModel.Price = totalPrice * (decimal)_discountVIP;
+            //}
+            //else
+            //{
+            //    serviceToLeadModel.Price = totalPrice;
+            //}
             var serviceToLead = _mapper.Map<ServiceToLead>(serviceToLeadModel);
-            TransactionRequestModel serviceTransactionModel = new TransactionRequestModel {
+            //get account by leadid
+            var serviceTransactionModel = new TransactionRequestModel {
                 Amount = serviceToLeadModel.Price,
                 Currency = Currency.RUB,
-                AccountId = 23};
-            _transactionService.AddTransaction(serviceTransactionModel);
+                AccountId = 23
+            };
+            var transactionId = _transactionStoreClient.AddTransaction(serviceTransactionModel);
+            var servicePayment = new ServicePayment {
+                ServiceToLeadId = serviceToLead,
+                TransactionId = transactionId.Id
+            };
+            await _servicePaymentRepository.AddServicePayment(servicePayment);
             serviceToLeadModel.Status = Status.Active;
-            _logger.LogInformation("Запрос на добавление услуги");
+
+            _logger.LogInformation($"Query for adding service with id = {service.Id} to Lead with id = {serviceToLead.LeadId}");
             return await _serviceToLeadRepository.AddServiceToLead(serviceToLead);
         }
 

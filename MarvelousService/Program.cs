@@ -1,9 +1,6 @@
-using MarvelousService.API.Infrastructure;
 using MarvelousService.API.Extensions;
+using MarvelousService.API.Infrastructure;
 using MarvelousService.DataLayer.Configuration;
-using System.Text.Json.Serialization;
-using MarvelousService.API.ExceptionResponse;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 string _logDirectoryVariableName = "LOG_DIRECTORY";
@@ -22,8 +19,6 @@ var config = new ConfigurationBuilder()
            .AddXmlFile("NLog.config", optional: true, reloadOnChange: true)
            .Build();
 
-builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
 builder.Services.AddEndpointsApiExplorer();

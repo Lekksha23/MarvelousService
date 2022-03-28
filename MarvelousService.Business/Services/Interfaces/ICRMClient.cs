@@ -2,7 +2,7 @@
 
 namespace MarvelousService.BusinessLayer.Services.Interfaces
 {
-    public interface ICRMService
+    public interface ICRMClient
     {
         Task<string> GetToken(AuthModel authModel);
     }

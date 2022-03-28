@@ -14,7 +14,7 @@ namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/services")]
-    [AuthorizeRole]
+    [AuthorizeRole(Role.Admin)]
     public class ServicesController : Controller
     {
         private readonly IServiceToService _serviceService;
@@ -33,8 +33,8 @@ namespace MarvelousService.API.Controllers
         [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Add new service")]       
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<int>> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
         {
             var leadIdentity = this.GetLeadFromToken();
@@ -53,8 +53,9 @@ namespace MarvelousService.API.Controllers
         [HttpGet("id")]
         [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Get service by id")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceResponse>))]
-        public async Task<ActionResult<List<ServiceResponse>>> GetServiceById(int id)
+        [AuthorizeRole(Role.Admin)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(ServiceResponse))]
+        public async Task<ActionResult<ServiceResponse>> GetServiceById(int id)
         {
             var leadIdentity = this.GetLeadFromToken().Id;
 

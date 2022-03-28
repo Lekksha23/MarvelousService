@@ -1,5 +1,4 @@
-﻿using Marvelous.Contracts;
-using Marvelous.Contracts.Enums;
+﻿using Marvelous.Contracts.Enums;
 
 namespace MarvelousService.API.Models
 {

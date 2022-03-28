@@ -1,11 +1,13 @@
 ﻿using MarvelousService.DataLayer.Entities;
+using MarvelousService.DataLayer.Enums;
 
-namespace MarvelousService.DataLayer.Interfaces
+namespace MarvelousService.DataLayer.Repositories
 {
     public interface IServiceToLeadRepository
     {
-        Task<List<ServiceToLead>> GetServiceToLeadById(int id);
-        Task<int> AddServiceToLead(ServiceToLead service);
+        Task<int> AddServiceToLead(ServiceToLead serviceToLead);
         Task<List<ServiceToLead>> GetByLeadId(int id);
+        Task<ServiceToLead> GetServiceToLeadById(int id);
+        void UpdateStatusById(int id, Status status);
     }
 }

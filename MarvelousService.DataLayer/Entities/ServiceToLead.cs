@@ -9,7 +9,7 @@ namespace MarvelousService.DataLayer.Entities
         public decimal Price { get; set; }
         public Status Status{ get; set; }
         public int LeadId{ get; set; }
-        public int ServiceId { get; set; }
+        public Service ServiceId { get; set; }
         public List<ServicePayment> servicePayments { get; set; }   
     }
 }

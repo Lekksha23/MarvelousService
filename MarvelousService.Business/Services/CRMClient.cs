@@ -4,7 +4,7 @@ using RestSharp;
 
 namespace MarvelousService.BusinessLayer.Services
 {
-    public class CRMService : ICRMService
+    public class CRMClient : ICRMClient
     {
         private const string _url = "https://piter-education.ru:5050";
         private const string _loginPath = "/api/auth/login/";
