@@ -20,7 +20,7 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IServiceToLeadRepository, ServiceToLeadRepository>();
             services.AddScoped<IServicePaymentRepository, ServicePaymentRepository>();
-+        }
+        }
 
         public static void RegisterMarvelousServiceServices(this IServiceCollection services)
         {
@@ -89,9 +89,9 @@ namespace MarvelousService.API.Extensions
             });
         }
 
-        public static void RegisterAuthJwtToken(this IServiceCollection jwt)
+        public static void AddCustomAuth(this IServiceCollection services)
         {
-            jwt.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -102,9 +102,10 @@ namespace MarvelousService.API.Extensions
                         ValidAudience = AuthOptions.Audience,
                         ValidateLifetime = true,
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuerSigningKey = true
                     };
                 });
+            services.AddAuthorization();
         }
     }
 }

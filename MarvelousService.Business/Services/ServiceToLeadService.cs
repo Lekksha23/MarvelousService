@@ -21,7 +21,7 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly ILogger<ServiceToService> _logger;
         private readonly ITransactionStoreClient _transactionStoreClient;
 
-        private const double _discount = 0.9;
+        private const double _discountVIP = 0.9;
 
         public ServiceToLeadService(IServiceToLeadRepository serviceToLeadRepository,
             IMapper mapper,
@@ -38,17 +38,17 @@ namespace MarvelousService.BusinessLayer.Services
 
         public async Task<int> AddServiceToLead(ServiceToLeadModel serviceToLeadModel, int role)
         {
-            Service service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId);
-            var totalPrice = serviceToLeadModel.GetPrice(service.Price);
+            var service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId);
+            //var totalPrice = serviceToLeadModel.GetPrice(service.Price);
 
-            if (role == (int)Role.Vip)
-            {
-                serviceToLeadModel.Price = totalPrice * (decimal)_discount;
-            }
-            else
-            {
-                serviceToLeadModel.Price = totalPrice;
-            }
+            //if (role == (int)Role.Vip)
+            //{
+            //    serviceToLeadModel.Price = totalPrice * (decimal)_discountVIP;
+            //}
+            //else
+            //{
+            //    serviceToLeadModel.Price = totalPrice;
+            //}
             var serviceToLead = _mapper.Map<ServiceToLead>(serviceToLeadModel);
             //get account by leadid
             var serviceTransactionModel = new TransactionRequestModel {
@@ -57,13 +57,14 @@ namespace MarvelousService.BusinessLayer.Services
                 AccountId = 23
             };
             var transactionId = _transactionStoreClient.AddTransaction(serviceTransactionModel);
-            var servicePayment = new ServicePaymentModel {
-                ServiceToLeadId = serviceToLead.Id,
-                TransactionId = transactionId
+            var servicePayment = new ServicePayment {
+                ServiceToLeadId = serviceToLead,
+                TransactionId = transactionId.Id
             };
-            _servicePaymentRepository.AddServicePayment();
+            await _servicePaymentRepository.AddServicePayment(servicePayment);
             serviceToLeadModel.Status = Status.Active;
-            _logger.LogInformation($"Query for adding the service to Lead with id = {serviceToLead.LeadId}");
+
+            _logger.LogInformation($"Query for adding service with id = {service.Id} to Lead with id = {serviceToLead.LeadId}");
             return await _serviceToLeadRepository.AddServiceToLead(serviceToLead);
         }
 

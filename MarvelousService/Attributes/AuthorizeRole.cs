@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MarvelousService.BusinessLayer.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRM.APILayer.Attribites
 {
@@ -8,7 +9,7 @@ namespace CRM.APILayer.Attribites
         public AuthorizeRole(params object[] roles)
         {
             if (roles.Any(r => r.GetType().BaseType != typeof(Enum)))
-                //throw new TypeMismatchException("The passed argument is not an enum.");
+                throw new TypeMismatchException("The passed argument is not an enum.");
 
             Roles = string.Join(",", roles.Select(r => Enum.GetName(r.GetType(), r)));
         }

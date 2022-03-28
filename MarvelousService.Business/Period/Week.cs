@@ -1,12 +1,12 @@
 ﻿namespace MarvelousService.BusinessLayer
 {
-    public class Week : ServiceToLeadBase, IServiceToLead
+    public class Week : SubscriptionTime
     {
-        private const double _weekCoef = 2.5;
+        private const int _weekCoef = 2;
 
-        public decimal GetPrice(decimal price)
+        public override decimal GetPrice(decimal price)
         {
-            return price * (decimal)_weekCoef;
+            return price * _weekCoef;
         }
     }
 }

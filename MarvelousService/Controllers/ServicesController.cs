@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRM.APILayer.Attribites;
-using Marvelous.Contracts;
+using Marvelous.Contracts.Enums;
 using MarvelousService.API.Models;
 using MarvelousService.API.Models.ExceptionModel;
 using MarvelousService.API.Models.Request;
@@ -13,7 +13,7 @@ namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/services")]
-    [AuthorizeRole]
+    [AuthorizeRole(Role.Admin)]
     public class ServicesController : Controller
     {
         private readonly IServiceToService _serviceService;
@@ -31,8 +31,8 @@ namespace MarvelousService.API.Controllers
         [HttpPost]
         [SwaggerOperation("Add new service")]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<int>> AddService([FromBody] ServiceInsertRequest serviceInsertRequest)
         {
             _logger.LogInformation($"Получен запрос на добавление новой услуги.");
@@ -45,12 +45,13 @@ namespace MarvelousService.API.Controllers
         //api/services/
         [HttpGet("id")]
         [SwaggerOperation("Get service by id")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<ServiceResponse>))]
-        public async Task<ActionResult<List<ServiceResponse>>> GetServiceById(int id)
+        [AuthorizeRole(Role.Admin)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(ServiceResponse))]
+        public async Task<ActionResult<ServiceResponse>> GetServiceById(int id)
         {
             _logger.LogInformation($"Запрос на получение услуги по id = {id}");
             var serviceModel = await _serviceService.GetServiceById(id);
-            var result = _autoMapper.Map<List<ServiceResponse>>(serviceModel);
+            var result = _autoMapper.Map<ServiceResponse>(serviceModel);
             _logger.LogInformation($"Услуга по id = {id} получена");
             return Ok(result);
         }

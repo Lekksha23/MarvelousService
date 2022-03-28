@@ -1,8 +1,8 @@
 ﻿namespace MarvelousService.BusinessLayer.Models
 {
-    public class OneTime
+    public class OneTime : SubscriptionTime
     {
-        public decimal GetPrice(decimal price)
+        public override decimal GetPrice(decimal price)
         {
             return price;
         }

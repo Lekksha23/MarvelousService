@@ -21,9 +21,9 @@ namespace MarvelousService.DataLayer.Repositories
 
         public async Task<int> AddServicePayment(ServicePayment servicePayment)
         {
-            _logger.LogInformation("Подключение к базе данных.");
+            _logger.LogInformation("Connecting to the MarvelousService.DB.");
             using IDbConnection connection = ProvideConnection();
-            _logger.LogInformation("Произведено подключение к базе данных.");
+            _logger.LogInformation("Connection succedded.");
 
             var id = await connection.QueryFirstOrDefaultAsync<int>(
                     _insertProcedure,
@@ -34,15 +34,15 @@ namespace MarvelousService.DataLayer.Repositories
                     },
                     commandType: CommandType.StoredProcedure
                 );
-            _logger.LogInformation($"Оплата услуги добавлена в базу данных.");
+            _logger.LogInformation($"Service payment was added to DB.");
             return id;
         }
 
         public async Task<List<ServicePayment>> GetServicePaymentsByServiceToLeadId(int id)
         {
-            _logger.LogInformation("Подключение к базе данных.");
+            _logger.LogInformation("Connecting to the MarvelousService.DB.");
             using IDbConnection connection = ProvideConnection();
-            _logger.LogInformation("Произведено подключение к базе данных.");
+            _logger.LogInformation("Connection succedded.");
 
             var servicePayments = await connection
                 .QueryAsync<ServicePayment, ServiceToLead, ServicePayment>(
@@ -56,7 +56,7 @@ namespace MarvelousService.DataLayer.Repositories
                 splitOn: "ServiceToLeadId",
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation($"Информация о подписке/разовом платеже с = {id} была возвращена.");
+            _logger.LogInformation($"Information about subscription pays or onetime pay with id = {id} were received.");
             return servicePayments.ToList();
         }
     }

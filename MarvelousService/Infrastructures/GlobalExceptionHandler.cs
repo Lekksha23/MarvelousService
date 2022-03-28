@@ -28,8 +28,7 @@ namespace MarvelousService.API.Infrastructure
             {
                 await ConstructResponse(context, HttpStatusCode.Conflict, ex.Message);
             }
-
-            catch (ValidationException ex)
+            catch (TypeMismatchException ex)
             {
                 await ConstructResponse(context, HttpStatusCode.BadRequest, ex.Message);
             }

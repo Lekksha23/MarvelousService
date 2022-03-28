@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRM.APILayer.Attribites;
-using Marvelous.Contracts;
+using Marvelous.Contracts.Enums;
 using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.BusinessLayer.Models;
