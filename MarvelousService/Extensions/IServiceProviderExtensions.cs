@@ -124,9 +124,9 @@ namespace MarvelousService.API.Extensions
                         hst.Password("qwe!23");
                     });
 
-                    cfg.ReceiveEndpoint("transactionQueue", e =>
+                    cfg.Publish<IServiceExchangeModel>(p =>
                     {
-                        //e.ConfigureConsumer<>(context);
+                        p.BindAlternateExchangeQueue("alternate-exchange", "alternate-queue");
                     });
 
 
