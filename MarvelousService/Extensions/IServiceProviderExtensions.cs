@@ -10,8 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 using MassTransit;
-using MarvelousService.API.Consumer;
-
+using Marvelous.Contracts.ExchangeModels;
 
 namespace MarvelousService.API.Extensions
 {
@@ -124,7 +123,7 @@ namespace MarvelousService.API.Extensions
                         hst.Password("qwe!23");
                     });
 
-                    cfg.Publish<IServiceExchangeModel>(p =>
+                    cfg.Publish<ServiceExchangeModel>(p =>
                     {
                         p.BindAlternateExchangeQueue("alternate-exchange", "alternate-queue");
                     });
