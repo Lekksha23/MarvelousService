@@ -42,14 +42,14 @@ namespace MarvelousService.API.Controllers
         {
             var leadIdentity = this.GetLeadFromToken();
 
-            _logger.LogInformation($"Получен запрос на добавление новой услуги.");
+            _logger.LogInformation($"Received a request to add a new service.");
 
             var serviceModel = _autoMapper.Map<ServiceModel>(serviceInsertRequest);
             serviceModel.Id = leadIdentity.Id;
             Role role = leadIdentity.Role;
             var id = await _serviceService.AddService(serviceModel, (int)role);
 
-            _logger.LogInformation($"Услуга с id = {id} успешно добавлена.");
+            _logger.LogInformation($"Service with id = {id} added successfully.");
 
             await _serviceProducer.NotifyServiceAdded(id);
 
@@ -66,10 +66,10 @@ namespace MarvelousService.API.Controllers
         {
             var leadIdentity = this.GetLeadFromToken().Id;
 
-            _logger.LogInformation($"Запрос на получение услуги по id = {id}");
+            _logger.LogInformation($"Service request for id = {id}");
             var serviceModel = await _serviceService.GetServiceById(leadIdentity);
             var result = _autoMapper.Map<List<ServiceResponse>>(serviceModel);
-            _logger.LogInformation($"Услуга по id = {id} получена");
+            _logger.LogInformation($"Service by id = {id} received");
             return Ok(result);
         }
 

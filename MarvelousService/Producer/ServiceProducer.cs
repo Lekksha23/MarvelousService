@@ -38,7 +38,7 @@ namespace MarvelousService.API.Producer
             {
                 var service = await _serviceToService.GetServiceById(id);
 
-                await busControl.Publish<ILeadFullExchangeModel>(new
+                await busControl.Publish<ServiceExchangeModel>(new
                 {
                     Id = service.Id,
                     Name = service.Name,
@@ -75,16 +75,12 @@ namespace MarvelousService.API.Producer
             await busControl.StartAsync(source.Token);
             try
             {
-                var lead = await _serviceToLead.GetServiceToLeadById(id);
+                var service = await _serviceToLead.GetServiceToLeadById(id);
 
-                await busControl.Publish<IAccountExchangeModel>(new
+                await busControl.Publish<ServiceExchangeModel>(new
                 {
-                    //Id = lead.Id,
-                    //Name = lead.Name,
-                    //CurrencyType = lead.CurrencyType,
-                    //LeadId = lead.Lead.Id,
-                    //IsBlocked = lead.IsBlocked,
-                    //LockDate = lead.LockDate
+                   
+
 
                 });
                 _logger.LogInformation("Account published");

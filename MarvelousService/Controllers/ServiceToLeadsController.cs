@@ -34,12 +34,12 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<int>> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
         {
             var leadIdentity = this.GetLeadFromToken();
-            _logger.LogInformation($"Получен запрос на оформление услуги лиду c id = {leadIdentity.Id}.");
+            _logger.LogInformation($"A request for a lead service has been received id = {leadIdentity.Id}.");
             var serviceToLeadModel = _autoMapper.Map<ServiceToLeadModel>(serviceToLeadInsertRequest);
             serviceToLeadModel.LeadId = leadIdentity.Id;
             Role role = leadIdentity.Role;
             var id = await _serviceToLeadService.AddServiceToLead(serviceToLeadModel, (int)role);
-            _logger.LogInformation($"Подписка/разовая услуга с id = {id} добавлена лиду с id = {serviceToLeadModel.LeadId}.");
+            _logger.LogInformation($"Subscription/one-time service with id = {id} added to lead with id = {serviceToLeadModel.LeadId}.");
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -51,12 +51,12 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<List<ServiceToLeadResponse>>> GetServiceToLeadById(int id)
         {
             var leadIdentity = this.GetLeadFromToken().Id;
-            _logger.LogInformation($"Запрос на получение всех услуг по id = {id}");
+            _logger.LogInformation($"Request for all services id = {id}");
 
             var serviceToLeadModel = await _serviceToLeadService.GetServiceToLeadById(leadIdentity);
             var result = _autoMapper.Map<List<ServiceToLeadResponse>>(serviceToLeadModel);
 
-            _logger.LogInformation($"Услуги по id = {id} получены");
+            _logger.LogInformation($"Services by id = {id} received");
 
             return Ok(result);
         }

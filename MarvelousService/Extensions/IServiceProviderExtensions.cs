@@ -29,6 +29,7 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IServiceToService, ServiceToService>();
             services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
+            services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
