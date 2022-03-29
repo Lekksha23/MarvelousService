@@ -23,7 +23,7 @@ namespace MarvelousService.BusinessLayer.Tests
         private readonly Mock<ILogger<ServiceToService>> _logger;
 
 
-        public ServiceTests()
+        public ServiceToServiceTests()
         {
             _serviceRepositoryMock = new Mock<IServiceRepository>();
             _serviceTest = new ServiceToServiceTestCaseSource();

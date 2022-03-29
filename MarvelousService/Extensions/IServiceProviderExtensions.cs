@@ -10,8 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 using MassTransit;
-using MarvelousService.API.Consumer;
-
+using Marvelous.Contracts.ExchangeModels;
 
 namespace MarvelousService.API.Extensions
 {
@@ -30,6 +29,7 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IServiceToService, ServiceToService>();
             services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
+            services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -124,9 +124,9 @@ namespace MarvelousService.API.Extensions
                         hst.Password("qwe!23");
                     });
 
-                    cfg.ReceiveEndpoint("transactionQueue", e =>
+                    cfg.Publish<ServiceExchangeModel>(p =>
                     {
-                        //e.ConfigureConsumer<>(context);
+                        p.BindAlternateExchangeQueue("alternate-exchange", "alternate-queue");
                     });
 
 

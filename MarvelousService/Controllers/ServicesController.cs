@@ -5,6 +5,7 @@ using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.API.Models.ExceptionModel;
 using MarvelousService.API.Models.Request;
+using MarvelousService.API.Producer.Interface;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,14 @@ namespace MarvelousService.API.Controllers
         private readonly IServiceToService _serviceService;
         private readonly IMapper _autoMapper;
         private readonly ILogger<ServicesController> _logger;
+        private readonly IServiceProducer _serviceProducer;
 
-        public ServicesController(IServiceToService serviceService, IMapper autoMapper, ILogger<ServicesController> logger)
+        public ServicesController(IServiceToService serviceService, IMapper autoMapper, ILogger<ServicesController> logger, IServiceProducer serviceProducer)
         {
             _serviceService = serviceService;
             _autoMapper = autoMapper;
             _logger = logger;
+            _serviceProducer = serviceProducer;
         }
 
         //api/services
@@ -39,13 +42,17 @@ namespace MarvelousService.API.Controllers
         {
             var leadIdentity = this.GetLeadFromToken();
 
-            _logger.LogInformation($"Получен запрос на добавление новой услуги.");
+            _logger.LogInformation($"Received a request to add a new service.");
 
             var serviceModel = _autoMapper.Map<ServiceModel>(serviceInsertRequest);
             serviceModel.Id = leadIdentity.Id;
             Role role = leadIdentity.Role;
             var id = await _serviceService.AddService(serviceModel, (int)role);
-            _logger.LogInformation($"Услуга с id = {id} успешно добавлена.");
+
+            _logger.LogInformation($"Service with id = {id} added successfully.");
+
+            await _serviceProducer.NotifyServiceAdded(id);
+
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -59,10 +66,10 @@ namespace MarvelousService.API.Controllers
         {
             var leadIdentity = this.GetLeadFromToken().Id;
 
-            _logger.LogInformation($"Запрос на получение услуги по id = {id}");
+            _logger.LogInformation($"Service request for id = {id}");
             var serviceModel = await _serviceService.GetServiceById(leadIdentity);
             var result = _autoMapper.Map<List<ServiceResponse>>(serviceModel);
-            _logger.LogInformation($"Услуга по id = {id} получена");
+            _logger.LogInformation($"Service by id = {id} received");
             return Ok(result);
         }
 

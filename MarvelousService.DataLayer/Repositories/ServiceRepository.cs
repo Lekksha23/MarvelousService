@@ -39,13 +39,13 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure) ;
 
-            _logger.LogInformation($"Услуга {service.Name} добавлена в базу данных");
+            _logger.LogInformation($"Service {service.Name} added to database");
             return id;  
         }
 
         public async Task<Service> GetServiceById(int id)
         {
-            _logger.LogInformation("Запрашиваем услугу по id");
+            _logger.LogInformation("Requesting a service by id");
             _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
@@ -55,13 +55,13 @@ namespace MarvelousService.DataLayer.Repositories
                 new { Id = id }, 
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation("Выборка прошла успешно выбрана услуга с id - " + id);
+            _logger.LogInformation("The selection was successfully selected service with id - " + id);
             return service;
         }
 
         public async Task<ServicePayment> GetTransactionByServiceToleadId(int id)
         {
-            _logger.LogInformation("Запрашиваем транзакция по id");
+            _logger.LogInformation("Request transaction by id");
             _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
@@ -71,7 +71,7 @@ namespace MarvelousService.DataLayer.Repositories
                 new { ServiceToLeadId = id },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation("Выборка прошла успешно выбрана транзакция с id - " + id);
+            _logger.LogInformation("The selection was successfully selected transaction with id - " + id);
 
             return service;
         }
@@ -87,7 +87,7 @@ namespace MarvelousService.DataLayer.Repositories
                 new { IsDeleted = service.IsDeleted },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation($"Услуга - {service.Name} сменила статус на 'Удалена' в базе данных");
+            _logger.LogInformation($"Service - {service.Name} changed status to 'Removed' in the database");
         }
 
         public async Task UpdateService( Service service)
@@ -105,7 +105,7 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation($"Услуга- {service.Name}, изменена в базе данных");
+            _logger.LogInformation($"Service - { service.Name}, changed in database");
         }
     }
 }

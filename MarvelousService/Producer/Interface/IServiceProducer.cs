@@ -2,6 +2,7 @@
 {
     public interface IServiceProducer
     {
-        Task Main(int id);
+        Task NotifyServiceAdded(int id);
+        Task NotifyServiceToLeadAdded(int id);
     }
 }
