@@ -18,6 +18,5 @@ namespace MarvelousService.BusinessLayer.Services
             var response = await client.PostAsync<string>(request);
             return response;
         }
-
     }
 }

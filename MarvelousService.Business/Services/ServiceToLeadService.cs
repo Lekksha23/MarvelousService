@@ -38,6 +38,7 @@ namespace MarvelousService.BusinessLayer.Services
         public async Task<int> AddServiceToLead(ServiceToLeadModel serviceToLeadModel, int role)
         {
             var service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId.Id);
+
             //var totalPrice = serviceToLeadModel.GetPrice(service.Price);
 
             //if (role == (int)Role.Vip)

@@ -60,15 +60,15 @@ namespace MarvelousService.API.Controllers
         [HttpGet("id")]
         [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Get service by id")]
-        [AuthorizeRole(Role.Admin)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(ServiceResponse))]
         public async Task<ActionResult<ServiceResponse>> GetServiceById(int id)
         {
-            var leadIdentity = this.GetLeadFromToken().Id;
-
             _logger.LogInformation($"Service request for id = {id}");
-            var serviceModel = await _serviceService.GetServiceById(leadIdentity);
-            var result = _autoMapper.Map<List<ServiceResponse>>(serviceModel);
+            var serviceModel = await _serviceService.GetServiceById(id);
+            var result = _autoMapper.Map<ServiceResponse>(serviceModel);
             _logger.LogInformation($"Service by id = {id} received");
             return Ok(result);
         }
