@@ -9,7 +9,6 @@ using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MarvelousService.BusinessLayer.Tests
@@ -44,7 +43,7 @@ namespace MarvelousService.BusinessLayer.Tests
             //given
             var serviceModel = _serviceTest.AddServiceModelTest();
             var service = new Service();
-            _serviceRepositoryMock.Setup(m => m.GetServiceById(It.IsAny<int>())).ReturnsAsync(service);
+            _serviceRepositoryMock.Setup(m => m.GetServiceById(It.IsAny<int>())).ReturnsAsync(service); 
             var sut = new ServiceToService( _serviceRepositoryMock.Object, _autoMapper, _logger.Object);
             int role = 3;
             //when
