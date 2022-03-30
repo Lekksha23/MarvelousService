@@ -3,6 +3,7 @@ using MarvelousService.BusinessLayer.Models.CRMModels;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using RestSharp;
 using RestSharp.Authenticators;
+using System.Net;
 
 namespace MarvelousService.BusinessLayer.Services
 {
@@ -27,6 +28,10 @@ namespace MarvelousService.BusinessLayer.Services
                 .AddJsonBody(authModel);
 
             var auth = await _client.ExecuteAsync<string>(authRequest);
+            if (auth.StatusCode != HttpStatusCode.OK)
+            {
+                throw new BadGatewayException();
+            }
             _client.Authenticator = new JwtAuthenticator(auth.Data);
         }
 
