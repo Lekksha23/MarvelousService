@@ -15,7 +15,7 @@ namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/services")]
-    [AuthorizeRole(Role.Admin)]
+    //[AuthorizeRole(Role.Admin)]
     public class ServicesController : Controller
     {
         private readonly IServiceToService _serviceService;
@@ -33,7 +33,7 @@ namespace MarvelousService.API.Controllers
 
         //api/services
         [HttpPost]
-        [AuthorizeRole(Role.Admin)]
+        //[AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Add new service")]       
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -58,9 +58,8 @@ namespace MarvelousService.API.Controllers
 
         //api/services/
         [HttpGet("id")]
-        [AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Get service by id")]
-        [AuthorizeRole(Role.Admin)]
+        //[AuthorizeRole(Role.Admin)]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(ServiceResponse))]
         public async Task<ActionResult<ServiceResponse>> GetServiceById(int id)
         {
@@ -75,7 +74,7 @@ namespace MarvelousService.API.Controllers
 
         //api/services/
         [HttpPut("id")]
-        [AuthorizeRole(Role.Admin)]
+        //[AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Update services")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
@@ -98,7 +97,7 @@ namespace MarvelousService.API.Controllers
 
         //api/services/
         [HttpPatch("id")]
-        [AuthorizeRole(Role.Admin)]
+        //[AuthorizeRole(Role.Admin)]
         [SwaggerOperation("Deleted services")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
