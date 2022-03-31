@@ -8,7 +8,6 @@ namespace MarvelousService.DataLayer.Entities
         public ServiceType Type { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public ServiceType Type { get; set; }
         public decimal Price { get; set; }
         public bool IsDeleted { get; set; }
     }

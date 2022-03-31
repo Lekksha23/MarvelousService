@@ -9,10 +9,13 @@ namespace MarvelousService.API.Configuration
         public AutoMapperFromApi()
         {
             CreateMap<AuthRequest, AuthModel>(); 
+
             CreateMap<ServiceInsertRequest, ServiceModel>();
-            CreateMap<ServiceResponse, ServiceModel>();
-            CreateMap<ServiceToLeadInsertRequest, ServiceToLeadModel>();
+            CreateMap<ServiceModel, ServiceResponse>();
+            CreateMap<ServiceSoftDeleteRequest, ServiceModel>();
             CreateMap<LeadInsertRequest, LeadModel>();
+
+            CreateMap<ServiceToLeadInsertRequest, ServiceToLeadModel>();
         }
     }
 }

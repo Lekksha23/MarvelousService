@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using Marvelous.Contracts.Enums;
-using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.API.Models.ExceptionModel;
-using MarvelousService.API.Models.Request;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
@@ -68,7 +65,7 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status503ServiceUnavailable)]
-        public async Task<ActionResult<ServiceUpdateRequest>> UpdateService(int id, ServiceUpdateRequest serviceUpdateRequest)
+        public async Task<ActionResult<ServiceResponse>> UpdateService(int id, ServiceUpdateRequest serviceUpdateRequest)
         {
             _logger.LogInformation($"Poluchen zapros na obnovlenie service s id = {id}.");
             ServiceModel service = _autoMapper.Map<ServiceModel>(serviceUpdateRequest);
@@ -84,7 +81,7 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExceptionOutputModel), StatusCodes.Status503ServiceUnavailable)]
-        public async Task<ActionResult<ServiceDeletedRequest>> SoftDelete(int id, ServiceDeletedRequest serviceDeletedRequest)
+        public async Task<ActionResult<ServiceResponse>> SoftDelete(int id, ServiceSoftDeleteRequest serviceDeletedRequest)
         {
             _logger.LogInformation($"Poluchen zapros na ydalenie service s id = {id}.");
             ServiceModel service = _autoMapper.Map<ServiceModel>(serviceDeletedRequest);

@@ -26,6 +26,7 @@ namespace MarvelousService.BusinessLayer.Services
         {
             _logger.LogInformation("Request for adding service");
             var service = _mapper.Map<Service>(serviceModel);
+            service.IsDeleted = false;
             var newService =  await _serviceRepository.AddService(service);
             return newService;
         }
@@ -43,6 +44,7 @@ namespace MarvelousService.BusinessLayer.Services
             _logger.LogInformation("Request for soft deletion service by id");
             var oldService = await _serviceRepository.GetServiceById(id);
             CheckService(oldService);
+            serviceModel.Id = id;
             var newService =  _mapper.Map<Service>(serviceModel);
             await _serviceRepository.SoftDelete(newService);
         }
@@ -50,8 +52,9 @@ namespace MarvelousService.BusinessLayer.Services
         public async Task UpdateService(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("Service update request");
-            var oldService = await _serviceRepository.GetServiceById(serviceModel.Id);
+            var oldService = await _serviceRepository.GetServiceById(id);
             CheckService(oldService);
+            serviceModel.Id = id;
             _logger.LogInformation("Service update request was successful");
             var service = _mapper.Map<Service>(serviceModel);
             await _serviceRepository.UpdateService(service);

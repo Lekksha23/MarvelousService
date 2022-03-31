@@ -1,9 +1,7 @@
-﻿namespace MarvelousService.API.Models.Request
+﻿namespace MarvelousService.API.Models
 {
-    public class ServiceUpdateRequest
+    public class ServiceUpdateRequest : ServiceInsertRequest
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public decimal OneTimePrice { get; set; }
+
     }
 }
