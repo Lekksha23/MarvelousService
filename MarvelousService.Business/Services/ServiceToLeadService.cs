@@ -18,14 +18,14 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly IServiceRepository _serviceRepository;
         private readonly IServicePaymentRepository _servicePaymentRepository;
         private readonly IMapper _mapper;
-        private readonly ILogger<ServiceToService> _logger;
+        private readonly ILogger<ServiceToLeadService> _logger;
         private readonly ITransactionStoreClient _transactionStoreClient;
 
         private const double _discountVIP = 0.9;
 
         public ServiceToLeadService(IServiceToLeadRepository serviceToLeadRepository,
             IMapper mapper,
-            ILogger<ServiceToService> logger,
+            ILogger<ServiceToLeadService> logger,
             IServiceRepository serviceRepository,
             ITransactionStoreClient transactionService)
         {
