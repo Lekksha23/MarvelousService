@@ -18,7 +18,7 @@ namespace MarvelousService.BusinessLayer.Models
             if (p == Period.Year)
             {
                 SubscriptionTime time = new Year();
-                time.GetPrice(price);
+                return time.GetPrice(price);
             }
 
             return price;

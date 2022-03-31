@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Marvelous.Contracts;
+using Marvelous.Contracts.Enums;
+using Marvelous.Contracts.RequestModels;
 using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;

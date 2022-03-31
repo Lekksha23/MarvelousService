@@ -32,6 +32,14 @@ namespace MarvelousService.API.Infrastructure
             {
                 await ConstructResponse(context, HttpStatusCode.BadGateway, ex.Message);
             }
+            catch (RequestTimeoutException ex)
+            {
+                await ConstructResponse(context, HttpStatusCode.RequestTimeout, ex.Message);
+            }
+            catch (ServiceUnavailableException ex)
+            {
+                await ConstructResponse(context, HttpStatusCode.ServiceUnavailable, ex.Message);
+            }
             catch (TypeMismatchException ex)
             {
                 await ConstructResponse(context, HttpStatusCode.BadRequest, ex.Message);
