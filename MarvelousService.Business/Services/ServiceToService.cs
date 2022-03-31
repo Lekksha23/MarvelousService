@@ -22,7 +22,7 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public async Task<int> AddService(ServiceModel serviceModel,int role)
+        public async Task<int> AddService(ServiceModel serviceModel)
         {
             _logger.LogInformation("Request for adding service");
             var service = _mapper.Map<Service>(serviceModel);

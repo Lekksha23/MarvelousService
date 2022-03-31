@@ -11,6 +11,8 @@ using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 using MassTransit;
 using Marvelous.Contracts.ExchangeModels;
+using MarvelousService.API.Producer.Interface;
+using MarvelousService.API.Producer;
 
 namespace MarvelousService.API.Extensions
 {
@@ -30,6 +32,7 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IServicePaymentService, ServicePaymentService>();
             services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
             services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
+            services.AddScoped<IServiceProducer, ServiceProducer>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
