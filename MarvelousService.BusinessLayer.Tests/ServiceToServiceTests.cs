@@ -47,7 +47,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ServiceToService( _serviceRepositoryMock.Object, _autoMapper, _logger.Object);
             int role = 3;
             //when
-            sut.AddService(serviceModel, role);
+            sut.AddService(serviceModel);
 
             //then
             _serviceRepositoryMock.Verify(m => m.AddService(It.IsAny<Service>()), Times.Once());

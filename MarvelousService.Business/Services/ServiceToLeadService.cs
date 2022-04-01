@@ -20,6 +20,7 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly IMapper _mapper;
         private readonly ILogger<ServiceToLeadService> _logger;
         private readonly ITransactionStoreClient _transactionStoreClient;
+        private readonly ICRMClient _crmClient;
 
         private const double _discountVIP = 0.9;
 
@@ -27,11 +28,13 @@ namespace MarvelousService.BusinessLayer.Services
             IMapper mapper,
             ILogger<ServiceToLeadService> logger,
             IServiceRepository serviceRepository,
-            ITransactionStoreClient transactionService)
+            ITransactionStoreClient transactionService,
+            ICRMClient crmClient)
         {
             _serviceToLeadRepository = serviceToLeadRepository;
             _serviceRepository = serviceRepository;
             _transactionStoreClient = transactionService;
+            _crmClient = crmClient;
             _mapper = mapper;
             _logger = logger;
         }
@@ -39,34 +42,41 @@ namespace MarvelousService.BusinessLayer.Services
         public async Task<int> AddServiceToLead(ServiceToLeadModel serviceToLeadModel, int role)
         {
             var service = await _serviceRepository.GetServiceById(serviceToLeadModel.ServiceId.Id);
-
-            //var totalPrice = serviceToLeadModel.GetPrice(service.Price);
-
-            //if (role == (int)Role.Vip)
-            //{
-            //    serviceToLeadModel.Price = totalPrice * (decimal)_discountVIP;
-            //}
-            //else
-            //{
-            //    serviceToLeadModel.Price = totalPrice;
-            //}
+            var totalPrice = serviceToLeadModel.GetTotalPrice(service.Price, serviceToLeadModel.Period);
+            CheckRole(serviceToLeadModel, totalPrice, role);
             var serviceToLead = _mapper.Map<ServiceToLead>(serviceToLeadModel);
-            //get account by leadid
+            var leadAccounts = await _crmClient.GetAccountsByLeadId();
+            var accountId = 0;
+            var count = 0;
+
+            for (int i = 0; i < leadAccounts.Count; i++)
+            {
+                if (leadAccounts[i].CurrencyType == Currency.RUB)
+                {
+                    accountId = leadAccounts[i].Id;
+                    count++;
+                    break;
+                }
+            }
+            if (count == 0)
+            {
+                throw new AccountException(
+                    $"There's no accounts with RUB CurrencyType was found in CRM for Lead with id {serviceToLeadModel.LeadId}");
+            }
             var serviceTransactionModel = new TransactionRequestModel {
                 Amount = serviceToLeadModel.Price,
                 Currency = Currency.RUB,
-                AccountId = 23
+                AccountId = accountId
             };
-            var transactionId = _transactionStoreClient.AddTransaction(serviceTransactionModel);
-
+            var transactionId = await _transactionStoreClient.AddTransaction(serviceTransactionModel);
             var servicePayment = new ServicePayment {
                 ServiceToLeadId = serviceToLead,
-                TransactionId = transactionId.Id
+                TransactionId = transactionId
             };
             await _servicePaymentRepository.AddServicePayment(servicePayment);
-            serviceToLeadModel.Status = Status.Active;
+            serviceToLead.Status = Status.Active;
 
-            _logger.LogInformation($"Query for adding service with id = {service.Id} to Lead with id = {serviceToLead.LeadId}");
+            _logger.LogInformation($"Query for adding service with id {service.Id} to Lead with id {serviceToLead.LeadId}");
             return await _serviceToLeadRepository.AddServiceToLead(serviceToLead);
         }
 
@@ -94,6 +104,26 @@ namespace MarvelousService.BusinessLayer.Services
                 throw new NotFoundServiceException("This service does not exist.");
             }
             return _mapper.Map<List<ServiceToLeadModel>>(service);
+        }
+
+        private void CheckRole(ServiceToLeadModel serviceToLeadModel, decimal totalPrice, int role)
+        {
+            switch (role)
+            {
+                case (int)Role.Vip:
+                    serviceToLeadModel.Price = totalPrice * (decimal)_discountVIP;
+                    break;
+                case (int)Role.Regular:
+                    serviceToLeadModel.Price = totalPrice;
+                    break;
+                case (int)Role.Admin:
+                    throw new RoleException("User with role admin can't book any services");
+                    _logger.LogError("User with role admin was trying to book a service");
+                    break;
+                default:
+                    throw new RoleException("Unknown role");
+                    _logger.LogError("User with unknown role was trying to book a service");
+            }
         }
     }
 }

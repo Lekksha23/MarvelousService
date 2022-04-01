@@ -40,7 +40,7 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure) ;
 
-            _logger.LogInformation($"Service {service.Name} added to database");
+            _logger.LogInformation($"Service - {service.Name} added to MarvelousService.DB");
             return id;  
         }
 
@@ -52,11 +52,11 @@ namespace MarvelousService.DataLayer.Repositories
             _logger.LogInformation("Connection succedded");
 
             var service = await connection.QueryFirstOrDefaultAsync<Service>(
-                _serviceGetByIdProcedure, 
-                new { Id = id }, 
+                _serviceGetByIdProcedure,
+                new { Id = id },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation("The selection was successfully selected service with id - " + id);
+            _logger.LogInformation($"Service with id {id} was received");
             return service;
         }
 
@@ -75,7 +75,7 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation($"Service - {service.Name} changed status to 'Removed' in the database");
+            _logger.LogInformation($"Service - {service.Name} changed status to 'Removed' in the MarvelousService.DB");
         }
 
         public async Task UpdateService(Service service)
