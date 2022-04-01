@@ -8,5 +8,6 @@ namespace MarvelousService.DataLayer.Repositories.Interfaces
         Task SoftDelete(Service service);
         Task UpdateService(Service service);
         Task<Service> GetServiceById(int id);
+        Task<List<Service>> GetAllService();
     }
 } 

@@ -14,6 +14,7 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly IServiceRepository _serviceRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<ServiceToService> _logger;
+        private readonly Helper _helper;
 
         public ServiceToService(IServiceRepository serviceRepository, IMapper mapper, ILogger<ServiceToService> logger)
         {
@@ -27,25 +28,33 @@ namespace MarvelousService.BusinessLayer.Services
             _logger.LogInformation("Request for adding service");
             var service = _mapper.Map<Service>(serviceModel);
             service.IsDeleted = false;
-            var newService =  await _serviceRepository.AddService(service);
+            var newService = await _serviceRepository.AddService(service);
             return newService;
         }
 
         public async Task<ServiceModel> GetServiceById(int id)
-        {   
+        {
             _logger.LogInformation("Request for getting service by id");
             var service = await _serviceRepository.GetServiceById(id);
-            CheckService(service);
+            _helper.CheckService(service);
             return _mapper.Map<ServiceModel>(service);
+        }
+
+        public async Task<List<ServiceModel>> GetAllServiceModels()
+        {
+            _logger.LogInformation("Request for getting services");
+            var services = await _serviceRepository.GetAllService();
+            return _mapper.Map<List<ServiceModel>>(services);
+
         }
 
         public async Task SoftDelete(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("Request for soft deletion service by id");
             var oldService = await _serviceRepository.GetServiceById(id);
-            CheckService(oldService);
+            _helper.CheckService(oldService);
             serviceModel.Id = id;
-            var newService =  _mapper.Map<Service>(serviceModel);
+            var newService = _mapper.Map<Service>(serviceModel);
             await _serviceRepository.SoftDelete(newService);
         }
 
@@ -53,20 +62,15 @@ namespace MarvelousService.BusinessLayer.Services
         {
             _logger.LogInformation("Service update request");
             var oldService = await _serviceRepository.GetServiceById(id);
-            CheckService(oldService);
+            _helper.CheckService(oldService);
             serviceModel.Id = id;
             _logger.LogInformation("Service update request was successful");
             var service = _mapper.Map<Service>(serviceModel);
             await _serviceRepository.UpdateService(service);
         }
 
-        private void CheckService(Service service)
-        {
-            if (service is null)
-            {
-                _logger.LogError("Error in receiving service by Id ");
-                throw new NotFoundServiceException("This service does not exist.");
-            }
-        }
+
+
     }
+
 }
