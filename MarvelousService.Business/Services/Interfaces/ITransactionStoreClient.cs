@@ -1,4 +1,4 @@
-﻿using Marvelous.Contracts;
+﻿using Marvelous.Contracts.RequestModels;
 
 namespace MarvelousService.BusinessLayer.Services
 {

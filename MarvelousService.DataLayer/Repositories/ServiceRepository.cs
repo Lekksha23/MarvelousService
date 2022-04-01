@@ -14,7 +14,6 @@ namespace MarvelousService.DataLayer.Repositories
         private const string _serviceGetByIdProcedure = "dbo.Service_SelectById";
         private const string _serviceUpdateProcedure = "dbo.Service_Update";
         private const string _serviceSoftDeleteProcedure = "dbo.Service_SoftDelete";
-        private const string _serviceGetTrancactionByServiceToLead = "dbo.ServicePayment_SelectByServiseToLeadId";
 
         private readonly ILogger<ServiceRepository> _logger;
 
@@ -35,7 +34,9 @@ namespace MarvelousService.DataLayer.Repositories
                 {
                     service.Name,
                     service.Price,
-                    service.Description
+                    service.Description,
+                    service.Type,
+                    service.IsDeleted
                 },
                 commandType: CommandType.StoredProcedure) ;
 
@@ -59,23 +60,6 @@ namespace MarvelousService.DataLayer.Repositories
             return service;
         }
 
-        public async Task<ServicePayment> GetTransactionByServiceToleadId(int id)
-        {
-            _logger.LogInformation("Request transaction by id");
-            _logger.LogInformation("Connecting to the MarvelousService.DB");
-            using IDbConnection connection = ProvideConnection();
-            _logger.LogInformation("Connection succedded");
-
-            var service = await connection.QueryFirstOrDefaultAsync<ServicePayment>(
-                _serviceGetTrancactionByServiceToLead,
-                new { ServiceToLeadId = id },
-                commandType: CommandType.StoredProcedure);
-
-            _logger.LogInformation("The selection was successfully selected transaction with id - " + id);
-
-            return service;
-        }
-
         public async Task SoftDelete(Service service)
         {
             _logger.LogInformation("Connecting to the MarvelousService.DB");
@@ -84,13 +68,17 @@ namespace MarvelousService.DataLayer.Repositories
 
             var newService = await connection.QueryFirstOrDefaultAsync<Service>(
                 _serviceSoftDeleteProcedure,
-                new { IsDeleted = service.IsDeleted },
+                new 
+                { 
+                    service.Id,
+                    service.IsDeleted 
+                },
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Service - {service.Name} changed status to 'Removed' in the database");
         }
 
-        public async Task UpdateService( Service service)
+        public async Task UpdateService(Service service)
         {
             _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
@@ -99,9 +87,11 @@ namespace MarvelousService.DataLayer.Repositories
             await connection.ExecuteAsync(_serviceUpdateProcedure,
                 new 
                 {
+                    service.Id,
                     service.Name,
                     service.Price,
                     service.Description,
+                    service.Type
                 },
                 commandType: CommandType.StoredProcedure);
 

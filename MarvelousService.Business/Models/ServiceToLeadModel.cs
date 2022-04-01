@@ -5,7 +5,6 @@ namespace MarvelousService.BusinessLayer.Models
     public class ServiceToLeadModel
     {
         public int Id { get; set; }
-        public ServiceType Type { get; set; }
         public decimal Price { get; set; }
         public Period Period { get; set; }
         public Status Status { get; set; }
@@ -13,9 +12,15 @@ namespace MarvelousService.BusinessLayer.Models
         public ServiceModel ServiceId { get; set; }
         public List<ServicePaymentModel> servicePayments { get; set; }
 
-        public decimal GetTotalPrice(decimal price)
+        public decimal GetTotalPrice(decimal price, Period p)
         {
             // приведение enum к конкретному классу
+            if (p == Period.Year)
+            {
+                SubscriptionTime time = new Year();
+                return time.GetPrice(price);
+            }
+
             return price;
         }
     }
