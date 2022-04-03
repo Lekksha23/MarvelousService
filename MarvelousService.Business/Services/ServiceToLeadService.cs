@@ -80,7 +80,7 @@ namespace MarvelousService.BusinessLayer.Services
             return await _serviceToLeadRepository.AddServiceToLead(serviceToLead);
         }
 
-        public async Task<List<ServiceToLeadModel>> GetLeadById(int id)
+        public async Task<List<ServiceToLeadModel>> GetByLeadId(int id)
         {
             _logger.LogInformation("Lead request by id");
             var lead = await _serviceToLeadRepository.GetByLeadId(id);

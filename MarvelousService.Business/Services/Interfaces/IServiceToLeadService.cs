@@ -7,6 +7,6 @@ namespace MarvelousService.BusinessLayer.Services.Interfaces
     {
         Task<List<ServiceToLeadModel>>GetServiceToLeadById(int id);
         Task<int> AddServiceToLead(ServiceToLeadModel serviceModel, int role);
-        Task<List<ServiceToLeadModel>> GetLeadById(int id);
+        Task<List<ServiceToLeadModel>> GetByLeadId(int id);
     }
 }
