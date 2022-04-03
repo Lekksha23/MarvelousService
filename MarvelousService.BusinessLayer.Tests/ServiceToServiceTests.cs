@@ -3,6 +3,7 @@ using Marvelous.Contracts;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services;
+using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.BusinessLayer.Tests.TestCaseSource;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories.Interfaces;
@@ -20,6 +21,7 @@ namespace MarvelousService.BusinessLayer.Tests
         private readonly ServiceToServiceTestCaseSource _serviceTest;
         private readonly IMapper _autoMapper;
         private readonly Mock<ILogger<ServiceToService>> _logger;
+        private readonly Mock<Helper> _helper;
 
 
         public ServiceToServiceTests()
@@ -29,6 +31,7 @@ namespace MarvelousService.BusinessLayer.Tests
             _autoMapper = new Mapper(
                 new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _logger = new Mock<ILogger<ServiceToService>>();
+            _helper = new Mock<Helper>();
         }
 
         [SetUp]
@@ -44,7 +47,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var serviceModel = _serviceTest.AddServiceModelTest();
             var service = new Service();
             _serviceRepositoryMock.Setup(m => m.GetServiceById(It.IsAny<int>())).ReturnsAsync(service); 
-            var sut = new ServiceToService( _serviceRepositoryMock.Object, _autoMapper, _logger.Object);
+            var sut = new ServiceToService( _serviceRepositoryMock.Object, _autoMapper, _logger.Object );
             int role = 3;
             //when
             sut.AddService(serviceModel);

@@ -59,6 +59,22 @@ namespace MarvelousService.API.Controllers
         }
 
         //api/services/
+        [HttpGet()]
+        [SwaggerOperation("Get all services")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(ServiceResponse))]
+        public async Task<ActionResult<ServiceResponse>> GetAllService()
+        {
+            _logger.LogInformation($"Request received for all services");
+            var serviceModels = await _serviceService.GetAllServiceModels();
+            var result = _autoMapper.Map<List<ServiceResponse>>(serviceModels);
+            _logger.LogInformation($"Services received");
+            return Ok(result);
+        }
+
+        //api/services/
         [HttpPut("id")]
         [SwaggerOperation("Update services")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
