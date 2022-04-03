@@ -1,4 +1,4 @@
-﻿create procedure [dbo].[Service_Insert] 
+﻿create procedure [dbo].[Resource_Insert] 
 	@Name varchar (40),
 	@Type int,
 	@Description varchar (500),
@@ -6,7 +6,7 @@
 	@IsDeleted bit
 as
 begin
-	insert into dbo.[Service]
+	insert into dbo.[Resource]
 	([Name],
 	 [Type],
 	 [Description],

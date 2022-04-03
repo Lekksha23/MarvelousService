@@ -1,4 +1,4 @@
-﻿create procedure [dbo].[Service_Update]
+﻿create procedure [dbo].[Resource_Update]
 	@Id int,
 	@Name varchar (40),
 	@Type int,
@@ -6,7 +6,7 @@
 	@Price decimal (6, 0)
 as
 begin
-	update dbo.[Service]
+	update dbo.[Resource]
 	set
 		[Name] = @Name,
 		[Type] = @Type,

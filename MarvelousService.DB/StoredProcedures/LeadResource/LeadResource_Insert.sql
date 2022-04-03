@@ -1,22 +1,22 @@
-﻿create procedure [dbo].[ServiceToLead_Insert]
+﻿create procedure [dbo].[LeadResource_Insert]
 	@Period int,
 	@Price decimal,
 	@Status int,
 	@LeadId int,
-	@ServiceId int
+	@ResourceId int
 as
 begin
-	insert into dbo.[ServiceToLead]
+	insert into dbo.[LeadResource]
 		([Period],
 	     [Price],
 	     [Status],
 		 [LeadId],
-		 [ServiceId])
+		 [ResourceId])
 	values
 		(@Period,
 		 @Price,
 		 @Status,
 		 @LeadId,
-		 @ServiceId)
+		 @ResourceId)
 	select scope_identity()
 end

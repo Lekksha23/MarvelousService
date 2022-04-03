@@ -13,7 +13,7 @@
     </RootPath>
     <RootNamespace>MarvelousService.DB</RootNamespace>
     <AssemblyName>MarvelousService.DB</AssemblyName>
-    <ModelCollation>1033, CI</ModelCollation>
+    <ModelCollation>1049,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -23,6 +23,7 @@
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <Recovery>SIMPLE</Recovery>
+    <DefaultCollation>Cyrillic_General_100_CI_AI_KS</DefaultCollation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -59,24 +60,24 @@
     <Folder Include="Properties" />
     <Folder Include="StoredProcedures" />
     <Folder Include="Tables" />
-    <Folder Include="StoredProcedures\ServiceToLead" />
-    <Folder Include="StoredProcedures\Service" />
-    <Folder Include="StoredProcedures\ServicePayment" />
+    <Folder Include="StoredProcedures\LeadResource" />
+    <Folder Include="StoredProcedures\Resource" />
+    <Folder Include="StoredProcedures\ResourcePayment" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\ServiceToLead.sql" />
-    <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_Insert.sql" />
-    <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectByLead.sql" />
-    <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_SelectById.sql" />
-    <Build Include="Tables\Service.sql" />
-    <Build Include="StoredProcedures\Service\Service_Insert.sql" />
-    <Build Include="StoredProcedures\Service\Service_Update.sql" />
-    <Build Include="Tables\ServicePayment.sql" />
-    <Build Include="StoredProcedures\ServicePayment\ServicePayment_Insert.sql" />
-    <Build Include="StoredProcedures\Service\Service_SelectById.sql" />
-    <Build Include="StoredProcedures\Service\Service_SoftDelete.sql" />
-    <Build Include="StoredProcedures\Service\Service_SelectAll.sql" />
-    <Build Include="StoredProcedures\ServiceToLead\ServiceToLead_UpdateStatus.sql" />
-    <Build Include="StoredProcedures\ServicePayment\ServicePayment_SelectByServiceToLead.sql" />
+    <Build Include="Tables\LeadResource.sql" />
+    <Build Include="StoredProcedures\LeadResource\LeadResource_Insert.sql" />
+    <Build Include="StoredProcedures\LeadResource\LeadResource_SelectByLead.sql" />
+    <Build Include="StoredProcedures\LeadResource\LeadResource_SelectById.sql" />
+    <Build Include="Tables\Resource.sql" />
+    <Build Include="StoredProcedures\Resource\Resource_Insert.sql" />
+    <Build Include="StoredProcedures\Resource\Resource_Update.sql" />
+    <Build Include="Tables\ResourcePayment.sql" />
+    <Build Include="StoredProcedures\ResourcePayment\ResourcePayment_Insert.sql" />
+    <Build Include="StoredProcedures\Resource\Resource_SelectById.sql" />
+    <Build Include="StoredProcedures\Resource\Resource_SoftDelete.sql" />
+    <Build Include="StoredProcedures\Resource\Resource_SelectAll.sql" />
+    <Build Include="StoredProcedures\LeadResource\LeadResource_UpdateStatus.sql" />
+    <Build Include="StoredProcedures\ResourcePayment\ResourcePayment_SelectByServiceToLead.sql" />
   </ItemGroup>
 </Project>

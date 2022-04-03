@@ -1,4 +1,4 @@
-﻿create procedure [dbo].[Service_SelectById]
+﻿create procedure [dbo].[Resource_SelectById]
 	 @Id int
 as
 begin
@@ -9,6 +9,6 @@ begin
 		[Description],
 		[Price],
 		[IsDeleted]
-	from dbo.[Service]
+	from dbo.[Resource]
 	where Id = @Id
 end
