@@ -28,13 +28,12 @@ namespace MarvelousService.API.Controllers
 
         //api/servicesToLead
         [HttpPost]
-        [AuthorizeRole(Role.Regular, Role.Vip)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [SwaggerOperation("Add service to a lead")]
         public async Task<ActionResult<int>> AddServiceToLead([FromBody] ServiceToLeadInsertRequest serviceToLeadInsertRequest)
         {
             var leadIdentity = this.GetLeadFromToken();
-            _logger.LogInformation($"A request for a lead service has been received id = {leadIdentity.Id}.");
+            _logger.LogInformation($"A request for adding Service {serviceToLeadInsertRequest.ServiceId} to Lead {leadIdentity.Id} has been received.");
             var serviceToLeadModel = _autoMapper.Map<ServiceToLeadModel>(serviceToLeadInsertRequest);
             serviceToLeadModel.LeadId = leadIdentity.Id;
             Role role = leadIdentity.Role;

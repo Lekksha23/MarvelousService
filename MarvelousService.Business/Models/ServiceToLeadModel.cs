@@ -1,4 +1,5 @@
-﻿using MarvelousService.DataLayer.Enums;
+﻿using MarvelousService.DataLayer.Entities;
+using MarvelousService.DataLayer.Enums;
 
 namespace MarvelousService.BusinessLayer.Models
 {
@@ -9,8 +10,8 @@ namespace MarvelousService.BusinessLayer.Models
         public Period Period { get; set; }
         public Status Status { get; set; }
         public int LeadId { get; set; }
-        public ServiceModel ServiceId { get; set; }
-        public List<ServicePaymentModel> servicePayments { get; set; }
+        public Service ServiceId { get; set; }
+        public List<ServicePaymentModel> ServicePayments { get; set; }
 
         public decimal GetTotalPrice(decimal price, Period p)
         {
@@ -20,8 +21,20 @@ namespace MarvelousService.BusinessLayer.Models
                 SubscriptionTime time = new Year();
                 return time.GetPrice(price);
             }
-
-            return price;
+            else if (p == Period.Month)
+            {
+                SubscriptionTime time = new Month();
+                return time.GetPrice(price);
+            }
+            else if (p == Period.Week)
+            {
+                SubscriptionTime time = new Week();
+                return time.GetPrice(price);
+            }
+            else
+            {
+                return price;
+            }
         }
     }
 }

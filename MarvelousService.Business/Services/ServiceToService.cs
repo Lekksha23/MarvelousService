@@ -51,10 +51,12 @@ namespace MarvelousService.BusinessLayer.Services
         public async Task SoftDelete(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("Request for soft deletion service by id");
-            var oldService = await _serviceRepository.GetServiceById(id);
             _helper.CheckService(oldService);
+            var service = await _serviceRepository.GetServiceById(id);
+            CheckService(service);
             serviceModel.Id = id;
-            var newService = _mapper.Map<Service>(serviceModel);
+            serviceModel.Name = service.Name;
+            var newService =  _mapper.Map<Service>(serviceModel);
             await _serviceRepository.SoftDelete(newService);
         }
 
