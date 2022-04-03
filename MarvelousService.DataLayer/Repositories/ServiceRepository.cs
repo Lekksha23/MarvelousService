@@ -14,6 +14,7 @@ namespace MarvelousService.DataLayer.Repositories
         private const string _serviceGetByIdProcedure = "dbo.Service_SelectById";
         private const string _serviceUpdateProcedure = "dbo.Service_Update";
         private const string _serviceSoftDeleteProcedure = "dbo.Service_SoftDelete";
+        private const string _serviceGetAllService = "dbo.Service_SelectAll";
 
         private readonly ILogger<ServiceRepository> _logger;
 
@@ -42,6 +43,21 @@ namespace MarvelousService.DataLayer.Repositories
 
             _logger.LogInformation($"Service - {service.Name} added to MarvelousService.DB");
             return id;  
+        }
+
+        public async Task<List<Service>> GetAllService()
+        {
+            _logger.LogInformation("Requesting a services");
+            _logger.LogInformation("Connecting to the MarvelousService.DB");
+            using IDbConnection connection = ProvideConnection();
+            _logger.LogInformation("Connection succedded");
+
+            var services = connection.QueryAsync<Service>(
+                _serviceGetAllService, commandType: CommandType.StoredProcedure)
+                .Result.ToList();
+
+            _logger.LogInformation("The selection was successfully, selected services");
+            return services;
         }
 
         public async Task<Service> GetServiceById(int id)
