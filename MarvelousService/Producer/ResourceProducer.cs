@@ -6,16 +6,15 @@ using MassTransit;
 
 namespace MarvelousService.API.Producer
 {
-    public class ServiceProducer : IResourceProducer
+    public class ResourceProducer : IResourceProducer
     {
-        private readonly IResourceService _serviceToService;
-        private readonly ILeadResourceService _serviceToLead;
-        private readonly ILogger<ServiceProducer> _logger;
+        private readonly IResourceService _resourceService;
+        private readonly ILeadResourceService _leadResource;
+        private readonly ILogger<ResourceProducer> _logger;
 
-        public ServiceProducer(ILeadResourceService serviceToLead,ILogger<ServiceProducer> logger)          
+        public ResourceProducer(ILeadResourceService leadResource, ILogger<ResourceProducer> logger)          
         {
-            _serviceToLead = serviceToLead;
-
+            _leadResource = leadResource;
             _logger = logger;
         }
 
@@ -36,25 +35,25 @@ namespace MarvelousService.API.Producer
             await busControl.StartAsync(source.Token);
             try
             {
-                var service = await _serviceToService.GetResourceById(id);
+                var resource = await _resourceService.GetResourceById(id);
 
-                await busControl.Publish<ServiceExchangeModel>(new
+                await busControl.Publish<ServiceExchangeModel>( new
                 {
-                    Id = service.Id,
-                    Name = service.Name,
-                    Description = service.Description,
-                    Price = service.Price,
-                    IsDeleted = service.IsDeleted
+                    Id = resource.Id,
+                    Name = resource.Name,
+                    Description = resource.Description,
+                    Price = resource.Price,
+                    IsDeleted = resource.IsDeleted
                 });
-                _logger.LogInformation("Service published");
+                _logger.LogInformation("Resource published");
             }
             finally
             {
-                _logger.LogWarning("Service not published");
+                _logger.LogWarning("Resource not published");
                 await busControl.StopAsync();
             }
 
-            _logger.LogInformation("Service published");
+            _logger.LogInformation("Resource published");
         }
 
         public async Task NotifyLeadResourceAdded(int id)
@@ -75,7 +74,7 @@ namespace MarvelousService.API.Producer
             await busControl.StartAsync(source.Token);
             try
             {
-                var service = await _serviceToLead.GetLeadResourceById(id);
+                var resource = await _leadResource.GetLeadResourceById(id);
 
                 await busControl.Publish<ServiceExchangeModel>(new
                 {
@@ -83,12 +82,12 @@ namespace MarvelousService.API.Producer
 
 
                 });
-                _logger.LogInformation("Account published");
+                _logger.LogInformation("Resource published");
 
             }
             finally
             {
-                _logger.LogWarning("Accoun not published");
+                _logger.LogWarning("Resource not published");
                 await busControl.StopAsync();
             }
 

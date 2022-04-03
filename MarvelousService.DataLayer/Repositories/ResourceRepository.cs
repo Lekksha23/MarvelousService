@@ -68,13 +68,13 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var service = await connection.QueryFirstOrDefaultAsync<Resource>(
+            var resource = await connection.QueryFirstOrDefaultAsync<Resource>(
                 _getByIdProcedure,
                 new { Id = id },
                 commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Resource with id {id} was received");
-            return service;
+            return resource;
         }
 
         public async Task SoftDelete(Resource resource)
@@ -83,7 +83,7 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var newService = await connection.QueryFirstOrDefaultAsync<Resource>(
+            var newResource = await connection.QueryFirstOrDefaultAsync<Resource>(
                 _softDeleteProcedure,
                 new 
                 { 

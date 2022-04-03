@@ -12,11 +12,12 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly IResourceRepository _resourceRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<ResourceService> _logger;
-        private readonly Helper _helper;
+        private readonly IHelper _helper;
 
-        public ResourceService(IResourceRepository resourceRepository, IMapper mapper, ILogger<ResourceService> logger)
+        public ResourceService(IResourceRepository resourceRepository, IMapper mapper, ILogger<ResourceService> logger, IHelper helper)
         {
             _resourceRepository = resourceRepository;
+            _helper = helper;
             _mapper = mapper;
             _logger = logger;
         }

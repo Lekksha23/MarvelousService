@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MarvelousService.API.Models;
-using MarvelousService.API.Models.ExceptionModel;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
@@ -52,8 +51,8 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<ResourceResponse>> GetResourceById(int id)
         {
             _logger.LogInformation($"Request for getting a resource by id {id}");
-            var serviceModel = await _resourceService.GetResourceById(id);
-            var result = _autoMapper.Map<ResourceResponse>(serviceModel);
+            var resourceModel = await _resourceService.GetResourceById(id);
+            var result = _autoMapper.Map<ResourceResponse>(resourceModel);
             _logger.LogInformation($"Resource by id {id} was received");
             return Ok(result);
         }

@@ -17,23 +17,32 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly ILeadResourceRepository _leadResourceRepository;
         private readonly IResourceRepository _resourceRepository;
         private readonly IResourcePaymentRepository _resourcePaymentRepository;
-        private readonly IMapper _mapper;
-        private readonly ILogger<LeadResourceService> _logger;
+        private readonly ICRMService _crmService;
+        private readonly ITransactionService _transactionService;
         private readonly ITransactionStoreClient _transactionStoreClient;
         private readonly ICRMClient _crmClient;
+        private readonly IMapper _mapper;
+        private readonly ILogger<LeadResourceService> _logger;
 
         private const double _discountVIP = 0.9;
 
-        public LeadResourceService(ILeadResourceRepository serviceToLeadRepository,
+        public LeadResourceService(
+            ILeadResourceRepository LeadResourceRepository,
+            IResourceRepository resourceRepository,
+            IResourcePaymentRepository resourcePaymentRepository,
+            ITransactionService transactionService,
+            ITransactionStoreClient transactionClient,
+            ICRMService crmService,
+            ICRMClient crmClient,
             IMapper mapper,
-            ILogger<LeadResourceService> logger,
-            IResourceRepository serviceRepository,
-            ITransactionStoreClient transactionService,
-            ICRMClient crmClient)
+            ILogger<LeadResourceService> logger)
         {
-            _leadResourceRepository = serviceToLeadRepository;
-            _resourceRepository = serviceRepository;
-            _transactionStoreClient = transactionService;
+            _leadResourceRepository = LeadResourceRepository;
+            _resourceRepository = resourceRepository;
+            _resourcePaymentRepository = resourcePaymentRepository;
+            _transactionService = transactionService;
+            _transactionStoreClient = transactionClient;
+            _crmService = crmService;
             _crmClient = crmClient;
             _mapper = mapper;
             _logger = logger;
@@ -41,48 +50,29 @@ namespace MarvelousService.BusinessLayer.Services
 
         public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, int role)
         {
+            _logger.LogInformation($"Query for adding a resource with id {leadResourceModel.Resource.Id} to Lead with id {leadResourceModel.LeadId}");
             var resource = await _resourceRepository.GetResourceById(leadResourceModel.Resource.Id);
             var totalPrice = leadResourceModel.GetTotalPrice(resource.Price, leadResourceModel.Period);
             CheckRole(leadResourceModel, totalPrice, role);
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
-            var leadAccounts = await _crmClient.GetLeadAccounts();
-            var accountId = 0;
-            var count = 0;
-
-            for (int i = 0; i < leadAccounts.Count; i++)
+            _logger.LogInformation("Query for getting a RUB LeadAccount");
+            var accountId = await _crmService.GetIdOfRubLeadAccount();
+            _logger.LogInformation("Query for adding a transaction for ResourcePayment");
+            var transactionId = await _transactionService.AddResourceTransaction(accountId, leadResourceModel.Price);
+            var resourcePayment = new ResourcePayment 
             {
-                if (leadAccounts[i].CurrencyType == Currency.RUB)
-                {
-                    accountId = leadAccounts[i].Id;
-                    count++;
-                    break;
-                }
-            }
-            if (count == 0)
-            {
-                throw new AccountException(
-                    $"There's no accounts with RUB CurrencyType was found in CRM for Lead with id {leadResourceModel.LeadId}");
-            }
-            var resourceTransactionModel = new TransactionRequestModel {
-                Amount = leadResourceModel.Price,
-                Currency = Currency.RUB,
-                AccountId = accountId
-            };
-            var transactionId = await _transactionStoreClient.AddTransaction(resourceTransactionModel);
-            var resourcePayment = new ResourcePayment {
                 LeadResource = leadResource,
                 TransactionId = transactionId
             };
+            _logger.LogInformation("Query for adding a ResourcePayment");
             await _resourcePaymentRepository.AddResourcePayment(resourcePayment);
             leadResource.Status = Status.Active;
-
-            _logger.LogInformation($"Query for adding resource with id {resource.Id} to Lead with id {leadResource.LeadId}");
             return await _leadResourceRepository.AddLeadResource(leadResource);
         }
 
         public async Task<List<LeadResourceModel>> GetByLeadId(int id)
         {
-            _logger.LogInformation("Lead request by id");
+            _logger.LogInformation($"Request for getting a LeadResource by LeadId {id}");
             var lead = await _leadResourceRepository.GetByLeadId(id);
 
             if (lead == null)

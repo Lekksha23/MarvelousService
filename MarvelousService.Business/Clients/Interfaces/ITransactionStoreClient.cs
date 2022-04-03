@@ -4,6 +4,6 @@ namespace MarvelousService.BusinessLayer.Services
 {
     public interface ITransactionStoreClient
     {
-        Task<long> AddTransaction(TransactionRequestModel transactionRequestModel);
+        Task<long> AddResourceTransaction(TransactionRequestModel transactionRequestModel);
     }
 }

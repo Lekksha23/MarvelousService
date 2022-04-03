@@ -1,11 +1,10 @@
 ﻿using MarvelousService.BusinessLayer.Exceptions;
-using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace MarvelousService.BusinessLayer.Services
 {
-    public class Helper
+    public class Helper : IHelper
     {
         private readonly ILogger<Helper> _logger;
 
@@ -13,12 +12,13 @@ namespace MarvelousService.BusinessLayer.Services
         {
             _logger = logger;
         }
-        public void CheckResource(Resource service)
+
+        public void CheckResource(Resource resource)
         {
-            if (service is null)
+            if (resource is null)
             {
-                _logger.LogError("Error in receiving service by Id ");
-                throw new NotFoundServiceException("This service does not exist.");
+                _logger.LogError("Error in receiving resource by Id ");
+                throw new NotFoundServiceException("This resource does not exist.");
             }
         }
     }

@@ -1,24 +1,23 @@
-﻿using MarvelousService.BusinessLayer.Models;
-using MarvelousService.DataLayer.Entities;
+﻿using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Enums;
 using System.Collections.Generic;
 
 namespace MarvelousService.BusinessLayer.Tests.TestData
 {
-    public class ServicePaymentTestData
+    public class ResourcePaymentTestData
     {
         public ResourcePayment GetServicePaymentForTests()
         {
             var servicePayment = new ResourcePayment
             {
                 Id = 1, 
-                ServiceToLeadId = new LeadResource 
+                LeadResource = new LeadResource 
                 {
                     Id = 2,
                     LeadId = 42,
                     Period = Period.Week,
                     Price = 6000,
-                    ServiceId =  new Resource 
+                    Resource =  new Resource 
                     { 
                         Id = 2,
                         Name = "Тренинг"
@@ -36,13 +35,13 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
                 new ResourcePayment 
                 { 
                     Id = 1,
-                    ServiceToLeadId = new LeadResource
+                    LeadResource = new LeadResource
                     {
                         Id = 2,
                         LeadId= 42,
                         Period = Period.Week,
                         Price = 3000,
-                        ServiceId = new Resource
+                        Resource = new Resource
                         {
                             Id = 3,
                             Name = "Тренинг", 
@@ -51,19 +50,19 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
                             IsDeleted = false
                         },
                         Status = Status.Active, 
-                        servicePayments = new List<ResourcePayment>()
+                        ResourcePayments = new List<ResourcePayment>()
                     }
                 },
                 new ResourcePayment
                 {
                     Id = 2,
-                    ServiceToLeadId = new LeadResource
+                    LeadResource = new LeadResource
                     {
                         Id = 2,
                         LeadId= 42,
                         Period = Period.Week,
                         Price = 3000,
-                        ServiceId = new Resource
+                        Resource = new Resource
                         {
                             Id = 3,
                             Name = "Тренинг",
@@ -72,10 +71,11 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
                             IsDeleted = false
                         },
                         Status = Status.Active,
-                        servicePayments = new List<ResourcePayment>()
+                        ResourcePayments = new List<ResourcePayment>()
                     }
                 }
             };
         }
+
     }
 }

@@ -1,18 +1,13 @@
 ﻿using MarvelousService.BusinessLayer.Models;
 using MarvelousService.DataLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
 {
-    public class ServiceToServiceTestCaseSource
+    public class ResourceServiceTestCaseSource
     {
         public ResourceModel AddServiceModelTest()
         {
-            ResourceModel serviceModel = new ResourceModel
+            ResourceModel resourceModel = new ResourceModel
             {
                 Id = 1,
                 Name = "qwe",
@@ -20,12 +15,12 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Price = 1500,
                 IsDeleted = false,
             };
-
-            return serviceModel;
+            return resourceModel;
         }
+
         public Resource AddServiceTest()
         {
-            Resource service = new Resource
+            Resource resource = new Resource
             {
                 Id = 1,
                 Name = "qwe",
@@ -33,12 +28,9 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Price = 1500,
                 IsDeleted = false,
             };
-
-            return service;
+            return resource;
         }
 
     }
-           
-        
 }
 

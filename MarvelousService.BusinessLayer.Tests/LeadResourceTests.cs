@@ -2,7 +2,6 @@
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Tests.TestCaseSource;
-using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -12,33 +11,27 @@ using System.Threading.Tasks;
 
 namespace MarvelousService.BusinessLayer.Tests
 {
-    public class ServiceToLeadTests
+    public class LeadResourceTests
     {
         private ITransactionStoreClient _transactionStoreClient;
-        private IResourceRepository _serviceRepositoryMock;
-        private Mock<ILeadResourceRepository> _serviceToLeadRepositoryMock;
-        private readonly ServiceToLeadTestCaseSource _serviceToLeadTest;
+        private IResourceRepository _ResourceRepositoryMock;
+        private Mock<ILeadResourceRepository> _leadResourceRepositoryMock;
+        private readonly LeadResourceTestCaseSource _leadResourceTest;
         private readonly IMapper _autoMapper;
         private readonly Mock<ILogger<LeadResourceService>> _logger;
 
-        public ServiceToLeadTests()
+        public LeadResourceTests()
         {
-            
-            _serviceToLeadRepositoryMock = new Mock<ILeadResourceRepository>();
-            _serviceToLeadTest = new ServiceToLeadTestCaseSource();
-            _autoMapper = new Mapper(
-                new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
+            _leadResourceTest = new LeadResourceTestCaseSource();
+            _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _logger = new Mock<ILogger<LeadResourceService>>();
         }
 
         [SetUp]
         public async Task Setup()
         {
-            _serviceToLeadRepositoryMock = new Mock<ILeadResourceRepository>();
+            _leadResourceRepositoryMock = new Mock<ILeadResourceRepository>();
         }
-
-
-
 
     }
 }

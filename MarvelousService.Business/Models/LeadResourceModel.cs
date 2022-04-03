@@ -10,7 +10,7 @@ namespace MarvelousService.BusinessLayer.Models
         public Period Period { get; set; }
         public Status Status { get; set; }
         public int LeadId { get; set; }
-        public Resource Resource { get; set; }
+        public ResourceModel Resource { get; set; }
         public List<ResourcePaymentModel> ResourcePayments { get; set; }
 
         public decimal GetTotalPrice(decimal price, Period p)

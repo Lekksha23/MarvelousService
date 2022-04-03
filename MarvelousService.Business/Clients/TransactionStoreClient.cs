@@ -15,12 +15,12 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public async Task<long> AddTransaction(TransactionRequestModel transactionRequestModel)
+        public async Task<long> AddResourceTransaction(TransactionRequestModel transactionRequestModel)
         {
             var client = new RestClient(_url);
             var request = new RestRequest(_transactionPath, Method.Post);
             request.AddJsonBody(transactionRequestModel);
-            _logger.LogInformation("Query for adding a transaction for service payment");
+            
             var response = await client.PostAsync<long>(request);
             return response;
         }
