@@ -10,9 +10,9 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
 {
     public class ServiceToServiceTestCaseSource
     {
-        public ServiceModel AddServiceModelTest()
+        public ResourceModel AddServiceModelTest()
         {
-            ServiceModel serviceModel = new ServiceModel
+            ResourceModel serviceModel = new ResourceModel
             {
                 Id = 1,
                 Name = "qwe",
@@ -23,9 +23,9 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
 
             return serviceModel;
         }
-        public Service AddServiceTest()
+        public Resource AddServiceTest()
         {
-            Service service = new Service
+            Resource service = new Resource
             {
                 Id = 1,
                 Name = "qwe",

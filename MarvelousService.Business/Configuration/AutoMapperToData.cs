@@ -8,9 +8,9 @@ namespace MarvelousService.BusinessLayer.Configurations
     {
         public AutoMapperToData()
         {
-            CreateMap<Service, ServiceModel>().ReverseMap();
-            CreateMap<ServiceToLead, ServiceToLeadModel>().ReverseMap();
-            CreateMap<ServicePayment, ServicePaymentModel>().ReverseMap();
+            CreateMap<Resource, ResourceModel>().ReverseMap();
+            CreateMap<LeadResource, LeadResourceModel>().ReverseMap();
+            CreateMap<ResourcePayment, ResourcePaymentModel>().ReverseMap();
         }
     }
 }

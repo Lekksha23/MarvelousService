@@ -36,7 +36,7 @@ namespace MarvelousService.BusinessLayer.Services
             _client.Authenticator = new JwtAuthenticator(response.Data);
         }
 
-        public async Task<List<AccountModel>> GetAccountsByLeadId()
+        public async Task<List<AccountModel>> GetLeadAccounts()
         {
             var request = new RestRequest(_getAccountByLeadIdPath, Method.Get);
             var response = await _client.ExecuteAsync<List<AccountModel>>(request);

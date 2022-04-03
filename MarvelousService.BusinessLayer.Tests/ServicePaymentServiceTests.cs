@@ -16,37 +16,37 @@ namespace MarvelousService.BusinessLayer.Tests
 {
     public class ServicePaymentServiceTests
     {
-        private Mock<IServicePaymentRepository> _servicePaymentRepositoryMock;
+        private Mock<IResourcePaymentRepository> _servicePaymentRepositoryMock;
         private readonly ServicePaymentTestData _servicePaymentTestData;
         private readonly IMapper _autoMapper;
-        private readonly Mock<ILogger<ServicePaymentService>> _logger;
+        private readonly Mock<ILogger<ResourcePaymentService>> _logger;
 
         public ServicePaymentServiceTests()
         {
             _servicePaymentTestData = new ServicePaymentTestData();
             _autoMapper = new Mapper(
                 new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
-            _logger = new Mock<ILogger<ServicePaymentService>>();
+            _logger = new Mock<ILogger<ResourcePaymentService>>();
         }
 
         [SetUp]
         public void Setup()
         {
-            _servicePaymentRepositoryMock = new Mock<IServicePaymentRepository>();
+            _servicePaymentRepositoryMock = new Mock<IResourcePaymentRepository>();
         }
 
         [Test]
         public async Task AddServicePayment()
         {
             // given
-            _servicePaymentRepositoryMock.Setup(m => m.AddServicePayment(It.IsAny<ServicePayment>())).ReturnsAsync(23);
-            var sut = new ServicePaymentService(_servicePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
+            _servicePaymentRepositoryMock.Setup(m => m.AddServicePayment(It.IsAny<ResourcePayment>())).ReturnsAsync(23);
+            var sut = new ResourcePaymentService(_servicePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
 
             // when
-            sut.AddServicePayment(new ServicePaymentModel());
+            sut.AddResourcePayment(new ResourcePaymentModel());
 
             // then
-            _servicePaymentRepositoryMock.Verify(m => m.AddServicePayment(It.IsAny<ServicePayment>()), Times.Once());
+            _servicePaymentRepositoryMock.Verify(m => m.AddServicePayment(It.IsAny<ResourcePayment>()), Times.Once());
         }
 
         [Test]
@@ -55,10 +55,10 @@ namespace MarvelousService.BusinessLayer.Tests
             // given
             var listOfServicePayments = _servicePaymentTestData.GetListOfServicePaymentsForTests();
             _servicePaymentRepositoryMock.Setup(m => m.GetServicePaymentsByServiceToLeadId(It.IsAny<int>())).ReturnsAsync(listOfServicePayments);
-            var sut = new ServicePaymentService(_servicePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
+            var sut = new ResourcePaymentService(_servicePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
 
             // when
-            var actual = await sut.GetServicePaymentsById(23);
+            var actual = await sut.GetResourcePaymentsById(23);
 
             // then
             Assert.IsNotNull(actual);
@@ -71,13 +71,13 @@ namespace MarvelousService.BusinessLayer.Tests
         public async Task GetServicePaymentsById_ShouldThrowNotFoundServiceException()
         {
             // given 
-            _servicePaymentRepositoryMock.Setup(m => m.GetServicePaymentsByServiceToLeadId(It.IsAny<int>())).ReturnsAsync((List<ServicePayment>)null);
-            var sut = new ServicePaymentService(_servicePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
+            _servicePaymentRepositoryMock.Setup(m => m.GetServicePaymentsByServiceToLeadId(It.IsAny<int>())).ReturnsAsync((List<ResourcePayment>)null);
+            var sut = new ResourcePaymentService(_servicePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
 
             // when
 
             // then
-            Assert.ThrowsAsync<NotFoundServiceException>(async () => await sut.GetServicePaymentsById(It.IsAny<int>()));
+            Assert.ThrowsAsync<NotFoundServiceException>(async () => await sut.GetResourcePaymentsById(It.IsAny<int>()));
         }
     }
 }

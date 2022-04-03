@@ -6,20 +6,20 @@ using MassTransit;
 
 namespace MarvelousService.API.Producer
 {
-    public class ServiceProducer : IServiceProducer
+    public class ServiceProducer : IResourceProducer
     {
-        private readonly IServiceToService _serviceToService;
-        private readonly IServiceToLeadService _serviceToLead;
+        private readonly IResourceService _serviceToService;
+        private readonly ILeadResourceService _serviceToLead;
         private readonly ILogger<ServiceProducer> _logger;
 
-        public ServiceProducer(IServiceToLeadService serviceToLead,ILogger<ServiceProducer> logger)          
+        public ServiceProducer(ILeadResourceService serviceToLead,ILogger<ServiceProducer> logger)          
         {
             _serviceToLead = serviceToLead;
 
             _logger = logger;
         }
 
-        public async Task NotifyServiceAdded(int id)
+        public async Task NotifyResourceAdded(int id)
         {
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
@@ -36,7 +36,7 @@ namespace MarvelousService.API.Producer
             await busControl.StartAsync(source.Token);
             try
             {
-                var service = await _serviceToService.GetServiceById(id);
+                var service = await _serviceToService.GetResourceById(id);
 
                 await busControl.Publish<ServiceExchangeModel>(new
                 {
@@ -57,7 +57,7 @@ namespace MarvelousService.API.Producer
             _logger.LogInformation("Service published");
         }
 
-        public async Task NotifyServiceToLeadAdded(int id)
+        public async Task NotifyLeadResourceAdded(int id)
         {
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
@@ -75,7 +75,7 @@ namespace MarvelousService.API.Producer
             await busControl.StartAsync(source.Token);
             try
             {
-                var service = await _serviceToLead.GetServiceToLeadById(id);
+                var service = await _serviceToLead.GetLeadResourceById(id);
 
                 await busControl.Publish<ServiceExchangeModel>(new
                 {

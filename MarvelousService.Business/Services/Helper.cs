@@ -13,7 +13,7 @@ namespace MarvelousService.BusinessLayer.Services
         {
             _logger = logger;
         }
-        public void CheckService(Service service)
+        public void CheckResource(Resource service)
         {
             if (service is null)
             {

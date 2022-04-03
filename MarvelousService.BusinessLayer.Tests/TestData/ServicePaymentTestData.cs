@@ -7,18 +7,18 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
 {
     public class ServicePaymentTestData
     {
-        public ServicePayment GetServicePaymentForTests()
+        public ResourcePayment GetServicePaymentForTests()
         {
-            var servicePayment = new ServicePayment
+            var servicePayment = new ResourcePayment
             {
                 Id = 1, 
-                ServiceToLeadId = new ServiceToLead 
+                ServiceToLeadId = new LeadResource 
                 {
                     Id = 2,
                     LeadId = 42,
                     Period = Period.Week,
                     Price = 6000,
-                    ServiceId =  new Service 
+                    ServiceId =  new Resource 
                     { 
                         Id = 2,
                         Name = "Тренинг"
@@ -29,20 +29,20 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
             return servicePayment;
         }
 
-        public List<ServicePayment> GetListOfServicePaymentsForTests()
+        public List<ResourcePayment> GetListOfServicePaymentsForTests()
         {
-            return new List<ServicePayment>
+            return new List<ResourcePayment>
             {
-                new ServicePayment 
+                new ResourcePayment 
                 { 
                     Id = 1,
-                    ServiceToLeadId = new ServiceToLead
+                    ServiceToLeadId = new LeadResource
                     {
                         Id = 2,
                         LeadId= 42,
                         Period = Period.Week,
                         Price = 3000,
-                        ServiceId = new Service
+                        ServiceId = new Resource
                         {
                             Id = 3,
                             Name = "Тренинг", 
@@ -51,19 +51,19 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
                             IsDeleted = false
                         },
                         Status = Status.Active, 
-                        servicePayments = new List<ServicePayment>()
+                        servicePayments = new List<ResourcePayment>()
                     }
                 },
-                new ServicePayment
+                new ResourcePayment
                 {
                     Id = 2,
-                    ServiceToLeadId = new ServiceToLead
+                    ServiceToLeadId = new LeadResource
                     {
                         Id = 2,
                         LeadId= 42,
                         Period = Period.Week,
                         Price = 3000,
-                        ServiceId = new Service
+                        ServiceId = new Resource
                         {
                             Id = 3,
                             Name = "Тренинг",
@@ -72,7 +72,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
                             IsDeleted = false
                         },
                         Status = Status.Active,
-                        servicePayments = new List<ServicePayment>()
+                        servicePayments = new List<ResourcePayment>()
                     }
                 }
             };

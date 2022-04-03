@@ -78,6 +78,6 @@
     <Build Include="StoredProcedures\Resource\Resource_SoftDelete.sql" />
     <Build Include="StoredProcedures\Resource\Resource_SelectAll.sql" />
     <Build Include="StoredProcedures\LeadResource\LeadResource_UpdateStatus.sql" />
-    <Build Include="StoredProcedures\ResourcePayment\ResourcePayment_SelectByServiceToLead.sql" />
+    <Build Include="StoredProcedures\ResourcePayment\ResourcePayment_SelectByLeadResource.sql" />
   </ItemGroup>
 </Project>
