@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Marvelous.Contracts;
-using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
@@ -51,9 +49,8 @@ namespace MarvelousService.BusinessLayer.Services
         public async Task SoftDelete(int id, ServiceModel serviceModel)
         {
             _logger.LogInformation("Request for soft deletion service by id");
-            _helper.CheckService(oldService);
             var service = await _serviceRepository.GetServiceById(id);
-            CheckService(service);
+            _helper.CheckService(service);
             serviceModel.Id = id;
             serviceModel.Name = service.Name;
             var newService =  _mapper.Map<Service>(serviceModel);
