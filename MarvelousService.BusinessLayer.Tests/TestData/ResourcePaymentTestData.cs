@@ -8,7 +8,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
     {
         public ResourcePayment GetServicePaymentForTests()
         {
-            var servicePayment = new ResourcePayment
+            var resourcePayment = new ResourcePayment
             {
                 Id = 1, 
                 LeadResource = new LeadResource 
@@ -25,7 +25,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
                     Status = Status.Active},
                 TransactionId = 100000
             };
-            return servicePayment;
+            return resourcePayment;
         }
 
         public List<ResourcePayment> GetListOfServicePaymentsForTests()
