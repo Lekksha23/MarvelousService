@@ -20,19 +20,22 @@ namespace MarvelousService.API.Extensions
     {
         public static void RegisterMarvelousServiceRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IServiceRepository, ServiceRepository>();
-            services.AddScoped<IServiceToLeadRepository, ServiceToLeadRepository>();
-            services.AddScoped<IServicePaymentRepository, ServicePaymentRepository>();
+            services.AddScoped<IResourceRepository, ResourceRepository>();
+            services.AddScoped<ILeadResourceRepository, LeadResourceRepository>();
+            services.AddScoped<IResourcePaymentRepository, ResourcePaymentRepository>();
         }
 
         public static void RegisterMarvelousServiceServices(this IServiceCollection services)
         {
             services.AddScoped<ICRMClient, CRMClient>();
-            services.AddScoped<IServiceToService, ServiceToService>();
-            services.AddScoped<IServicePaymentService, ServicePaymentService>();
-            services.AddScoped<IServiceToLeadService, ServiceToLeadService>();
+            services.AddScoped<ICRMService, CRMService>();
+            services.AddScoped<IResourceService, ResourceService>();
+            services.AddScoped<IResourcePaymentService, ResourcePaymentService>();
+            services.AddScoped<ILeadResourceService, LeadResourceService>();
+            services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
-            services.AddScoped<IServiceProducer, ServiceProducer>();
+            services.AddScoped<IHelper, Helper>();
+            services.AddScoped<IResourceProducer, ResourceProducer>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
