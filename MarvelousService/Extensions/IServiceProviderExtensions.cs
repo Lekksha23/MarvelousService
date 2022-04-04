@@ -104,10 +104,8 @@ namespace MarvelousService.API.Extensions
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.Issuer,
-                        ValidateAudience = true,
-                        ValidAudience = AuthOptions.Audience,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
                         ValidateLifetime = true,
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                         ValidateIssuerSigningKey = true
@@ -132,7 +130,7 @@ namespace MarvelousService.API.Extensions
 
                     cfg.Publish<ServiceExchangeModel>(p =>
                     {
-                        p.BindAlternateExchangeQueue("alternate-exchange", "alternate-queue");
+                        p.BindAlternateExchangeQueue("resource-exchange", "resource-queue");
                     });
 
 
