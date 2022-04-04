@@ -9,5 +9,4 @@ begin
 		[Price],
 		[IsDeleted]
 	from dbo.[Resource]
-	where IsDeleted = 0
 end
