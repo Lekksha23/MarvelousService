@@ -46,11 +46,10 @@ namespace MarvelousService.API.Producer
                     Price = resource.Price,
                     IsDeleted = resource.IsDeleted
                 });
-                _logger.LogInformation("Resource published");
+                
             }
             finally
-            {
-                _logger.LogWarning("Resource not published");
+            {                
                 await busControl.StopAsync();
             }
 
@@ -88,7 +87,6 @@ namespace MarvelousService.API.Producer
             }
             finally
             {
-                _logger.LogWarning("Resource not published");
                 await busControl.StopAsync();
             }
 

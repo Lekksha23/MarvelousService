@@ -4,7 +4,7 @@ using MarvelousService.DataLayer.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 string _logDirectoryVariableName = "LOG_DIRECTORY";
-string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
+string _connectionStringVariableName = "RESOURCE_CONNECTION_STRING";
 
 string logDirectory = builder.Configuration.GetValue<string>(_logDirectoryVariableName);
 string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);

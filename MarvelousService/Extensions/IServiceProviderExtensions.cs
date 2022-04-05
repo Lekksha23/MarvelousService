@@ -130,7 +130,7 @@ namespace MarvelousService.API.Extensions
 
                     cfg.Publish<ServiceExchangeModel>(p =>
                     {
-                        p.BindAlternateExchangeQueue("resource-exchange", "resource-queue");
+                        p.BindAlternateExchangeQueue("Resource-exchange", "Resource-queue");
                     });
 
 
