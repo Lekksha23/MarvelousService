@@ -79,5 +79,6 @@
     <Build Include="StoredProcedures\Resource\Resource_SelectAll.sql" />
     <Build Include="StoredProcedures\LeadResource\LeadResource_UpdateStatus.sql" />
     <Build Include="StoredProcedures\ResourcePayment\ResourcePayment_SelectByLeadResource.sql" />
+    <Build Include="StoredProcedures\LeadResource\LeadResource_SelectByPayDate.sql" />
   </ItemGroup>
 </Project>
