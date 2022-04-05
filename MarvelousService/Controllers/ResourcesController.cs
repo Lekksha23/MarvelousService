@@ -74,6 +74,22 @@ namespace MarvelousService.API.Controllers
         }
 
         //api/services/
+        [HttpGet("active id")]
+        [SwaggerOperation("Get active resource")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(ResourceResponse))]
+        public async Task<ActionResult<ResourceResponse>> GetActiveResource()
+        {
+            _logger.LogInformation($"Request for receiving all resources");
+            var resourceModels = await _resourceService.GetActiveResourceService();
+            var result = _autoMapper.Map<List<ResourceResponse>>(resourceModels);
+            _logger.LogInformation($"Resources received");
+            return Ok(result);
+        }
+
+        //api/services/
         [HttpPut("id")]
         [SwaggerOperation("Update a resource")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
