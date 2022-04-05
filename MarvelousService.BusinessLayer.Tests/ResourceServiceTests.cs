@@ -105,5 +105,26 @@ namespace MarvelousService.BusinessLayer.Tests
 
         }
 
+        //[Test]
+        //public async Task GetAllResourseTest()
+        //{
+        //    //given
+        //    var resource = _resourceTest.AddAllServiceTest();
+        //    _resourceRepositoryMock.Setup(m => m.GetAllResources(It.IsAny<int>())).ReturnsAsync(resource);
+        //    var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+
+        //    //when
+        //    var actual = sut.GetResourceById(It.IsAny<int>()).Result;
+
+        //    //then
+        //    Assert.IsNotNull(actual);
+        //    Assert.IsNotNull(actual.Id);
+        //    Assert.IsNotNull(actual.Name);
+        //    Assert.IsNotNull(actual.Price);
+        //    Assert.IsNotNull(actual.IsDeleted);
+        //    Assert.IsNotNull(actual.Description);
+
+        //}
+
     }
 }
