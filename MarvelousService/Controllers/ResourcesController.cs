@@ -37,7 +37,7 @@ namespace MarvelousService.API.Controllers
             var resourceModel = _autoMapper.Map<ResourceModel>(serviceInsertRequest);
             var id = await _resourceService.AddResource(resourceModel);
             _logger.LogInformation($"Resource with id {id} successfully added.");
-            //await _serviceProducer.NotifyServiceAdded(id);
+            await _resourceProducer.NotifyResourceAdded(resourceModel.Id);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -54,6 +54,7 @@ namespace MarvelousService.API.Controllers
             var resourceModel = await _resourceService.GetResourceById(id);
             var result = _autoMapper.Map<ResourceResponse>(resourceModel);
             _logger.LogInformation($"Resource by id {id} was received");
+            await _resourceProducer.NotifyResourceAdded(id);
             return Ok(result);
         }
 
@@ -102,6 +103,7 @@ namespace MarvelousService.API.Controllers
             ResourceModel resource = _autoMapper.Map<ResourceModel>(serviceUpdateRequest);
             await _resourceService.UpdateResource(id, resource);
             _logger.LogInformation($"Resource with id {id} successfully received.");
+            await _resourceProducer.NotifyResourceAdded(id);
             return Ok(resource);
         }
 
@@ -118,6 +120,7 @@ namespace MarvelousService.API.Controllers
             ResourceModel service = _autoMapper.Map<ResourceModel>(serviceDeletedRequest);
             await _resourceService.SoftDelete(id, service);
             _logger.LogInformation($"Resource with id {id} successfully deleted.");
+            await _resourceProducer.NotifyResourceAdded(id);
             return Ok(service);
         }
     }

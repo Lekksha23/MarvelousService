@@ -12,10 +12,11 @@ namespace MarvelousService.API.Producer
         private readonly ILeadResourceService _leadResource;
         private readonly ILogger<ResourceProducer> _logger;
 
-        public ResourceProducer(ILeadResourceService leadResource, ILogger<ResourceProducer> logger)          
+        public ResourceProducer(ILeadResourceService leadResource, ILogger<ResourceProducer> logger, IResourceService resourceService)          
         {
             _leadResource = leadResource;
             _logger = logger;
+            _resourceService = resourceService;
         }
 
         public async Task NotifyResourceAdded(int id)
