@@ -106,7 +106,7 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task GetAllActiveResourseTest()
+        public async Task GetAllResourseTest()
         {
             //given
             var resource = _resourceTest.AddAllServiceTest();
@@ -114,13 +114,13 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
 
             //when
-            var actual = sut.GetActiveResourceService().Result;
+            var actual = sut.GetAllResources().Result;
 
             //then
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Count > 0);
 
-            for (int i = 0; i < actual.Count; i++)
+            for(int i = 0; i< actual.Count;i++)
             {
                 Assert.IsNotNull(actual);
                 Assert.IsNotNull(actual[i].Id);
@@ -129,8 +129,10 @@ namespace MarvelousService.BusinessLayer.Tests
                 Assert.IsNotNull(actual[i].IsDeleted);
                 Assert.IsNotNull(actual[i].Description);
             }
-
+            
         }
+
+        
 
     }
 }
