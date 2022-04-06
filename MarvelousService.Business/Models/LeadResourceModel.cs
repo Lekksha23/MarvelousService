@@ -13,7 +13,7 @@ namespace MarvelousService.BusinessLayer.Models
         public ResourceModel Resource { get; set; }
         public List<ResourcePaymentModel> ResourcePayments { get; set; }
 
-        public decimal GetTotalPrice(decimal price, Period period)
+        public decimal GetPrice(decimal price, Period period)
         {
             if (period == Period.Year)
             {
