@@ -59,7 +59,7 @@ namespace MarvelousService.API.Controllers
         }
 
         //api/services/
-        [HttpGet()]
+        [HttpGet("getAll")]
         [SwaggerOperation("Get all resources")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -75,7 +75,7 @@ namespace MarvelousService.API.Controllers
         }
 
         //api/services/
-        [HttpGet("active id")]
+        [HttpGet("getActive")]
         [SwaggerOperation("Get active resource")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
