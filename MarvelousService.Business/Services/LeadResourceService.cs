@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Marvelous.Contracts.Enums;
-using Marvelous.Contracts.RequestModels;
 using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
@@ -19,10 +18,9 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly IResourcePaymentRepository _resourcePaymentRepository;
         private readonly ICRMService _crmService;
         private readonly ITransactionService _transactionService;
-        private readonly ITransactionStoreClient _transactionStoreClient;
-        private readonly ICRMClient _crmClient;
-        private readonly IMapper _mapper;
         private readonly ILogger<LeadResourceService> _logger;
+        private readonly IMapper _mapper;
+        private readonly IHelper _helper;
 
         private const double _discountVIP = 0.9;
 
@@ -31,41 +29,32 @@ namespace MarvelousService.BusinessLayer.Services
             IResourceRepository resourceRepository,
             IResourcePaymentRepository resourcePaymentRepository,
             ITransactionService transactionService,
-            ITransactionStoreClient transactionClient,
             ICRMService crmService,
-            ICRMClient crmClient,
+            ILogger<LeadResourceService> logger,
             IMapper mapper,
-            ILogger<LeadResourceService> logger)
+            IHelper helper)
         {
             _leadResourceRepository = LeadResourceRepository;
             _resourceRepository = resourceRepository;
             _resourcePaymentRepository = resourcePaymentRepository;
             _transactionService = transactionService;
-            _transactionStoreClient = transactionClient;
             _crmService = crmService;
-            _crmClient = crmClient;
             _mapper = mapper;
             _logger = logger;
+            _helper = helper;
         }
 
         public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, int role)
         {
             _logger.LogInformation($"Query for adding a resource with id {leadResourceModel.Resource.Id} to Lead with id {leadResourceModel.LeadId}");
             var resource = await _resourceRepository.GetResourceById(leadResourceModel.Resource.Id);
+            _helper.CheckResource(resource);
             var totalPrice = leadResourceModel.GetTotalPrice(resource.Price, leadResourceModel.Period);
             CheckRole(leadResourceModel, totalPrice, role);
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
-            _logger.LogInformation("Query for getting a RUB LeadAccount");
             var accountId = await _crmService.GetIdOfRubLeadAccount();
-            _logger.LogInformation("Query for adding a transaction for ResourcePayment");
             var transactionId = await _transactionService.AddResourceTransaction(accountId, leadResourceModel.Price);
-            var resourcePayment = new ResourcePayment 
-            {
-                LeadResource = leadResource,
-                TransactionId = transactionId
-            };
-            _logger.LogInformation("Query for adding a ResourcePayment");
-            await _resourcePaymentRepository.AddResourcePayment(resourcePayment);
+            await _resourcePaymentRepository.AddResourcePayment(leadResource, transactionId);
             leadResource.Status = Status.Active;
             return await _leadResourceRepository.AddLeadResource(leadResource);
         }

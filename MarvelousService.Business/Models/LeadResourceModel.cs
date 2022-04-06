@@ -13,20 +13,19 @@ namespace MarvelousService.BusinessLayer.Models
         public ResourceModel Resource { get; set; }
         public List<ResourcePaymentModel> ResourcePayments { get; set; }
 
-        public decimal GetTotalPrice(decimal price, Period p)
+        public decimal GetTotalPrice(decimal price, Period period)
         {
-            // приведение enum к конкретному классу
-            if (p == Period.Year)
+            if (period == Period.Year)
             {
                 SubscriptionTime time = new Year();
                 return time.GetPrice(price);
             }
-            else if (p == Period.Month)
+            else if (period == Period.Month)
             {
                 SubscriptionTime time = new Month();
                 return time.GetPrice(price);
             }
-            else if (p == Period.Week)
+            else if (period == Period.Week)
             {
                 SubscriptionTime time = new Week();
                 return time.GetPrice(price);
