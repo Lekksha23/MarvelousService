@@ -55,7 +55,8 @@ namespace MarvelousService.DataLayer.Repositories
             var resources = connection.QueryAsync<Resource>(
                 _getAllProcedure,
                 commandType: CommandType.StoredProcedure)
-                .Result.ToList();
+                .Result
+                .ToList();
 
             _logger.LogInformation("All resources were successfully recieved");
             return resources;
@@ -63,7 +64,7 @@ namespace MarvelousService.DataLayer.Repositories
 
         public async Task<Resource> GetResourceById(int id)
         {
-            _logger.LogInformation("Requesting a service by id");
+            _logger.LogInformation("Requesting a resource by id");
             _logger.LogInformation("Connecting to the MarvelousService.DB");
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
