@@ -20,7 +20,6 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly ITransactionService _transactionService;
         private readonly ILogger<LeadResourceService> _logger;
         private readonly IMapper _mapper;
-        private readonly IHelper _helper;
 
         private const double _discountVIP = 0.9;
 
@@ -31,8 +30,7 @@ namespace MarvelousService.BusinessLayer.Services
             ITransactionService transactionService,
             ICRMService crmService,
             ILogger<LeadResourceService> logger,
-            IMapper mapper,
-            IHelper helper)
+            IMapper mapper)
         {
             _leadResourceRepository = LeadResourceRepository;
             _resourceRepository = resourceRepository;
@@ -41,16 +39,11 @@ namespace MarvelousService.BusinessLayer.Services
             _crmService = crmService;
             _mapper = mapper;
             _logger = logger;
-            _helper = helper;
         }
 
         public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, int role)
         {
-            _logger.LogInformation($"Query for adding a resource with id {leadResourceModel.Resource.Id} to Lead with id {leadResourceModel.LeadId}.");
-            var resource = await _resourceRepository.GetResourceById(leadResourceModel.Resource.Id);
-            _helper.CheckResource(resource);
-            var totalPrice = leadResourceModel.GetPrice(resource.Price, leadResourceModel.Period);
-            CheckRole(leadResourceModel, totalPrice, role);
+            CheckRole(leadResourceModel, role);
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
             var accountId = await _crmService.GetIdOfRubLeadAccount();
             var transactionId = await _transactionService.AddResourceTransaction(accountId, leadResourceModel.Price);
@@ -61,7 +54,6 @@ namespace MarvelousService.BusinessLayer.Services
 
         public async Task<List<LeadResourceModel>> GetByLeadId(int id)
         {
-            _logger.LogInformation($"Request for getting a LeadResource by LeadId {id}.");
             var lead = await _leadResourceRepository.GetByLeadId(id);
 
             if (lead == null)
@@ -74,7 +66,6 @@ namespace MarvelousService.BusinessLayer.Services
 
         public async Task<List<LeadResourceModel>> GetLeadResourceById(int id)
         {
-            _logger.LogInformation("Resource request by id.");
             var leadResource = await _leadResourceRepository.GetLeadResourceById(id);
 
             if (leadResource == null)
@@ -85,15 +76,14 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<List<LeadResourceModel>>(leadResource);
         }
 
-        private void CheckRole(LeadResourceModel leadResourceModel, decimal price, int role)
+        private void CheckRole(LeadResourceModel leadResourceModel, int role)
         {
             switch (role)
             {
                 case (int)Role.Vip:
-                    leadResourceModel.Price = price * (decimal)_discountVIP;
+                    leadResourceModel.Price *= (decimal)_discountVIP;
                     break;
                 case (int)Role.Regular:
-                    leadResourceModel.Price = price;
                     break;
                 case (int)Role.Admin:
                     throw new RoleException("User with role Admin can't buy any resources.");

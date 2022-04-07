@@ -15,12 +15,18 @@ namespace MarvelousService.API.Controllers
     public class LeadResourcesController : Controller
     {
         private readonly ILeadResourceService _leadResourceService;
+        private readonly IResourceService _resourceService;
         private readonly IMapper _autoMapper;
         private readonly ILogger<ResourcesController> _logger;
 
-        public LeadResourcesController(IMapper autoMapper, ILeadResourceService leadResource, ILogger<ResourcesController> logger)
+        public LeadResourcesController(
+            IMapper autoMapper, 
+            ILeadResourceService leadResource,
+            IResourceService resourceService,
+            ILogger<ResourcesController> logger)
         {
             _leadResourceService = leadResource;
+            _resourceService = resourceService;
             _autoMapper = autoMapper;
             _logger = logger;
         }
@@ -29,14 +35,16 @@ namespace MarvelousService.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [SwaggerOperation("Add resource to a lead")]
-        public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest serviceToLeadInsertRequest)
+        public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-            var leadIdentity = this.GetLeadFromToken();
-            _logger.LogInformation($"Request for adding a Resource {serviceToLeadInsertRequest.ServiceId} to Lead {leadIdentity.Id}.");
-            var leadResourceModel = _autoMapper.Map<LeadResourceModel>(serviceToLeadInsertRequest);
-            leadResourceModel.LeadId = leadIdentity.Id;
-            Role role = leadIdentity.Role;
-            var id = await _leadResourceService.AddLeadResource(leadResourceModel, (int)role);
+            //var leadIdentity = this.GetLeadFromToken();
+            //_logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadIdentity.Id}.");
+            var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
+            var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
+            leadResourceModel.Resource = resource.Result;
+            //leadResourceModel.LeadId = leadIdentity.Id;
+            //Role role = leadIdentity.Role;
+            var id = await _leadResourceService.AddLeadResource(leadResourceModel, 2);
             _logger.LogInformation($"Subscription/one-time resource with id {id} added to lead with id {leadResourceModel.LeadId}.");
             return StatusCode(StatusCodes.Status201Created, id);
         }

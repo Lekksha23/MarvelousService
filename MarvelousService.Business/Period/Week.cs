@@ -4,9 +4,9 @@
     {
         private const int _weekCoef = 2;
 
-        public override decimal GetPrice(decimal price)
+        public override decimal GetPrice(decimal resourcePrice)
         {
-            return price * _weekCoef;
+            return resourcePrice * _weekCoef;
         }
     }
 }

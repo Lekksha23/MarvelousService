@@ -24,8 +24,4 @@
     <ProjectReference Include="..\MarvelousService.Business\MarvelousService.BusinessLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Request\LeadResource\" />
-  </ItemGroup>
-
 </Project>

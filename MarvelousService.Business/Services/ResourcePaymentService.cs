@@ -20,19 +20,10 @@ namespace MarvelousService.BusinessLayer.Services
             _logger = logger;
         }
 
-        public async Task<int> AddResourcePayment(ResourcePaymentModel servicePaymentModel)
-        {
-            _logger.LogInformation("Query for adding Resource payment");
-            var resourcePayment = _mapper.Map<ResourcePayment>(servicePaymentModel);
-            var id = await _resourcePaymentRepository.AddResourcePayment(resourcePayment);
-            _logger.LogInformation($"Resource payment was added. LeadResourceId = {resourcePayment.LeadResource.Id}");
-            return id;
-        }
-
-        public async Task<List<ResourcePaymentModel>> GetResourcePaymentsById(int serviceToLeadId)
+        public async Task<List<ResourcePaymentModel>> GetResourcePaymentsById(int leadResourceId)
         {
             _logger.LogInformation("Query for receiving Resource payments by id");
-            var resourcePayments = await _resourcePaymentRepository.GetResourcePaymentsByLeadResourceId(serviceToLeadId);
+            var resourcePayments = await _resourcePaymentRepository.GetResourcePaymentsByLeadResourceId(leadResourceId);
             CheckResourcePayments(resourcePayments);
             return _mapper.Map<List<ResourcePaymentModel>>(resourcePayments);
         }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Exceptions;
-using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Tests.TestData;
 using MarvelousService.DataLayer.Entities;
@@ -32,20 +31,6 @@ namespace MarvelousService.BusinessLayer.Tests
         public void Setup()
         {
             _resourcePaymentRepositoryMock = new Mock<IResourcePaymentRepository>();
-        }
-
-        [Test]
-        public async Task AddResourcePayment()
-        {
-            // given
-            _resourcePaymentRepositoryMock.Setup(m => m.AddResourcePayment(It.IsAny<ResourcePayment>())).ReturnsAsync(23);
-            var sut = new ResourcePaymentService(_resourcePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
-
-            // when
-            sut.AddResourcePayment(new ResourcePaymentModel());
-
-            // then
-            _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(It.IsAny<ResourcePayment>()), Times.Once());
         }
 
         [Test]

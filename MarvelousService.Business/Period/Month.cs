@@ -4,9 +4,9 @@
     {
         private const int _monthCoef = 4;
 
-        public override decimal GetPrice(decimal price)
+        public override decimal GetPrice(decimal resourcePrice)
         {
-            return price * _monthCoef;
+            return resourcePrice * _monthCoef;
         }
     }
 }

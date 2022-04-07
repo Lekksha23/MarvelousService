@@ -2,6 +2,6 @@
 {
     public abstract class SubscriptionTime
     {
-        public abstract decimal GetPrice(decimal price);
+        public abstract decimal GetPrice(decimal resourcePrice);
     }
 }

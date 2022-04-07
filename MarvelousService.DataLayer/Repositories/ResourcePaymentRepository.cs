@@ -38,13 +38,13 @@ namespace MarvelousService.DataLayer.Repositories
             return id;
         }
 
-        public async Task<List<ResourcePayment>> GetResourcePaymentsByLeadResourceId(int id)
+        public async Task<List<ResourcePayment>> GetResourcePaymentsByLeadResourceId(int leadResourceId)
         {
             _logger.LogInformation("Connecting to the MarvelousService.DB.");
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded.");
 
-            var servicePayments = await connection
+            var resourcePayments = await connection
                 .QueryAsync<ResourcePayment, LeadResource, ResourcePayment>(
                 _selectByLeadResourceProcedure,
                 (resourcePayment, leadResource) =>
@@ -52,12 +52,12 @@ namespace MarvelousService.DataLayer.Repositories
                     resourcePayment.LeadResource = leadResource;
                     return resourcePayment;
                 },
-                new { Id = id },
+                new { Id = leadResourceId },
                 splitOn: "LeadResourceId",
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation($"Information about subscription pays or onetime pay with id {id} were received.");
-            return servicePayments.ToList();
+            _logger.LogInformation($"Information about subscription pays or onetime pay with id {leadResourceId} were received.");
+            return resourcePayments.ToList();
         }
     }
 }
