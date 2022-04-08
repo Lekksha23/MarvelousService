@@ -8,4 +8,5 @@ namespace MarvelousService.BusinessLayer.Services
         void CheckIfEntityIsNull<T>(int id, T entity);
         void CheckMicroserviceResponse(RestResponse response);
         void CheckIfResourcePaymentsIsNull(List<ResourcePayment> resourcePayments);
+    }
 }

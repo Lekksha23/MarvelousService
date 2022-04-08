@@ -58,7 +58,13 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<List<LeadResourceModel>>(leadResource);
         }
 
-        public async Task<List<LeadResourceModel>> GetLeadResourceById(int id)
+        public async Task<List<LeadResourceModel>> GetByPayDate(DateTime payDate)
+        {
+            var leadResources = await _leadResourceRepository.GetByPayDate(payDate);
+            return _mapper.Map<List<LeadResourceModel>>(leadResources);
+        }
+
+        public async Task<List<LeadResourceModel>> GetById(int id)
         {
             var leadResource = await _leadResourceRepository.GetLeadResourceById(id);
             _helper.CheckIfEntityIsNull(id, leadResource);

@@ -44,7 +44,7 @@ namespace MarvelousService.API.Controllers
             leadResourceModel.Resource = resource.Result;
             leadResourceModel.LeadId = leadIdentity.Id;
             Role role = leadIdentity.Role;
-            var id = await _leadResourceService.AddLeadResource(leadResourceModel, role);
+            var id = await _leadResourceService.AddLeadResource(leadResourceModel, (int)role);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -57,7 +57,7 @@ namespace MarvelousService.API.Controllers
         {
             var leadIdentity = this.GetLeadFromToken().Id;
             _logger.LogInformation($"Request for getting all lead resources with id {id}");
-            var leadResourceModelList = await _leadResourceService.GetLeadResourceById(leadIdentity);
+            var leadResourceModelList = await _leadResourceService.GetById(leadIdentity);
             var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
             _logger.LogInformation($"Lead resources were received by id {id}");
             return Ok(result);
