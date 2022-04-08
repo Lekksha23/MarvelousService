@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Exceptions;
-using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Tests.TestData;
 using MarvelousService.DataLayer.Entities;
@@ -20,32 +19,20 @@ namespace MarvelousService.BusinessLayer.Tests
         private readonly ResourcePaymentTestData _resourcePaymentTestData;
         private readonly IMapper _autoMapper;
         private readonly Mock<ILogger<ResourcePaymentService>> _logger;
+        private readonly Mock<IHelper> _helperMock;
 
         public ResourcePaymentServiceTests()
         {
             _resourcePaymentTestData = new ResourcePaymentTestData();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _logger = new Mock<ILogger<ResourcePaymentService>>();
+            _helperMock = new Mock<IHelper>();
         }
 
         [SetUp]
         public void Setup()
         {
             _resourcePaymentRepositoryMock = new Mock<IResourcePaymentRepository>();
-        }
-
-        [Test]
-        public async Task AddResourcePayment()
-        {
-            // given
-            _resourcePaymentRepositoryMock.Setup(m => m.AddResourcePayment(It.IsAny<ResourcePayment>())).ReturnsAsync(23);
-            var sut = new ResourcePaymentService(_resourcePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
-
-            // when
-            sut.AddResourcePayment(new ResourcePaymentModel());
-
-            // then
-            _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(It.IsAny<ResourcePayment>()), Times.Once());
         }
 
         [Test]

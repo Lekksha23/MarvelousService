@@ -8,6 +8,7 @@ begin
 		lr.[Price],
 		lr.[Status],
 		lr.[LeadId],
+		lr.[StartDate],
 		r.[Id],
 		r.[Name],
 		r.[Type],

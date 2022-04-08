@@ -7,6 +7,7 @@ namespace MarvelousService.DataLayer.Repositories
     {
         Task<int> AddLeadResource(LeadResource serviceToLead);
         Task<List<LeadResource>> GetByLeadId(int id);
+        Task<List<LeadResource>> GetByPayDate(DateTime payDate);
         Task<LeadResource> GetLeadResourceById(int id);
         void UpdateStatusById(int id, Status status);
     }

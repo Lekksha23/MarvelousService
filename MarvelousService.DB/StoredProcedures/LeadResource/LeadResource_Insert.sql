@@ -11,12 +11,14 @@ begin
 	     [Price],
 	     [Status],
 		 [LeadId],
-		 [ResourceId])
+		 [ResourceId],
+		 [StartDate])
 	values
 		(@Period,
 		 @Price,
 		 @Status,
 		 @LeadId,
-		 @ResourceId)
+		 @ResourceId,
+		 getdate())
 	select scope_identity()
 end

@@ -74,7 +74,7 @@ namespace MarvelousService.API.Producer
             await busControl.StartAsync(source.Token);
             try
             {
-                var resource = await _leadResource.GetLeadResourceById(id);
+                var resource = await _leadResource.GetById(id);
 
                 await busControl.Publish<ServiceExchangeModel>(new
                 {

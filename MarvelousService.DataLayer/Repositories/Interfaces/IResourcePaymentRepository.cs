@@ -4,7 +4,7 @@ namespace MarvelousService.DataLayer.Repositories
 {
     public interface IResourcePaymentRepository
     {
-        Task<int> AddResourcePayment(ResourcePayment resourcePayment);
+        Task<int> AddResourcePayment(LeadResource leadResource, long transactionId);
         Task<List<ResourcePayment>> GetResourcePaymentsByLeadResourceId(int id);
     }
 }

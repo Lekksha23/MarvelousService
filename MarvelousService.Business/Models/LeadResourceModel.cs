@@ -1,4 +1,4 @@
-﻿using MarvelousService.DataLayer.Entities;
+﻿using Marvelous.Contracts.Enums;
 using MarvelousService.DataLayer.Enums;
 
 namespace MarvelousService.BusinessLayer.Models
@@ -6,35 +6,28 @@ namespace MarvelousService.BusinessLayer.Models
     public class LeadResourceModel
     {
         public int Id { get; set; }
-        public decimal Price { get; set; }
-        public Period Period { get; set; }
+        public Period Period { get; set; }  
+        public ResourceModel Resource { get; set; }
         public Status Status { get; set; }
         public int LeadId { get; set; }
-        public ResourceModel Resource { get; set; }
         public List<ResourcePaymentModel> ResourcePayments { get; set; }
 
-        public decimal GetTotalPrice(decimal price, Period p)
+        public decimal Price
         {
-            // приведение enum к конкретному классу
-            if (p == Period.Year)
+            get
             {
-                SubscriptionTime time = new Year();
-                return time.GetPrice(price);
+                SubscriptionTime time = new OneTime();
+
+                time = Period switch
+                {
+                    Period.Week => new Week(),
+                    Period.Month => new Month(),
+                    Period.Year => new Year(),
+                    _ => time
+                };
+                return time.GetPrice(Resource.Price);
             }
-            else if (p == Period.Month)
-            {
-                SubscriptionTime time = new Month();
-                return time.GetPrice(price);
-            }
-            else if (p == Period.Week)
-            {
-                SubscriptionTime time = new Week();
-                return time.GetPrice(price);
-            }
-            else
-            {
-                return price;
-            }
+            set { }
         }
     }
 }

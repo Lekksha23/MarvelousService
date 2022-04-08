@@ -18,8 +18,9 @@ namespace MarvelousService.DataLayer.Repositories
             _logger = logger;
         }
 
-        public async Task<int> AddResourcePayment(ResourcePayment resourcePayment)
+        public async Task<int> AddResourcePayment(LeadResource leadResource, long transactionId)
         {
+            _logger.LogInformation("Query for adding a resource payment");
             _logger.LogInformation("Connecting to the MarvelousService.DB.");
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded.");
@@ -28,8 +29,8 @@ namespace MarvelousService.DataLayer.Repositories
                     _insertProcedure,
                     new
                     {
-                        resourcePayment.LeadResource.Id,
-                        resourcePayment.TransactionId
+                        leadResource.Id,
+                        transactionId
                     },
                     commandType: CommandType.StoredProcedure
                 );
@@ -37,13 +38,13 @@ namespace MarvelousService.DataLayer.Repositories
             return id;
         }
 
-        public async Task<List<ResourcePayment>> GetResourcePaymentsByLeadResourceId(int id)
+        public async Task<List<ResourcePayment>> GetResourcePaymentsByLeadResourceId(int leadResourceId)
         {
             _logger.LogInformation("Connecting to the MarvelousService.DB.");
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded.");
 
-            var servicePayments = await connection
+            var resourcePayments = await connection
                 .QueryAsync<ResourcePayment, LeadResource, ResourcePayment>(
                 _selectByLeadResourceProcedure,
                 (resourcePayment, leadResource) =>
@@ -51,12 +52,12 @@ namespace MarvelousService.DataLayer.Repositories
                     resourcePayment.LeadResource = leadResource;
                     return resourcePayment;
                 },
-                new { Id = id },
+                new { Id = leadResourceId },
                 splitOn: "LeadResourceId",
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation($"Information about subscription pays or onetime pay with id {id} were received.");
-            return servicePayments.ToList();
+            _logger.LogInformation($"Information about subscription pays or onetime payment with id {leadResourceId} were received.");
+            return resourcePayments.ToList();
         }
     }
 }

@@ -2,9 +2,9 @@
 {
     public class OneTime : SubscriptionTime
     {
-        public override decimal GetPrice(decimal price)
+        public override decimal GetPrice(decimal resourcePrice)
         {
-            return price;
+            return resourcePrice;
         }
     }
 }
