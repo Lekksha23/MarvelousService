@@ -8,5 +8,6 @@ namespace MarvelousService.BusinessLayer.Services
         Task<int> AddLead(LeadModel lead);
         Task Authorize(AuthModel authModel);
         Task<List<AccountModel>> GetLeadAccounts();
+        Task<string> GetToken(AuthModel authModel);
     }
 }

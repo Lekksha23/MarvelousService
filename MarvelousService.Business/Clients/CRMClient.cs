@@ -48,5 +48,14 @@ namespace MarvelousService.BusinessLayer.Services
             _helper.CheckMicroserviceResponse(response);
             return Convert.ToInt32(response.Content);
         }
+
+        public async Task<string> GetToken(AuthModel authModel)
+        {
+            var request = new RestRequest(_loginPath, Method.Post);
+            request.AddJsonBody(authModel);
+            var response = await _client.PostAsync(request);
+            _helper.CheckMicroserviceResponse(response);
+            return response.Content;
+        }
     }
 }
