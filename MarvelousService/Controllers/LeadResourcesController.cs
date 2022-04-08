@@ -37,15 +37,14 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Add resource to a lead")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-            //var leadIdentity = this.GetLeadFromToken();
-            //_logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadIdentity.Id}.");
+            var leadIdentity = this.GetLeadFromToken();
+            _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadIdentity.Id}.");
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
             leadResourceModel.Resource = resource.Result;
-            //leadResourceModel.LeadId = leadIdentity.Id;
-            //Role role = leadIdentity.Role;
-            var id = await _leadResourceService.AddLeadResource(leadResourceModel, 2);
-            _logger.LogInformation($"Subscription/one-time resource with id {id} added to lead with id {leadResourceModel.LeadId}.");
+            leadResourceModel.LeadId = leadIdentity.Id;
+            Role role = leadIdentity.Role;
+            var id = await _leadResourceService.AddLeadResource(leadResourceModel, role);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -58,8 +57,8 @@ namespace MarvelousService.API.Controllers
         {
             var leadIdentity = this.GetLeadFromToken().Id;
             _logger.LogInformation($"Request for getting all lead resources with id {id}");
-            var serviceToLeadModel = await _leadResourceService.GetLeadResourceById(leadIdentity);
-            var result = _autoMapper.Map<List<LeadResourceResponse>>(serviceToLeadModel);
+            var leadResourceModelList = await _leadResourceService.GetLeadResourceById(leadIdentity);
+            var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
             _logger.LogInformation($"Lead resources were received by id {id}");
             return Ok(result);
         }

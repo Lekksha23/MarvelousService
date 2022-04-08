@@ -6,8 +6,7 @@ namespace MarvelousService.BusinessLayer.Models
     public class LeadResourceModel
     {
         public int Id { get; set; }
-        public Period Period { get; set; }
-        public Role LeadRole { get; set; }    
+        public Period Period { get; set; }  
         public ResourceModel Resource { get; set; }
         public Status Status { get; set; }
         public int LeadId { get; set; }
@@ -28,7 +27,7 @@ namespace MarvelousService.BusinessLayer.Models
                 };
                 return time.GetPrice(Resource.Price);
             }
-            set => value;
+            set { }
         }
     }
 }

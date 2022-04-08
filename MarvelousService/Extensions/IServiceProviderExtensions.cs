@@ -34,8 +34,8 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<ILeadResourceService, LeadResourceService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
-            services.AddScoped<IHelper, Helper>();
             services.AddScoped<IResourceProducer, ResourceProducer>();
+            services.AddScoped<IHelper, Helper>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -106,9 +106,7 @@ namespace MarvelousService.API.Extensions
                     {
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        ValidateLifetime = true,
-                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        ValidateIssuerSigningKey = true
+                        ValidateLifetime = false
                     };
                 });
             services.AddAuthorization();
@@ -132,10 +130,9 @@ namespace MarvelousService.API.Extensions
                     {
                         p.BindAlternateExchangeQueue("resource-exchange", "resource-queue");
                     });
-
-
                 });
             });
         }
+
     }
 }

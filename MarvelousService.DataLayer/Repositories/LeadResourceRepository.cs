@@ -39,7 +39,7 @@ namespace MarvelousService.DataLayer.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation($"Service {id} was added to Lead {leadResource.LeadId}");
+            _logger.LogInformation($"Resource {id} was added to Lead {leadResource.LeadId}");
             return id;
         }
 

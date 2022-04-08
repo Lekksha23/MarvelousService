@@ -9,6 +9,7 @@ begin
 	     lr.[Status],
 		 lr.[LeadId],
 		 lr.[ResourceId],
+		 lr.[StartDate],
 		 r.[Id],
 		 r.[Name],
 		 r.[Type],

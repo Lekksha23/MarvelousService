@@ -35,7 +35,7 @@ namespace MarvelousService.BusinessLayer.Services
         {
             _logger.LogInformation($"Request for getting a resource by id {id}");
             var resource = await _resourceRepository.GetResourceById(id);
-            _helper.CheckResource(resource);
+            _helper.CheckIfEntityIsNull(id, resource);
             return _mapper.Map<ResourceModel>(resource);
         }
 
@@ -50,7 +50,7 @@ namespace MarvelousService.BusinessLayer.Services
         {
             _logger.LogInformation($"Request for soft deletion of resource by id {id}");
             var resource = await _resourceRepository.GetResourceById(id);
-            _helper.CheckResource(resource);
+            _helper.CheckIfEntityIsNull(id, resource);
             resourceModel.Id = id;
             resourceModel.Name = resource.Name;
             var newResource =  _mapper.Map<Resource>(resourceModel);
@@ -61,14 +61,10 @@ namespace MarvelousService.BusinessLayer.Services
         {
             _logger.LogInformation($"Request for updating a status of Resource by id {id}");
             var oldResource = await _resourceRepository.GetResourceById(id);
-            _helper.CheckResource(oldResource);
+            _helper.CheckIfEntityIsNull(id, oldResource);
             resourceModel.Id = id;
             var resource = _mapper.Map<Resource>(resourceModel);
             await _resourceRepository.UpdateResource(resource);
         }
-
-
-
     }
-
 }

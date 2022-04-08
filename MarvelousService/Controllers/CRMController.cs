@@ -24,18 +24,6 @@ namespace MarvelousService.API.Controllers
             _crmClient = crmService;
         }
 
-        [HttpPost("login")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [SwaggerOperation("Authentication")]
-        public async Task<ActionResult> Login([FromBody] AuthRequest auth)
-        {
-            _logger.LogInformation($"Query for authentication user with email:{auth.Email}.");
-            var authModel = _autoMapper.Map<AuthModel>(auth);
-            var token = await _crmClient.GetToken(authModel);
-            _logger.LogInformation($"Authentication of user with email:{auth.Email} successfully completed.");
-            return Json(token);
-        }
-
         [HttpPost("authorize")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation("Authorization")]

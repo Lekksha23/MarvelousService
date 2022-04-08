@@ -56,7 +56,7 @@ namespace MarvelousService.DataLayer.Repositories
                 splitOn: "LeadResourceId",
                 commandType: CommandType.StoredProcedure);
 
-            _logger.LogInformation($"Information about subscription pays or onetime pay with id {leadResourceId} were received.");
+            _logger.LogInformation($"Information about subscription pays or onetime payment with id {leadResourceId} were received.");
             return resourcePayments.ToList();
         }
     }
