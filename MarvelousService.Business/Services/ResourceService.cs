@@ -39,12 +39,6 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<ResourceModel>(resource);
         }
 
-        public async Task<List<ResourceModel>> GetAllResources()
-        {
-            _logger.LogInformation("Request for getting all resources");
-            var resources = await _resourceRepository.GetAllResources();
-            return _mapper.Map<List<ResourceModel>>(resources);
-        }
 
         public async Task SoftDelete(int id, ResourceModel resourceModel)
         {
@@ -65,6 +59,24 @@ namespace MarvelousService.BusinessLayer.Services
             resourceModel.Id = id;
             var resource = _mapper.Map<Resource>(resourceModel);
             await _resourceRepository.UpdateResource(resource);
+        }
+
+        public async Task<List<ResourceModel>> GetAllResources()
+        {
+            _logger.LogInformation("Request for getting all resources");
+            var resources = await _resourceRepository.GetAllResources();
+            return _mapper.Map<List<ResourceModel>>(resources);
+        }
+
+        public async Task<List<ResourceModel>> GetActiveResourceService()
+        {
+            _logger.LogInformation("Request for getting all active resources");
+            var resourse = await _resourceRepository.GetAllResources();
+            var tmp = _mapper.Map<List<ResourceModel>>(resourse);
+            tmp.RemoveAll(t => t.IsDeleted == true);
+           
+            return _mapper.Map<List<ResourceModel>>(tmp);
+
         }
     }
 }

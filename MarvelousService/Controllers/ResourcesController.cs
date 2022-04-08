@@ -37,7 +37,7 @@ namespace MarvelousService.API.Controllers
             var resourceModel = _autoMapper.Map<ResourceModel>(serviceInsertRequest);
             var id = await _resourceService.AddResource(resourceModel);
             _logger.LogInformation($"Resource with id {id} successfully added.");
-            //await _serviceProducer.NotifyServiceAdded(id);
+            await _resourceProducer.NotifyResourceAdded(resourceModel.Id);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -54,11 +54,12 @@ namespace MarvelousService.API.Controllers
             var resourceModel = await _resourceService.GetResourceById(id);
             var result = _autoMapper.Map<ResourceResponse>(resourceModel);
             _logger.LogInformation($"Resource by id {id} was received");
+            await _resourceProducer.NotifyResourceAdded(id);
             return Ok(result);
         }
 
         //api/services/
-        [HttpGet()]
+        [HttpGet("getAll")]
         [SwaggerOperation("Get all resources")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -68,6 +69,22 @@ namespace MarvelousService.API.Controllers
         {
             _logger.LogInformation($"Request for receiving all resources");
             var resourceModels = await _resourceService.GetAllResources();
+            var result = _autoMapper.Map<List<ResourceResponse>>(resourceModels);
+            _logger.LogInformation($"Resources received");
+            return Ok(result);
+        }
+
+        //api/services/
+        [HttpGet("getActive")]
+        [SwaggerOperation("Get active resource")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(ResourceResponse))]
+        public async Task<ActionResult<ResourceResponse>> GetActiveResource()
+        {
+            _logger.LogInformation($"Request for receiving all resources");
+            var resourceModels = await _resourceService.GetActiveResourceService();
             var result = _autoMapper.Map<List<ResourceResponse>>(resourceModels);
             _logger.LogInformation($"Resources received");
             return Ok(result);
@@ -86,6 +103,7 @@ namespace MarvelousService.API.Controllers
             ResourceModel resource = _autoMapper.Map<ResourceModel>(serviceUpdateRequest);
             await _resourceService.UpdateResource(id, resource);
             _logger.LogInformation($"Resource with id {id} successfully received.");
+            await _resourceProducer.NotifyResourceAdded(id);
             return Ok(resource);
         }
 
@@ -102,6 +120,7 @@ namespace MarvelousService.API.Controllers
             ResourceModel service = _autoMapper.Map<ResourceModel>(serviceDeletedRequest);
             await _resourceService.SoftDelete(id, service);
             _logger.LogInformation($"Resource with id {id} successfully deleted.");
+            await _resourceProducer.NotifyResourceAdded(id);
             return Ok(service);
         }
     }
