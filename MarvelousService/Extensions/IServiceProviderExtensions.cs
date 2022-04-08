@@ -1,18 +1,17 @@
-﻿using MarvelousService.API.Configuration;
-using MarvelousService.BusinessLayer.Configuration;
+﻿using Marvelous.Contracts.ExchangeModels;
+using MarvelousService.API.Configuration;
+using MarvelousService.API.Producer;
+using MarvelousService.API.Producer.Interface;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
-using MassTransit;
-using Marvelous.Contracts.ExchangeModels;
-using MarvelousService.API.Producer.Interface;
-using MarvelousService.API.Producer;
 
 namespace MarvelousService.API.Extensions
 {

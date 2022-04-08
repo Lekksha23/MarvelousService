@@ -33,6 +33,9 @@ namespace MarvelousService.API.Controllers
 
         //api/leadResources
         [HttpPost]
+        [AuthorizeRole(Role.Regular, Role.Vip)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [SwaggerOperation("Add resource to a lead")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
@@ -50,18 +53,33 @@ namespace MarvelousService.API.Controllers
 
         //api/leadResources
         [HttpGet("id")]
-        [AuthorizeRole(Role.Regular, Role.Vip)]
         [SwaggerOperation("Get lead resources by id")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<LeadResourceResponse>))]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesById(int id)
         {
-            var leadIdentity = this.GetLeadFromToken().Id;
             _logger.LogInformation($"Request for getting all lead resources with id {id}");
-            var leadResourceModelList = await _leadResourceService.GetById(leadIdentity);
+            var leadResourceModelList = await _leadResourceService.GetById(id);
             var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
             _logger.LogInformation($"Lead resources were received by id {id}");
             return Ok(result);
         }
 
+        //api/leadResources
+        [HttpGet("payDate")]
+        [SwaggerOperation("Get lead resources by pay date")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<LeadResourceByPayDateResponse>))]
+        public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesByPayDate([FromQuery] DateTime payDate)
+        {
+            _logger.LogInformation($"Request for getting all lead resources with pay date {payDate}");
+            var leadResourceModelList = await _leadResourceService.GetByPayDate(payDate);
+            var result = _autoMapper.Map<List<LeadResourceByPayDateResponse>>(leadResourceModelList);
+            _logger.LogInformation($"Lead resources were received by pay date {payDate}");
+            return Ok(result);
+        }
     }
 }

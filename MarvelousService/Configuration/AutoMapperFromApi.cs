@@ -16,6 +16,8 @@ namespace MarvelousService.API.Configuration
             CreateMap<LeadInsertRequest, LeadModel>();
 
             CreateMap<LeadResourceInsertRequest, LeadResourceModel>();
+            CreateMap<LeadResourceModel, LeadResourceByPayDateResponse>();
+            CreateMap<LeadResourceModel, LeadResourceResponse>();
         }
     }
 }
