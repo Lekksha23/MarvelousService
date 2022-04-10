@@ -18,7 +18,7 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly ITransactionService _transactionService;
         private readonly ILogger<LeadResourceService> _logger;
         private readonly IMapper _mapper;
-        private readonly IHelper _helper;
+        private readonly ICheckErrorHelper _helper;
 
         private const double _discountVIP = 0.9;
 
@@ -29,7 +29,7 @@ namespace MarvelousService.BusinessLayer.Services
             ICRMService crmService,
             ILogger<LeadResourceService> logger,
             IMapper mapper,
-            IHelper helper)
+            ICheckErrorHelper helper)
         {
             _leadResourceRepository = LeadResourceRepository;
             _resourcePaymentRepository = resourcePaymentRepository;

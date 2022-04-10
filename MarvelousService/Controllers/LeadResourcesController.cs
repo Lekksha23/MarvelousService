@@ -3,6 +3,7 @@ using CRM.APILayer.Attribites;
 using Marvelous.Contracts.Enums;
 using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -12,23 +13,25 @@ namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/leadResources")]
-    public class LeadResourcesController : Controller
+    public class LeadResourcesController : ControllerExtensions
     {
         private readonly ILeadResourceService _leadResourceService;
         private readonly IResourceService _resourceService;
         private readonly IMapper _autoMapper;
         private readonly ILogger<ResourcesController> _logger;
+        private readonly IReqvestHelper _reqvestHelper;
 
         public LeadResourcesController(
             IMapper autoMapper, 
             ILeadResourceService leadResource,
             IResourceService resourceService,
-            ILogger<ResourcesController> logger)
+            ILogger<ResourcesController> logger, IReqvestHelper reqvestHelper) : base(reqvestHelper, logger)
         {
             _leadResourceService = leadResource;
             _resourceService = resourceService;
             _autoMapper = autoMapper;
             _logger = logger;
+            _reqvestHelper = reqvestHelper;
         }
 
         //api/leadResources
@@ -37,7 +40,8 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Add resource to a lead")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-            var leadIdentity = this.GetLeadFromToken();
+            await this.CheckRole(Role.Regular,Role.Vip); // Плюнуть Ролью....
+
             _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadIdentity.Id}.");
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);

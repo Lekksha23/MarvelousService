@@ -6,11 +6,11 @@ using System.Net;
 
 namespace MarvelousService.BusinessLayer.Services
 {
-    public class Helper : IHelper
+    public class CheckErrorHelper : ICheckErrorHelper
     {
-        private readonly ILogger<Helper> _logger;
+        private readonly ILogger<CheckErrorHelper> _logger;
 
-        public Helper(ILogger<Helper> logger)
+        public CheckErrorHelper(ILogger<CheckErrorHelper> logger)
         {
             _logger = logger;
         }
