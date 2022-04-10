@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using RestSharp;
 using System.Net;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Helpers
 {
     public class Helper : IHelper
     {

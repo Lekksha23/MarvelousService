@@ -1,4 +1,5 @@
 ﻿using Marvelous.Contracts.RequestModels;
+using MarvelousService.BusinessLayer.Helpers;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 

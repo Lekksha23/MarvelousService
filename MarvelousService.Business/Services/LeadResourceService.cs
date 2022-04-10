@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using Marvelous.Contracts.Enums;
-using MarvelousService.BusinessLayer.Exceptions;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Enums;
 using MarvelousService.DataLayer.Repositories;
-using Microsoft.Extensions.Logging;
 
 namespace MarvelousService.BusinessLayer.Services
 {
@@ -16,18 +15,18 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly IResourcePaymentRepository _resourcePaymentRepository;
         private readonly ICRMService _crmService;
         private readonly ITransactionService _transactionService;
-        private readonly ILogger<LeadResourceService> _logger;
         private readonly IMapper _mapper;
         private readonly IHelper _helper;
-
-        private const double _discountVIP = 0.9;
+        private IRoleStrategy _roleStrategy;
+        private readonly IRoleStrategyProvider _roleStrategyProvider;
 
         public LeadResourceService(
             ILeadResourceRepository LeadResourceRepository,
             IResourcePaymentRepository resourcePaymentRepository,
             ITransactionService transactionService,
             ICRMService crmService,
-            ILogger<LeadResourceService> logger,
+            IRoleStrategy roleStrategy,
+            IRoleStrategyProvider roleStrategyProvider,
             IMapper mapper,
             IHelper helper)
         {
@@ -35,12 +34,13 @@ namespace MarvelousService.BusinessLayer.Services
             _resourcePaymentRepository = resourcePaymentRepository;
             _transactionService = transactionService;
             _crmService = crmService;
+            _roleStrategy = roleStrategy;
+            _roleStrategyProvider = roleStrategyProvider;
             _mapper = mapper;
-            _logger = logger;
             _helper = helper;
         }
 
-        public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, int role)
+        public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role)
         {
             GiveDiscountIfLeadIsVIP(leadResourceModel, role);  
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
@@ -71,23 +71,10 @@ namespace MarvelousService.BusinessLayer.Services
             return _mapper.Map<List<LeadResourceModel>>(leadResource);
         }
 
-        private void GiveDiscountIfLeadIsVIP(LeadResourceModel leadResourceModel, int role)
+        private void GiveDiscountIfLeadIsVIP(LeadResourceModel leadResourceModel, Role role)
         {
-            switch (role)
-            {
-                case (int)Role.Vip:
-                    leadResourceModel.Price *= (decimal)_discountVIP;
-                    break;
-                case (int)Role.Regular:
-                    break;
-                case (int)Role.Admin:
-                    throw new RoleException("User with role Admin can't buy any resources.");
-                    _logger.LogError("User with role Admin was trying to buy a resource.");
-                    break;
-                default:
-                    throw new RoleException("Unknown role.");
-                    _logger.LogError("User with unknown role was trying to buy a resource.");
-            }
+            _roleStrategy = _roleStrategyProvider.GetStrategy((int)role);
+            _roleStrategy.GiveLeadDiscount(leadResourceModel, role);
         }
     }
 }

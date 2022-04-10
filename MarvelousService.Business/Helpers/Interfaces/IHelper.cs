@@ -1,7 +1,7 @@
 ﻿using MarvelousService.DataLayer.Entities;
 using RestSharp;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Helpers
 {
     public interface IHelper
     {

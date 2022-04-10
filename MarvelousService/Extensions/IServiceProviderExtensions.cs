@@ -3,6 +3,7 @@ using MarvelousService.API.Configuration;
 using MarvelousService.API.Producer;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.BusinessLayer.Configurations;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Services;
 using MarvelousService.BusinessLayer.Services.Interfaces;
 using MarvelousService.DataLayer.Repositories;
@@ -26,15 +27,28 @@ namespace MarvelousService.API.Extensions
 
         public static void RegisterMarvelousServiceServices(this IServiceCollection services)
         {
-            services.AddScoped<ICRMClient, CRMClient>();
             services.AddScoped<ICRMService, CRMService>();
             services.AddScoped<IResourceService, ResourceService>();
             services.AddScoped<IResourcePaymentService, ResourcePaymentService>();
             services.AddScoped<ILeadResourceService, LeadResourceService>();
             services.AddScoped<ITransactionService, TransactionService>();
-            services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
             services.AddScoped<IResourceProducer, ResourceProducer>();
+        }
+
+        public static void RegisterMarvelousServiceClients(this IServiceCollection services)
+        {
+            services.AddScoped<ICRMClient, CRMClient>();
+            services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
+        }
+
+        public static void RegisterMarvelousServiceHelpers(this IServiceCollection services)
+        {
             services.AddScoped<IHelper, Helper>();
+            services.AddScoped<IRoleStrategyProvider, RoleStrategyProvider>();
+            services.AddScoped<IRoleStrategy, RegularRoleStrategy>();
+            services.AddScoped<IRoleStrategy, AdminRoleStrategy>();
+            services.AddScoped<IRoleStrategy, UknownRoleStrategy>();
+            services.AddScoped<IRoleStrategy, VIPRoleStrategy>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)

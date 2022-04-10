@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using CRM.APILayer.Attribites;
 using Marvelous.Contracts.Enums;
-using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services.Interfaces;
@@ -33,21 +31,20 @@ namespace MarvelousService.API.Controllers
 
         //api/leadResources
         [HttpPost]
-        [AuthorizeRole(Role.Regular, Role.Vip)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [SwaggerOperation("Add resource to a lead")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-            var leadIdentity = this.GetLeadFromToken();
-            _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadIdentity.Id}.");
+            //var leadIdentity = this.GetLeadFromToken();
+            //_logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadIdentity.Id}.");
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
             leadResourceModel.Resource = resource.Result;
-            leadResourceModel.LeadId = leadIdentity.Id;
-            Role role = leadIdentity.Role;
-            var id = await _leadResourceService.AddLeadResource(leadResourceModel, (int)role);
+            //leadResourceModel.LeadId = leadIdentity.Id;
+            //Role role = leadIdentity.Role;
+            var id = await _leadResourceService.AddLeadResource(leadResourceModel, Role.Vip);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
