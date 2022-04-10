@@ -42,6 +42,7 @@ namespace MarvelousService.BusinessLayer.Services
 
         public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role)
         {
+            leadResourceModel.Price = leadResourceModel.CountPrice();
             GiveDiscountIfLeadIsVIP(leadResourceModel, role);  
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
             var accountId = await _crmService.GetIdOfRubLeadAccount();
