@@ -24,7 +24,7 @@ namespace MarvelousService.API.Controllers
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [SwaggerOperation("Authentication")]
+        [SwaggerOperation("Authentication. Roles: Anonymous")]
         public async Task<ActionResult> Login([FromBody] AuthRequestModel auth)
         {
             _logger.LogInformation($"Query for authentication user with email:{auth.Email}.");

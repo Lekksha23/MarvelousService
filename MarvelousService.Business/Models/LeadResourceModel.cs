@@ -1,5 +1,4 @@
-﻿using Marvelous.Contracts.Enums;
-using MarvelousService.DataLayer.Enums;
+﻿using MarvelousService.DataLayer.Enums;
 
 namespace MarvelousService.BusinessLayer.Models
 {
@@ -11,23 +10,20 @@ namespace MarvelousService.BusinessLayer.Models
         public Status Status { get; set; }
         public int LeadId { get; set; }
         public List<ResourcePaymentModel> ResourcePayments { get; set; }
+        public decimal Price { get; set; }
 
-        public decimal Price
+        public decimal CountPrice()
         {
-            get
-            {
-                SubscriptionTime time = new OneTime();
+            SubscriptionTime time = new OneTime();
 
-                time = Period switch
-                {
-                    Period.Week => new Week(),
-                    Period.Month => new Month(),
-                    Period.Year => new Year(),
-                    _ => time
-                };
-                return time.GetPrice(Resource.Price);
-            }
-            set { }
+            time = Period switch
+            {
+                Period.Week => new Week(),
+                Period.Month => new Month(),
+                Period.Year => new Year(),
+                _ => time
+            };
+            return time.GetPrice(Resource.Price);
         }
     }
 }

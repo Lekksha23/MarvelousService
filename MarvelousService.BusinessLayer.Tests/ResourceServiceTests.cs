@@ -51,6 +51,7 @@ namespace MarvelousService.BusinessLayer.Tests
             //then
             _resourceRepositoryMock.Verify(m => m.AddResource(It.IsAny<Resource>()), Times.Once());
         }
+
         [Test]
         public async Task UpdateServiceTest()
         {

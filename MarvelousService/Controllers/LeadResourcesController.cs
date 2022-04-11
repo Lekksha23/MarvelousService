@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
-using CRM.APILayer.Attribites;
 using Marvelous.Contracts.Enums;
-using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Clients.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using MarvelousService.API.Extensions;
 
 namespace MarvelousService.API.Controllers
 {
@@ -37,8 +36,10 @@ namespace MarvelousService.API.Controllers
 
         //api/leadResources
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        [SwaggerOperation("Add a resource to a lead")]
+        [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
             var lead = await CheckRole(Role.Regular, Role.Vip); 
@@ -47,20 +48,38 @@ namespace MarvelousService.API.Controllers
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
             leadResourceModel.Resource = resource.Result;
-            var id = await _leadResourceService.AddLeadResource(leadResourceModel, 2);
+            var id = await _leadResourceService.AddLeadResource(leadResourceModel, Role.Vip);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
         //api/leadResources
         [HttpGet("id")]
-        [SwaggerOperation("Get lead resources by id")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<LeadResourceResponse>))]
+        [SwaggerOperation("Get lead resources by id. Roles: Anonymous.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesById(int id)
         {
             _logger.LogInformation($"Request for getting all lead resources with id {id}");
             var leadResourceModelList = await _leadResourceService.GetById(id);
             var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
             _logger.LogInformation($"Lead resources were received by id {id}");
+            return Ok(result);
+        }
+
+        //api/leadResources
+        [HttpGet("payDate")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<LeadResourceByPayDateResponse>))]
+        [SwaggerOperation("Get lead resources by pay date. Roles: Anonymous")]
+        public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesByPayDate([FromQuery] DateTime payDate)
+        {
+            _logger.LogInformation($"Request for getting all lead resources with pay date {payDate}");
+            var leadResourceModelList = await _leadResourceService.GetByPayDate(payDate);
+            var result = _autoMapper.Map<List<LeadResourceByPayDateResponse>>(leadResourceModelList);
+            _logger.LogInformation($"Lead resources were received by pay date {payDate}");
             return Ok(result);
         }
     }

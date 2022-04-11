@@ -2,11 +2,15 @@
 using MarvelousService.API.Models;
 using MarvelousService.BusinessLayer.Clients;
 using MarvelousService.BusinessLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MarvelousService.API.Controllers
 {
+    [ApiController]
+    [Route("api/crm")]
+    [AllowAnonymous]
     public class CRMController : Controller
     {
         private readonly ICRMClient _crmClient;
@@ -22,7 +26,7 @@ namespace MarvelousService.API.Controllers
 
         [HttpPost("registrate")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-        [SwaggerOperation("Registrate a new lead")]
+        [SwaggerOperation("Registrate a new lead. Roles: Anonymous")]
         public async Task<ActionResult<int>> RegistrateLead([FromBody] LeadInsertRequest leadInsertRequest)
         {
             _logger.LogInformation($"Query for registration new lead with name:{leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
