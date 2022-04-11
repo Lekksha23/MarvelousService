@@ -2,13 +2,13 @@
 using Marvelous.Contracts.Enums;
 using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Services.Interfaces;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Enums;
 using MarvelousService.DataLayer.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public class LeadResourceService : ILeadResourceService
     {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Exceptions;
-using MarvelousService.BusinessLayer.Services;
+using MarvelousService.BusinessLayer.Clients;
 using MarvelousService.BusinessLayer.Tests.TestData;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories;

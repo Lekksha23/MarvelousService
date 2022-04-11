@@ -2,7 +2,7 @@
 using Marvelous.Contracts.RequestModels;
 using Microsoft.Extensions.Logging;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public class TransactionService : ITransactionService
     {

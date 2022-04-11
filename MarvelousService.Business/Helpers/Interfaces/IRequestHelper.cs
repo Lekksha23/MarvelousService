@@ -5,10 +5,11 @@ using RestSharp;
 
 namespace MarvelousService.BusinessLayer.Helpers
 {
-    public interface IReqvestHelper
+    public interface IRequestHelper
     {
-        Task<RestResponse<T>> GetTokenFromFront<T>(Microservice service, AuthRequestModel authReguest);
+        Task<RestResponse<T>> GetTokenForFront<T>(Microservice service, AuthRequestModel authReguest);
         Task<RestResponse<T>> SendRequest<T>(string path, Microservice service, string jwtToken = "null");
-        Task<RestResponse<IdentityResponseModel>> SendRequestCheckValidateToken(string jwtToken);
+        void CheckMicroserviceResponse(RestResponse response);
+        Task<RestResponse<IdentityResponseModel>> SendRequestToValidateToken(string jwtToken);
     }
 }

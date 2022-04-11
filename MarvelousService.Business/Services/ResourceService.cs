@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Services.Interfaces;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public class ResourceService : IResourceService
     {

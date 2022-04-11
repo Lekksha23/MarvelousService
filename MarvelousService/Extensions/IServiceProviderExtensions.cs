@@ -1,8 +1,8 @@
 ﻿using MarvelousService.API.Configuration;
 using MarvelousService.BusinessLayer.Configuration;
 using MarvelousService.BusinessLayer.Configurations;
-using MarvelousService.BusinessLayer.Services;
-using MarvelousService.BusinessLayer.Services.Interfaces;
+using MarvelousService.BusinessLayer.Clients;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -37,8 +37,8 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
             services.AddScoped<IResourceProducer, ResourceProducer>();
             services.AddScoped<ICheckErrorHelper, CheckErrorHelper>();
-            services.AddScoped<IReqvestHelper, ReqvestHelper>();
-            services.AddTransient<IInitialHelper, InitialHelper>();
+            services.AddScoped<IRequestHelper, RequestHelper>();
+            services.AddTransient<IInitializeHelper, InitializeHelper>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -60,7 +60,7 @@ namespace MarvelousService.API.Extensions
 
         public static void InitializeConfigs(this WebApplication app)
         {
-            app.Services.CreateScope().ServiceProvider.GetRequiredService<IInitialHelper>().InitialazeConfig();
+            app.Services.CreateScope().ServiceProvider.GetRequiredService<IInitializeHelper>().InitializeConfig();
         }
 
         public static void RegisterSwaggerAuth(this IServiceCollection swagger)

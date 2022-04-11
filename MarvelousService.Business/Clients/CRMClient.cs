@@ -1,42 +1,30 @@
-﻿using MarvelousService.BusinessLayer.Models;
+﻿using MarvelousService.BusinessLayer.Helpers;
+using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Models.CRMModels;
 using RestSharp;
-using RestSharp.Authenticators;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public class CRMClient : ICRMClient
     {
-        private RestClient _client;
-        private readonly ICheckErrorHelper _helper;
+        private readonly RestClient _client;
+        private readonly IRequestHelper _requestHelper;
         private const string _url = "https://piter-education.ru:5050";
         private const string _loginPath = "/api/auth/login/";
         private const string _addLeadPath = "/api/leads/";
         private const string _getAccountByLeadIdPath = "/api/accounts/";
 
-        public CRMClient(ICheckErrorHelper helper)
+        public CRMClient(IRequestHelper requestHelper)
         {
             _client = new RestClient(_url);
-            _helper = helper;
-        }
-
-        public async Task Authorize(AuthModel authModel)
-        {
-            var authRequest = new RestRequest(_loginPath, Method.Post)
-                .AddHeader("Accept", "text/plain")
-                .AddHeader("Content-Type", "application/json")
-                .AddJsonBody(authModel);
-
-            var response = await _client.ExecuteAsync<string>(authRequest);
-            _helper.CheckMicroserviceResponse(response);
-            _client.Authenticator = new JwtAuthenticator(response.Data);
+            _requestHelper = requestHelper;
         }
 
         public async Task<List<AccountModel>> GetLeadAccounts()
         {
             var request = new RestRequest(_getAccountByLeadIdPath, Method.Get);
             var response = await _client.ExecuteAsync<List<AccountModel>>(request);
-            _helper.CheckMicroserviceResponse(response);
+            _requestHelper.CheckMicroserviceResponse(response);
             return response.Data;
         }
 
@@ -45,17 +33,8 @@ namespace MarvelousService.BusinessLayer.Services
             var request = new RestRequest(_addLeadPath, Method.Post);
             request.AddJsonBody(lead);
             var response = await _client.PostAsync(request);
-            _helper.CheckMicroserviceResponse(response);
+            _requestHelper.CheckMicroserviceResponse(response);
             return Convert.ToInt32(response.Content);
-        }
-
-        public async Task<string> GetToken(AuthModel authModel)
-        {
-            var request = new RestRequest(_loginPath, Method.Post);
-            request.AddJsonBody(authModel);
-            var response = await _client.PostAsync(request);
-            _helper.CheckMicroserviceResponse(response);
-            return response.Content;
         }
     }
 }
