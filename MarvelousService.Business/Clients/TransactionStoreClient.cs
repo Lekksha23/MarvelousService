@@ -6,12 +6,12 @@ namespace MarvelousService.BusinessLayer.Services
 {
     public class TransactionStoreClient : ITransactionStoreClient
     {
-        private readonly IHelper _helper;
+        private readonly ICheckErrorHelper _helper;
         private const string _url = "https://piter-education.ru:6060";
         private const string _transactionPath = "/api/service-payment/";
         private readonly ILogger<ResourceService> _logger;
 
-        public TransactionStoreClient(IHelper helper)
+        public TransactionStoreClient(ICheckErrorHelper helper)
         {
             _helper = helper;
         }

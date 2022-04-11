@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using Marvelous.Contracts.Enums;
+using Marvelous.Contracts.RequestModels;
+using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -11,54 +15,62 @@ namespace MarvelousService.API.Controllers
     [ApiController]
     [Route("api/auth")]
     [AllowAnonymous]
-    public class CRMController : Controller
+    public class CRMController : ControllerExtensions
     {
         private readonly IMapper _autoMapper;
         private readonly ICRMClient _crmClient;
         private readonly ILogger<CRMController> _logger;
+        private readonly IReqvestHelper _reqvestHelper;
 
-        public CRMController(IMapper autoMapper, ICRMClient crmService, ILogger<CRMController> logger)
+        public CRMController(IMapper autoMapper, ICRMClient crmService, ILogger<CRMController> logger, IReqvestHelper reqvestHelper): base(reqvestHelper, logger)
         {
             _logger = logger;
             _autoMapper = autoMapper;
             _crmClient = crmService;
+            _reqvestHelper = reqvestHelper;
         }
+
+
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [SwaggerOperation("Authentication")]
-        public async Task<ActionResult> Login([FromBody] AuthRequest auth)
+        public async Task<ActionResult> Login([FromBody] AuthRequestModel auth)
         {
             _logger.LogInformation($"Query for authentication user with email:{auth.Email}.");
-            var authModel = _autoMapper.Map<AuthModel>(auth);
-            var token = await _crmClient.GetToken(authModel);
+            var token = await _reqvestHelper.GetTokenFromFront<string>(Microservice.MarvelousAuth,auth);
+
+            //var authModel = _autoMapper.Map<AuthModel>(auth);
+            //var token = await _crmClient.GetToken(authModel);
             _logger.LogInformation($"Authentication of user with email:{auth.Email} successfully completed.");
             return Json(token);
         }
 
-        [HttpPost("authorize")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation("Authorization")]
-        public async Task<ActionResult> Authorize([FromBody] AuthRequest auth)
-        {
-            _logger.LogInformation($"Query for authorization user with email:{auth.Email}.");
-            var authModel = _autoMapper.Map<AuthModel>(auth);
-            await _crmClient.Authorize(authModel);
-            _logger.LogInformation($"Authorization of user with email:{auth.Email} successfully completed.");
-            return Ok();
-        }
+        //[HttpPost("authorize")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[SwaggerOperation("Authorization")]
+        //public async Task<ActionResult> Authorize([FromBody] AuthRequest auth)
+        //{
+        //    _logger.LogInformation($"Query for authorization user with email:{auth.Email}.");
+        //    var authModel = _autoMapper.Map<AuthModel>(auth);
+        //    await _crmClient.Authorize(authModel);
+        //    _logger.LogInformation($"Authorization of user with email:{auth.Email} successfully completed.");
+        //    return Ok();
+        //}
 
-        [HttpPost("registrate")]
-        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-        [SwaggerOperation("Registrate a new lead")]
-        public async Task<ActionResult<int>> RegistrateLead([FromBody] LeadInsertRequest leadInsertRequest)
-        {
-            _logger.LogInformation($"Query for registration new lead with name:{leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
-            var leadModel = _autoMapper.Map<LeadModel>(leadInsertRequest);
-            var leadId = await _crmClient.AddLead(leadModel);
-            _logger.LogInformation($"A New lead with email:{leadInsertRequest.Email} was successfully added.");
-            return Ok(leadId);
-        }
+        //[HttpPost("registrate")]
+        //[ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        //[SwaggerOperation("Registrate a new lead")]
+        //public async Task<ActionResult<int>> RegistrateLead([FromBody] LeadInsertRequest leadInsertRequest)
+        //{
+        //    _logger.LogInformation($"Query for registration new lead with name:{leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
+        //    var leadModel = _autoMapper.Map<LeadModel>(leadInsertRequest);
+        //    var leadId = await _crmClient.AddLead(leadModel);
+        //    _logger.LogInformation($"A New lead with email:{leadInsertRequest.Email} was successfully added.");
+        //    return Ok(leadId);
+        //}
+
+
 
     }
 }

@@ -8,13 +8,13 @@ namespace MarvelousService.BusinessLayer.Services
     public class CRMClient : ICRMClient
     {
         private RestClient _client;
-        private readonly IHelper _helper;
+        private readonly ICheckErrorHelper _helper;
         private const string _url = "https://piter-education.ru:5050";
         private const string _loginPath = "/api/auth/login/";
         private const string _addLeadPath = "/api/leads/";
         private const string _getAccountByLeadIdPath = "/api/accounts/";
 
-        public CRMClient(IHelper helper)
+        public CRMClient(ICheckErrorHelper helper)
         {
             _client = new RestClient(_url);
             _helper = helper;

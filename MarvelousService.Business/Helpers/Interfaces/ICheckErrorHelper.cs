@@ -3,7 +3,7 @@ using RestSharp;
 
 namespace MarvelousService.BusinessLayer.Services
 {
-    public interface IHelper
+    public interface ICheckErrorHelper
     {
         void CheckIfEntityIsNull<T>(int id, T entity);
         void CheckMicroserviceResponse(RestResponse response);

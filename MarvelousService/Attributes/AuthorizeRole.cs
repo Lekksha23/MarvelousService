@@ -12,6 +12,7 @@ namespace CRM.APILayer.Attribites
                 throw new TypeMismatchException("The passed argument is not an enum.");
 
             Roles = string.Join(",", roles.Select(r => Enum.GetName(r.GetType(), r)));
+
         }
     }
 }

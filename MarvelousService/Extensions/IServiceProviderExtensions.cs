@@ -13,6 +13,7 @@ using MassTransit;
 using Marvelous.Contracts.ExchangeModels;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.API.Producer;
+using MarvelousService.BusinessLayer.Helpers;
 
 namespace MarvelousService.API.Extensions
 {
@@ -35,7 +36,9 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
             services.AddScoped<IResourceProducer, ResourceProducer>();
-            services.AddScoped<IHelper, Helper>();
+            services.AddScoped<ICheckErrorHelper, CheckErrorHelper>();
+            services.AddScoped<IReqvestHelper, ReqvestHelper>();
+            services.AddTransient<IInitialHelper, InitialHelper>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -52,6 +55,12 @@ namespace MarvelousService.API.Extensions
                 loggingBuilder.SetMinimumLevel(LogLevel.Information);
                 loggingBuilder.AddNLog(config);
             });
+        }
+
+
+        public static void InitializeConfigs(this WebApplication app)
+        {
+            app.Services.CreateScope().ServiceProvider.GetRequiredService<IInitialHelper>().InitialazeConfig();
         }
 
         public static void RegisterSwaggerAuth(this IServiceCollection swagger)

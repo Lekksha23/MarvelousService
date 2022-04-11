@@ -1,25 +1,35 @@
 ﻿using Marvelous.Contracts.Enums;
 using MarvelousService.API.Models;
+using MarvelousService.BusinessLayer.Exceptions;
+using MarvelousService.BusinessLayer.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace MarvelousService.API.Extensions
 {
-    public static class ControllerExtensions
+    public  class ControllerExtensions : Controller
     {
-        public static LeadIdentity GetLeadFromToken(this Controller controller)
+        private readonly IReqvestHelper _reqvestHelper;
+        private readonly ILogger  _logger;
+
+
+        public ControllerExtensions(IReqvestHelper reqvestHelper, ILogger logger)
         {
-            var identity = controller.HttpContext.User.Identity as ClaimsIdentity;
-            var leadIdentity = new LeadIdentity();
-            leadIdentity.Id = int.Parse(identity.Claims.ToList()
-                .Where(c => c.Type == ClaimTypes.UserData)
-                .Select(c => c.Value)
-                .SingleOrDefault());
-            leadIdentity.Role = Enum.Parse<Role>(identity.Claims.ToList()
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .SingleOrDefault());
-            return leadIdentity;
+            _reqvestHelper = reqvestHelper;
+            _logger = logger;
+        }
+
+
+
+        public  async Task CheckRole(params Role[] roles)
+        {
+            //вызов моей проверки и получение LeadIdentity
+            var lead = await _reqvestHelper.SendRequestCheckValidateToken(HttpContext.Request.Headers.Authorization[0]);
+            if (!roles.Select(r => r.ToString()).Contains(lead.Data.Role))
+            {
+
+                throw new RoleException("");
+            }
         }
     }
 }
