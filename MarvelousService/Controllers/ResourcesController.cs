@@ -2,7 +2,7 @@
 using MarvelousService.API.Models;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Services.Interfaces;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

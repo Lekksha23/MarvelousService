@@ -1,6 +1,6 @@
 ﻿using Marvelous.Contracts.RequestModels;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public interface ITransactionStoreClient
     {

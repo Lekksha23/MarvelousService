@@ -1,35 +1,33 @@
 ﻿using Marvelous.Contracts.Enums;
-using MarvelousService.API.Models;
+using Marvelous.Contracts.ResponseModels;
 using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace MarvelousService.API.Extensions
 {
-    public  class ControllerExtensions : Controller
+    public class ControllerExtensions : Controller
     {
-        private readonly IReqvestHelper _reqvestHelper;
-        private readonly ILogger  _logger;
+        private readonly IRequestHelper _requestHelper;
+        private readonly ILogger _logger;
 
-
-        public ControllerExtensions(IReqvestHelper reqvestHelper, ILogger logger)
+        public ControllerExtensions(IRequestHelper reqvestHelper, ILogger logger)
         {
-            _reqvestHelper = reqvestHelper;
+            _requestHelper = reqvestHelper;
             _logger = logger;
         }
 
-
-
-        public  async Task CheckRole(params Role[] roles)
+        protected async Task<IdentityResponseModel> CheckRole(params Role[] roles)
         {
-            //вызов моей проверки и получение LeadIdentity
-            var lead = await _reqvestHelper.SendRequestCheckValidateToken(HttpContext.Request.Headers.Authorization[0]);
-            if (!roles.Select(r => r.ToString()).Contains(lead.Data.Role))
+            _logger.LogInformation($"Query for validation of token in the IdentityService");
+            var lead = await _requestHelper.SendRequestToValidateToken(HttpContext.Request.Headers.Authorization[0]);
+            var leadRole = lead.Data.Role;
+            if (!roles.Select(r => r.ToString()).Contains(leadRole))
             {
-
-                throw new RoleException("");
+                _logger.LogError($"User with role:{leadRole} don't have acces to the method");
+                throw new RoleException($"User with role:{leadRole} don't have acces to this method");
             }
+            return lead.Data;
         }
     }
 }

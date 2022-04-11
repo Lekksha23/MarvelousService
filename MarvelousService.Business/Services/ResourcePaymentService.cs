@@ -5,7 +5,7 @@ using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public class ResourcePaymentService : IResourcePaymentService
     {

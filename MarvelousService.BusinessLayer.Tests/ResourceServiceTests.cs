@@ -1,7 +1,7 @@
 using AutoMapper;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Services;
+using MarvelousService.BusinessLayer.Clients;
 using MarvelousService.BusinessLayer.Tests.TestCaseSource;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories.Interfaces;
