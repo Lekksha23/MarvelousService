@@ -2,7 +2,7 @@
 using MarvelousService.BusinessLayer.Models;
 
 
-namespace MarvelousService.BusinessLayer.Services.Interfaces
+namespace MarvelousService.BusinessLayer.Clients.Interfaces
 {
     public interface ILeadResourceService
     {

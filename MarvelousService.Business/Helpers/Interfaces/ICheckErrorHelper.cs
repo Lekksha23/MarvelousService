@@ -1,12 +1,11 @@
 ﻿using MarvelousService.DataLayer.Entities;
 using RestSharp;
 
-namespace MarvelousService.BusinessLayer.Helpers
+namespace MarvelousService.BusinessLayer.Clients
 {
-    public interface IHelper
+    public interface ICheckErrorHelper
     {
         void CheckIfEntityIsNull<T>(int id, T entity);
-        void CheckMicroserviceResponse(RestResponse response);
         void CheckIfResourcePaymentsIsNull(List<ResourcePayment> resourcePayments);
     }
 }

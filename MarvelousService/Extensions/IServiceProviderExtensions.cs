@@ -3,9 +3,8 @@ using MarvelousService.API.Configuration;
 using MarvelousService.API.Producer;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.BusinessLayer.Configurations;
-using MarvelousService.BusinessLayer.Helpers;
-using MarvelousService.BusinessLayer.Services;
-using MarvelousService.BusinessLayer.Services.Interfaces;
+using MarvelousService.BusinessLayer.Clients;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using MassTransit;
@@ -13,6 +12,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
+using MassTransit;
+using Marvelous.Contracts.ExchangeModels;
+using MarvelousService.API.Producer.Interface;
+using MarvelousService.API.Producer;
+using MarvelousService.BusinessLayer.Helpers;
 
 namespace MarvelousService.API.Extensions
 {
@@ -49,6 +53,10 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IRoleStrategy, AdminRoleStrategy>();
             services.AddScoped<IRoleStrategy, UknownRoleStrategy>();
             services.AddScoped<IRoleStrategy, VIPRoleStrategy>();
+            services.AddScoped<IResourceProducer, ResourceProducer>();
+            services.AddScoped<ICheckErrorHelper, CheckErrorHelper>();
+            services.AddScoped<IRequestHelper, RequestHelper>();
+            services.AddTransient<IInitializeHelper, InitializeHelper>();
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -65,6 +73,12 @@ namespace MarvelousService.API.Extensions
                 loggingBuilder.SetMinimumLevel(LogLevel.Information);
                 loggingBuilder.AddNLog(config);
             });
+        }
+
+
+        public static void InitializeConfigs(this WebApplication app)
+        {
+            app.Services.CreateScope().ServiceProvider.GetRequiredService<IInitializeHelper>().InitializeConfig();
         }
 
         public static void RegisterSwaggerAuth(this IServiceCollection swagger)

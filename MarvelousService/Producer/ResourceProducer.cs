@@ -1,7 +1,7 @@
 ﻿using Marvelous.Contracts.ExchangeModels;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.BusinessLayer;
-using MarvelousService.BusinessLayer.Services.Interfaces;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MassTransit;
 
 namespace MarvelousService.API.Producer

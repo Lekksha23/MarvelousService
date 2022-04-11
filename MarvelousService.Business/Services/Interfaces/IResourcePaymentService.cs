@@ -1,6 +1,6 @@
 ﻿using MarvelousService.BusinessLayer.Models;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public interface IResourcePaymentService
     {

@@ -2,7 +2,7 @@
 using MarvelousService.BusinessLayer.Exceptions;
 using Microsoft.Extensions.Logging;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public class CRMService : ICRMService
     {

@@ -1,3 +1,4 @@
+using Marvelous.Contracts.Enums;
 using MarvelousService.API.Extensions;
 using MarvelousService.API.Infrastructure;
 using MarvelousService.DataLayer.Configuration;
@@ -5,6 +6,10 @@ using MarvelousService.DataLayer.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 string _logDirectoryVariableName = "LOG_DIRECTORY";
 string _connectionStringVariableName = "SERVICE_CONNECTION_STRING";
+
+string confServise = "https://piter-education.ru:6040";
+string autxService = "https://piter-education.ru:6042";
+
 
 string logDirectory = builder.Configuration.GetValue<string>(_logDirectoryVariableName);
 string connString = builder.Configuration.GetValue<string>(_connectionStringVariableName);
@@ -41,6 +46,10 @@ builder.Services.AddMassTransit();
 var app = builder.Build();
 
 
+app.Configuration[Microservice.MarvelousConfigs.ToString()] = confServise;
+
+app.Configuration[Microservice.MarvelousAuth.ToString()] = autxService;
+
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
@@ -53,5 +62,5 @@ app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandler>();
 
 app.MapControllers();
-
+app.InitializeConfigs();
 app.Run();

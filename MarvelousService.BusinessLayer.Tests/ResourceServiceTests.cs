@@ -1,7 +1,7 @@
 using AutoMapper;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Services;
+using MarvelousService.BusinessLayer.Clients;
 using MarvelousService.BusinessLayer.Tests.TestCaseSource;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories.Interfaces;
@@ -19,7 +19,7 @@ namespace MarvelousService.BusinessLayer.Tests
         private readonly ResourceServiceTestCaseSource _resourceTest;
         private readonly IMapper _autoMapper;
         private readonly Mock<ILogger<ResourceService>> _logger;
-        private readonly Mock<IHelper> _helper;
+        private readonly Mock<ICheckErrorHelper> _helper;
 
         public ResourceServiceTests()
         {
@@ -27,7 +27,7 @@ namespace MarvelousService.BusinessLayer.Tests
             _resourceTest = new ResourceServiceTestCaseSource();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _logger = new Mock<ILogger<ResourceService>>();
-            _helper = new Mock<IHelper>();
+            _helper = new Mock<ICheckErrorHelper>();
         }
 
         [SetUp]

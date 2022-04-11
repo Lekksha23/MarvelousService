@@ -2,12 +2,12 @@
 using Marvelous.Contracts.Enums;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Services.Interfaces;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Enums;
 using MarvelousService.DataLayer.Repositories;
 
-namespace MarvelousService.BusinessLayer.Services
+namespace MarvelousService.BusinessLayer.Clients
 {
     public class LeadResourceService : ILeadResourceService
     {
@@ -16,7 +16,7 @@ namespace MarvelousService.BusinessLayer.Services
         private readonly ICRMService _crmService;
         private readonly ITransactionService _transactionService;
         private readonly IMapper _mapper;
-        private readonly IHelper _helper;
+        private readonly ICheckErrorHelper _helper;
         private IRoleStrategy _roleStrategy;
         private readonly IRoleStrategyProvider _roleStrategyProvider;
 
@@ -28,7 +28,7 @@ namespace MarvelousService.BusinessLayer.Services
             IRoleStrategy roleStrategy,
             IRoleStrategyProvider roleStrategyProvider,
             IMapper mapper,
-            IHelper helper)
+            ICheckErrorHelper helper)
         {
             _leadResourceRepository = LeadResourceRepository;
             _resourcePaymentRepository = resourcePaymentRepository;

@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Marvelous.Contracts.Enums;
 using MarvelousService.API.Models;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Services.Interfaces;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -10,22 +11,25 @@ namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/leadResources")]
-    public class LeadResourcesController : Controller
+    public class LeadResourcesController : ControllerExtensions
     {
         private readonly ILeadResourceService _leadResourceService;
         private readonly IResourceService _resourceService;
         private readonly IMapper _autoMapper;
         private readonly ILogger<ResourcesController> _logger;
+        private readonly IRequestHelper _requestHelper;
 
         public LeadResourcesController(
-            IMapper autoMapper, 
+            IMapper autoMapper,
             ILeadResourceService leadResource,
             IResourceService resourceService,
-            ILogger<ResourcesController> logger)
+            IRequestHelper requestHelper,
+            ILogger<ResourcesController> logger) : base(requestHelper, logger)
         {
             _leadResourceService = leadResource;
             _resourceService = resourceService;
             _autoMapper = autoMapper;
+            _requestHelper = requestHelper;
             _logger = logger;
         }
 
@@ -34,17 +38,17 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        [SwaggerOperation("Add resource to a lead")]
+        [SwaggerOperation("Add a resource to a lead")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-            //var leadIdentity = this.GetLeadFromToken();
-            //_logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadIdentity.Id}.");
+            var lead = await CheckRole(Role.Regular, Role.Vip); 
+            _logger.LogInformation($"Access to the method for lead {lead} granted");
+            _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead}.");
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
             leadResourceModel.Resource = resource.Result;
-            //leadResourceModel.LeadId = leadIdentity.Id;
-            //Role role = leadIdentity.Role;
             var id = await _leadResourceService.AddLeadResource(leadResourceModel, Role.Vip);
+            var id = await _leadResourceService.AddLeadResource(leadResourceModel, 2);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 

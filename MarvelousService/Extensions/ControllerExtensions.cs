@@ -1,25 +1,33 @@
 ﻿using Marvelous.Contracts.Enums;
-using MarvelousService.API.Models;
+using Marvelous.Contracts.ResponseModels;
+using MarvelousService.BusinessLayer.Exceptions;
+using MarvelousService.BusinessLayer.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace MarvelousService.API.Extensions
 {
-    public static class ControllerExtensions
+    public class ControllerExtensions : Controller
     {
-        public static LeadIdentity GetLeadFromToken(this Controller controller)
+        private readonly IRequestHelper _requestHelper;
+        private readonly ILogger _logger;
+
+        public ControllerExtensions(IRequestHelper reqvestHelper, ILogger logger)
         {
-            var identity = controller.HttpContext.User.Identity as ClaimsIdentity;
-            var leadIdentity = new LeadIdentity();
-            leadIdentity.Id = int.Parse(identity.Claims.ToList()
-                .Where(c => c.Type == ClaimTypes.UserData)
-                .Select(c => c.Value)
-                .SingleOrDefault());
-            leadIdentity.Role = Enum.Parse<Role>(identity.Claims.ToList()
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .SingleOrDefault());
-            return leadIdentity;
+            _requestHelper = reqvestHelper;
+            _logger = logger;
+        }
+
+        protected async Task<int> CheckRole(params Role[] roles)
+        {
+            _logger.LogInformation($"Query for validation of token in the IdentityService");
+            var lead = await _requestHelper.SendRequestToValidateToken(HttpContext.Request.Headers.Authorization.First());
+            var leadRole = lead.Data.Role;
+            if (!roles.Select(r => r.ToString()).Contains(leadRole))
+            {
+                _logger.LogError($"User with role:{leadRole} don't have acces to the method");
+                throw new ForbiddenException($"User with role:{leadRole} don't have acces to this method");
+            }
+            return lead.Data.Id.Value;
         }
     }
 }
