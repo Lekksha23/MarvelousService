@@ -41,7 +41,7 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Add a resource to a lead")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-            var lead = await CheckRole(Role.Regular, Role.Vip);
+            var lead = await CheckRole(Role.Regular, Role.Vip); 
             _logger.LogInformation($"Access to the method for lead {lead} granted");
             _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead}.");
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
@@ -53,7 +53,6 @@ namespace MarvelousService.API.Controllers
 
         //api/leadResources
         [HttpGet("id")]
-        [AuthorizeRole(Role.Regular, Role.Vip)]
         [SwaggerOperation("Get lead resources by id")]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<LeadResourceResponse>))]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesById(int id)
