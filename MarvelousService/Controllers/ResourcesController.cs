@@ -13,6 +13,7 @@ namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/resources")]
+    [SwaggerTag("Access only for admins.")]
     public class ResourcesController : ControllerExtensions
     {
         private readonly IResourceService _resourceService;

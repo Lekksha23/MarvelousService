@@ -6,6 +6,7 @@ using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Clients.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using MarvelousService.API.Extensions;
 
 namespace MarvelousService.API.Controllers
 {
@@ -38,7 +39,7 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        [SwaggerOperation("Add a resource to a lead")]
+        [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
             var lead = await CheckRole(Role.Regular, Role.Vip); 
@@ -48,17 +49,16 @@ namespace MarvelousService.API.Controllers
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
             leadResourceModel.Resource = resource.Result;
             var id = await _leadResourceService.AddLeadResource(leadResourceModel, Role.Vip);
-            var id = await _leadResourceService.AddLeadResource(leadResourceModel, 2);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
         //api/leadResources
         [HttpGet("id")]
-        [SwaggerOperation("Get lead resources by id")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<LeadResourceResponse>))]
+        [SwaggerOperation("Get lead resources by id. Roles: Anonymous.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesById(int id)
         {
             _logger.LogInformation($"Request for getting all lead resources with id {id}");
@@ -70,10 +70,10 @@ namespace MarvelousService.API.Controllers
 
         //api/leadResources
         [HttpGet("payDate")]
-        [SwaggerOperation("Get lead resources by pay date")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<LeadResourceByPayDateResponse>))]
+        [SwaggerOperation("Get lead resources by pay date. Roles: Anonymous")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesByPayDate([FromQuery] DateTime payDate)
         {
             _logger.LogInformation($"Request for getting all lead resources with pay date {payDate}");
