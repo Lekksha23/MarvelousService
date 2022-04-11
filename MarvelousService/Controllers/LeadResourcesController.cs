@@ -42,8 +42,8 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
             var lead = await CheckRole(Role.Regular, Role.Vip);
-            _logger.LogInformation($"Access to the method for lead {lead.Id} granted");
-            _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead.Id}.");
+            _logger.LogInformation($"Access to the method for lead {lead} granted");
+            _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead}.");
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
             leadResourceModel.Resource = resource.Result;

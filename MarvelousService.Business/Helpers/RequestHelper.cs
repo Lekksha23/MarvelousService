@@ -50,7 +50,7 @@ namespace MarvelousService.BusinessLayer.Helpers
             var request = new RestRequest(AuthEndpoints.ApiAuth + AuthEndpoints.ValidationFront);
             var client = new RestClient(_config[Microservice.MarvelousAuth.ToString()]);
             client.Authenticator = new MarvelousAuthenticator(jwtToken);
-            client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousTransactionStore.ToString());
+            client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
             var response = await client.ExecuteAsync<IdentityResponseModel>(request);
             CheckMicroserviceResponse(response);
             return response;
