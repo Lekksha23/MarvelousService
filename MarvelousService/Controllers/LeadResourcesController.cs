@@ -49,6 +49,7 @@ namespace MarvelousService.API.Controllers
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
             leadResourceModel.Resource = resource.Result;
+            leadResourceModel.LeadId = (int)lead.Id;
             var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
             return StatusCode(StatusCodes.Status201Created, id);
         }

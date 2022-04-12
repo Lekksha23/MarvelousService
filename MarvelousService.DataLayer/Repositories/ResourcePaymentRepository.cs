@@ -29,8 +29,8 @@ namespace MarvelousService.DataLayer.Repositories
                     _insertProcedure,
                     new
                     {
-                        LeadResourceId = leadResourceId,
-                        TransactionId = transactionId
+                        leadResourceId,
+                        transactionId
                     },
                     commandType: CommandType.StoredProcedure
                 );
