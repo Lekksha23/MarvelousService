@@ -1,4 +1,5 @@
-﻿using MarvelousService.BusinessLayer.Helpers;
+﻿using Marvelous.Contracts.Autentificator;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Models.CRMModels;
 using RestSharp;
@@ -9,8 +10,7 @@ namespace MarvelousService.BusinessLayer.Clients
     {
         private readonly RestClient _client;
         private readonly IRequestHelper _requestHelper;
-        private const string _url = "https://piter-education.ru:5050";
-        private const string _loginPath = "/api/auth/login/";
+        private const string _url = "https://piter-education.ru:5050"; // Get from IConfiguration
         private const string _addLeadPath = "/api/leads/";
         private const string _getAccountByLeadIdPath = "/api/accounts/";
 
@@ -20,8 +20,9 @@ namespace MarvelousService.BusinessLayer.Clients
             _requestHelper = requestHelper;
         }
 
-        public async Task<List<AccountModel>> GetLeadAccounts()
+        public async Task<List<AccountModel>> GetLeadAccounts(string jwtToken)
         {
+            _client.Authenticator = new MarvelousAuthenticator(jwtToken);
             var request = new RestRequest(_getAccountByLeadIdPath, Method.Get);
             var response = await _client.ExecuteAsync<List<AccountModel>>(request);
             _requestHelper.CheckMicroserviceResponse(response);

@@ -45,7 +45,7 @@ namespace MarvelousService.BusinessLayer.Helpers
             return response;
         }
 
-        public async Task<RestResponse<IdentityResponseModel>> SendRequestToValidateToken(string jwtToken) // Когда Токен есть
+        public async Task<RestResponse<IdentityResponseModel>> SendRequestToValidateToken(string jwtToken)
         {
             var request = new RestRequest(AuthEndpoints.ApiAuth + AuthEndpoints.ValidationFront);
             var client = new RestClient(_config[Microservice.MarvelousAuth.ToString()]);
@@ -67,7 +67,7 @@ namespace MarvelousService.BusinessLayer.Helpers
                 case HttpStatusCode.ServiceUnavailable:
                     throw new ServiceUnavailableException($"Service Unavailable {response.ErrorException!.Message}");
                 default:
-                    throw new BadGatewayException($"Error  {response.ErrorException!.Message}");
+                    throw new BadGatewayException($"Error {response.ErrorException!.Message}");
             }
             if (response.Content == null)
                 throw new BadGatewayException($"Content equal's null {response.ErrorException!.Message}");

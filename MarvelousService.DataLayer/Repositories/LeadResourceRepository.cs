@@ -35,7 +35,7 @@ namespace MarvelousService.DataLayer.Repositories
                     leadResource.Price,
                     leadResource.Status,
                     leadResource.LeadId,
-                    leadResource.Resource.Id,
+                    ResourceId = leadResource.Resource.Id,
                 },
                 commandType: CommandType.StoredProcedure);
 

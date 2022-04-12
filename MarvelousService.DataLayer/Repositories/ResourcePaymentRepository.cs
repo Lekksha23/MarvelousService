@@ -18,7 +18,7 @@ namespace MarvelousService.DataLayer.Repositories
             _logger = logger;
         }
 
-        public async Task<int> AddResourcePayment(LeadResource leadResource, long transactionId)
+        public async Task<int> AddResourcePayment(int leadResourceId, long transactionId)
         {
             _logger.LogInformation("Query for adding a resource payment");
             _logger.LogInformation("Connecting to the MarvelousService.DB.");
@@ -29,7 +29,7 @@ namespace MarvelousService.DataLayer.Repositories
                     _insertProcedure,
                     new
                     {
-                        leadResource.Id,
+                        leadResourceId,
                         transactionId
                     },
                     commandType: CommandType.StoredProcedure

@@ -17,9 +17,9 @@ namespace MarvelousService.API.Extensions
             _logger = logger;
         }
 
-        protected async Task<int> CheckRole(params Role[] roles)
+        protected async Task<IdentityResponseModel> CheckRole(params Role[] roles)
         {
-            _logger.LogInformation($"Query for validation of token in the IdentityService");
+            _logger.LogInformation($"Query for checking role in the IdentityService");
             var lead = await _requestHelper.SendRequestToValidateToken(HttpContext.Request.Headers.Authorization.First());
             var leadRole = lead.Data.Role;
             if (!roles.Select(r => r.ToString()).Contains(leadRole))
@@ -27,7 +27,7 @@ namespace MarvelousService.API.Extensions
                 _logger.LogError($"User with role:{leadRole} don't have acces to the method");
                 throw new ForbiddenException($"User with role:{leadRole} don't have acces to this method");
             }
-            return lead.Data.Id.Value;
+            return lead.Data;
         }
     }
 }
