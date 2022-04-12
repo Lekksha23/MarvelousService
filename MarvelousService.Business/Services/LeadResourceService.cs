@@ -15,10 +15,10 @@ namespace MarvelousService.BusinessLayer.Clients
         private readonly IResourcePaymentRepository _resourcePaymentRepository;
         private readonly ICRMService _crmService;
         private readonly ITransactionService _transactionService;
-        private readonly IMapper _mapper;
-        private readonly ICheckErrorHelper _helper;
         private IRoleStrategy _roleStrategy;
         private readonly IRoleStrategyProvider _roleStrategyProvider;
+        private readonly IMapper _mapper;
+        private readonly ICheckErrorHelper _helper;
 
         public LeadResourceService(
             ILeadResourceRepository LeadResourceRepository,
@@ -40,16 +40,17 @@ namespace MarvelousService.BusinessLayer.Clients
             _helper = helper;
         }
 
-        public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role)
+        public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role, string jwtToken)
         {
             leadResourceModel.Price = leadResourceModel.CountPrice();
             GiveDiscountIfLeadIsVIP(leadResourceModel, role);  
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
-            var accountId = await _crmService.GetIdOfRubLeadAccount();
+            var accountId = await _crmService.GetIdOfRubLeadAccount(jwtToken);
             var transactionId = await _transactionService.AddResourceTransaction(accountId, leadResourceModel.Price);
-            await _resourcePaymentRepository.AddResourcePayment(leadResource, transactionId);
             leadResource.Status = Status.Active;
-            return await _leadResourceRepository.AddLeadResource(leadResource);
+            var leadResourceId = await _leadResourceRepository.AddLeadResource(leadResource);
+            await _resourcePaymentRepository.AddResourcePayment(leadResourceId, transactionId);
+            return leadResourceId;
         }
 
         public async Task<List<LeadResourceModel>> GetByLeadId(int id)

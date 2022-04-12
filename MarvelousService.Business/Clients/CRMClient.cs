@@ -1,4 +1,5 @@
-﻿using MarvelousService.BusinessLayer.Helpers;
+﻿using Marvelous.Contracts.Autentificator;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Models.CRMModels;
 using RestSharp;
@@ -20,8 +21,9 @@ namespace MarvelousService.BusinessLayer.Clients
             _requestHelper = requestHelper;
         }
 
-        public async Task<List<AccountModel>> GetLeadAccounts()
+        public async Task<List<AccountModel>> GetLeadAccounts(string jwtToken)
         {
+            _client.Authenticator = new MarvelousAuthenticator(jwtToken);
             var request = new RestRequest(_getAccountByLeadIdPath, Method.Get);
             var response = await _client.ExecuteAsync<List<AccountModel>>(request);
             _requestHelper.CheckMicroserviceResponse(response);

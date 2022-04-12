@@ -15,12 +15,12 @@ namespace MarvelousService.BusinessLayer.Clients
             _logger = logger;
         }
 
-        public async Task<int> GetIdOfRubLeadAccount()
+        public async Task<int> GetIdOfRubLeadAccount(string jwtToken)
         {
             var count = 0;
             var accountId = 0;
             _logger.LogInformation("Query for getting all Accounts for Lead from CRM");
-            var leadAccounts = await _crmClient.GetLeadAccounts();
+            var leadAccounts = await _crmClient.GetLeadAccounts(jwtToken);
             _logger.LogInformation("All Accounts for Lead from CRM were received");
             for (int i = 0; i < leadAccounts.Count; i++)
             {
