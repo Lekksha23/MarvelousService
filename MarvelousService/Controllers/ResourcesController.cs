@@ -45,7 +45,6 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<int>> AddResource([FromBody] ResourceInsertRequest serviceInsertRequest)
         {
             _logger.LogInformation($"Received a request to add a new resource.");
-            _logger.LogInformation($"Check Role.");
             var lead = await CheckRole(Role.Admin);
             _logger.LogInformation($"Role - {lead} successfully verified.");
             var resourceModel = _autoMapper.Map<ResourceModel>(serviceInsertRequest);
@@ -65,7 +64,6 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<ResourceResponse>> GetResourceById(int id)
         {
             _logger.LogInformation($"Request for getting a resource by id {id}");
-            _logger.LogInformation($"Check Role.");
             var lead = await CheckRole(Role.Admin);
             _logger.LogInformation($"Role - {lead} successfully verified.");
             var resourceModel = await _resourceService.GetResourceById(id);
@@ -85,7 +83,6 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<ResourceResponse>> GetAllResources()
         {
             _logger.LogInformation($"Request for receiving all resources");
-            _logger.LogInformation($"Check Role.");
             var lead = await CheckRole(Role.Admin);
             _logger.LogInformation($"Role - {lead} successfully verified.");
             var resourceModels = await _resourceService.GetAllResources();
@@ -104,7 +101,6 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<ResourceResponse>> GetActiveResource()
         {
             _logger.LogInformation($"Request for receiving all resources");
-            _logger.LogInformation($"Check Role.");
             var lead = await CheckRole(Role.Admin);
             _logger.LogInformation($"Role - {lead} successfully verified.");
             var resourceModels = await _resourceService.GetActiveResourceService();
@@ -123,7 +119,6 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<ResourceResponse>> UpdateResource(int id, ResourceUpdateRequest serviceUpdateRequest)
         {
             _logger.LogInformation($"Request for updating a resource with id {id}.");
-            _logger.LogInformation($"Check Role.");
             var lead = await CheckRole(Role.Admin);
             _logger.LogInformation($"Role - {lead} successfully verified.");
             ResourceModel resource = _autoMapper.Map<ResourceModel>(serviceUpdateRequest);
@@ -143,7 +138,6 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<ResourceResponse>> SoftDelete(int id, ResourceSoftDeleteRequest serviceDeletedRequest)
         {
             _logger.LogInformation($"Request for deletion a resource with id {id}.");
-            _logger.LogInformation($"Check Role.");
             var lead = await CheckRole(Role.Admin);
             _logger.LogInformation($"Role - {lead} successfully verified.");
             ResourceModel service = _autoMapper.Map<ResourceModel>(serviceDeletedRequest);

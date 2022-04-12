@@ -19,7 +19,7 @@ namespace MarvelousService.API.Extensions
 
         protected async Task<IdentityResponseModel> CheckRole(params Role[] roles)
         {
-            _logger.LogInformation($"Query for validation of token in the IdentityService");
+            _logger.LogInformation($"Query for checking role in the IdentityService");
             var lead = await _requestHelper.SendRequestToValidateToken(HttpContext.Request.Headers.Authorization.First());
             var leadRole = lead.Data.Role;
             if (!roles.Select(r => r.ToString()).Contains(leadRole))

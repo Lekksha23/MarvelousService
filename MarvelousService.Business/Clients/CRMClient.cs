@@ -10,8 +10,7 @@ namespace MarvelousService.BusinessLayer.Clients
     {
         private readonly RestClient _client;
         private readonly IRequestHelper _requestHelper;
-        private const string _url = "https://piter-education.ru:5050";
-        private const string _loginPath = "/api/auth/login/";
+        private const string _url = "https://piter-education.ru:5050"; // Get from IConfiguration
         private const string _addLeadPath = "/api/leads/";
         private const string _getAccountByLeadIdPath = "/api/accounts/";
 
