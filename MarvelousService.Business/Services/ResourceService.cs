@@ -26,6 +26,9 @@ namespace MarvelousService.BusinessLayer.Clients
         public async Task<int> AddResource(ResourceModel resourceModel)
         {
             _logger.LogInformation("Request for adding a resource");
+            _logger.LogInformation($"Request for getting a resource by id {resourceModel.Id}");
+            var oldService = await _resourceRepository.GetResourceById(resourceModel.Id);
+            _helper.CheckIfEntityIsNotNull(resourceModel.Id, oldService);
             var resource = _mapper.Map<Resource>(resourceModel);
             resource.IsDeleted = false;
             var newResource = await _resourceRepository.AddResource(resource);

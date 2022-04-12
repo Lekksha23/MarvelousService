@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using MarvelousService.BusinessLayer.Exceptions;
 
 namespace MarvelousService.BusinessLayer.Tests
 {
@@ -160,6 +161,19 @@ namespace MarvelousService.BusinessLayer.Tests
 
         }
 
+        //[Test]
+        //public async Task AddServiceNegativeTest()
+        //{
+        //    //given
+        //    var resourceModel = _resourceTest.AddServiceModelTest(); 
+        //    var resource = new Resource();
+        //    _resourceRepositoryMock.Setup(m => m.GetResourceById(1));
+        //    _helper.Setup(m => m.CheckIfEntityIsNotNull(resourceModel.Id,resourceModel)); 
+        //    var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+
+        //    //then
+        //    Assert.ThrowsAsync<DuplicationException>(async () => await sut.AddResource(resourceModel));
+        //}
 
 
     }

@@ -58,7 +58,7 @@ namespace MarvelousService.API.Producer
 
         public async Task NotifyLeadResourceAdded(int id)
         {
-            var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
+            var busControlfromLead = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
                 cfg.Host("rabbitmq://80.78.240.16", hst =>
                 {
@@ -69,17 +69,20 @@ namespace MarvelousService.API.Producer
 
             });
 
-            var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            var sourceLead = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
-            await busControl.StartAsync(source.Token);
+            await busControlfromLead.StartAsync(sourceLead.Token);
             try
             {
-                var resource = await _leadResource.GetById(id);
+                var  leadService = await _leadResource.GetById(id);
 
-                await busControl.Publish<ServiceExchangeModel>(new
+                await busControlfromLead.Publish<LeadResourceExchangeModel>(new
                 {
-                   
-
+                    Id = leadService.Id,
+                    Period = leadService.Period,
+                    Status = leadService.Status,
+                    LeadId = leadService.LeadId,
+                    Price = leadService.Price
 
                 });
                 _logger.LogInformation("Resource published");
@@ -87,7 +90,7 @@ namespace MarvelousService.API.Producer
             }
             finally
             {
-                await busControl.StopAsync();
+                await busControlfromLead.StopAsync();
             }
 
         }
