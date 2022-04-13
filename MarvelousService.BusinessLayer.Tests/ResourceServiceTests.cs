@@ -31,7 +31,7 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [SetUp]
-        public async Task Setup()
+        public void Setup()
         {
             _resourceRepositoryMock = new Mock<IResourceRepository>();
         }
@@ -46,7 +46,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
             int role = 3;
             //when
-            sut.AddResource(resourceModel);
+            await sut.AddResource(resourceModel);
 
             //then
             _resourceRepositoryMock.Verify(m => m.AddResource(It.IsAny<Resource>()), Times.Once());
@@ -61,7 +61,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
 
             //when
-            sut.UpdateResource(1, new ResourceModel());
+            await sut.UpdateResource(1, new ResourceModel());
 
             //then
             _resourceRepositoryMock.Verify(m => m.GetResourceById(It.IsAny<int>()), Times.Once());
@@ -77,7 +77,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
 
             //when
-            sut.SoftDelete(1, new ResourceModel());
+            await sut.SoftDelete(1, new ResourceModel());
 
             //then
             _resourceRepositoryMock.Verify(m => m.GetResourceById(It.IsAny<int>()), Times.Once());
@@ -94,7 +94,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
 
             //when
-            var actual = sut.GetResourceById(It.IsAny<int>()).Result;
+            var actual = await sut.GetResourceById(It.IsAny<int>());
 
             //then
             Assert.IsNotNull(actual);
@@ -103,7 +103,6 @@ namespace MarvelousService.BusinessLayer.Tests
             Assert.IsNotNull(actual.Price);
             Assert.IsNotNull(actual.IsDeleted);
             Assert.IsNotNull(actual.Description);
-
         }
 
         [Test]
@@ -115,7 +114,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
 
             //when
-            var actual = sut.GetAllResources().Result;
+            var actual = await sut.GetAllResources();
 
             //then
             Assert.IsNotNull(actual);
@@ -130,7 +129,6 @@ namespace MarvelousService.BusinessLayer.Tests
                 Assert.IsNotNull(actual[i].IsDeleted);
                 Assert.IsNotNull(actual[i].Description);
             }
-            
         }
 
         [Test]
@@ -142,7 +140,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
 
             //when
-            var actual = sut.GetActiveResourceService().Result;
+            var actual = await sut.GetActiveResourceService();
 
             //then
             Assert.IsNotNull(actual);
@@ -157,10 +155,6 @@ namespace MarvelousService.BusinessLayer.Tests
                 Assert.IsNotNull(actual[i].IsDeleted);
                 Assert.IsNotNull(actual[i].Description);
             }
-
         }
-
-
-
     }
 }
