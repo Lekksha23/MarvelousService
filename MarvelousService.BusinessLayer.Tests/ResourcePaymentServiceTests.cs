@@ -17,9 +17,9 @@ namespace MarvelousService.BusinessLayer.Tests
     {
         private Mock<IResourcePaymentRepository> _resourcePaymentRepositoryMock;
         private readonly ResourcePaymentTestData _resourcePaymentTestData;
-        private readonly IMapper _autoMapper;
         private readonly Mock<ILogger<ResourcePaymentService>> _logger;
         private readonly Mock<ICheckErrorHelper> _helperMock;
+        private readonly IMapper _autoMapper;
 
         public ResourcePaymentServiceTests()
         {
@@ -36,34 +36,34 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task GetServicePaymentsById_ShouldReturnListOfPayments()
+        public async Task GetResourcePaymentsById_ShouldReturnListOfPayments()
         {
             // given
+            var leadResourceId = 23;
             var listOfResourcePayments = _resourcePaymentTestData.GetListOfServicePaymentsForTests();
-            _resourcePaymentRepositoryMock.Setup(m => m.GetResourcePaymentsByLeadResourceId(It.IsAny<int>())).ReturnsAsync(listOfResourcePayments);
+            _resourcePaymentRepositoryMock.Setup(m => m.GetResourcePaymentsByLeadResourceId(leadResourceId)).ReturnsAsync(listOfResourcePayments);
             var sut = new ResourcePaymentService(_resourcePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
 
             // when
-            var actual = await sut.GetResourcePaymentsById(23);
+            var actual = await sut.GetResourcePaymentsById(leadResourceId);
 
             // then
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Count > 0);
             Assert.IsTrue(actual.Count == listOfResourcePayments.Count);
-            _resourcePaymentRepositoryMock.Verify(m => m.GetResourcePaymentsByLeadResourceId(It.IsAny<int>()), Times.Once());
+            _resourcePaymentRepositoryMock.Verify(m => m.GetResourcePaymentsByLeadResourceId(leadResourceId), Times.Once());
         }
 
         [Test]
-        public async Task GetServicePaymentsById_ShouldThrowNotFoundServiceException()
+        public async Task GetResourcePaymentsById_ShouldThrowNotFoundServiceException()
         {
             // given 
-            _resourcePaymentRepositoryMock.Setup(m => m.GetResourcePaymentsByLeadResourceId(It.IsAny<int>())).ReturnsAsync((List<ResourcePayment>)null);
+            var leadResourceId = 23;
+            _resourcePaymentRepositoryMock.Setup(m => m.GetResourcePaymentsByLeadResourceId(leadResourceId)).ReturnsAsync((List<ResourcePayment>)null);
             var sut = new ResourcePaymentService(_resourcePaymentRepositoryMock.Object, _autoMapper, _logger.Object);
 
-            // when
-
             // then
-            Assert.ThrowsAsync<NotFoundServiceException>(async () => await sut.GetResourcePaymentsById(It.IsAny<int>()));
+            Assert.ThrowsAsync<NotFoundServiceException>(async () => await sut.GetResourcePaymentsById(leadResourceId));
         }
     }
 }

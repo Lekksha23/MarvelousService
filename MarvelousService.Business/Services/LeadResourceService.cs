@@ -43,7 +43,7 @@ namespace MarvelousService.BusinessLayer.Clients
         public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role, string jwtToken)
         {
             leadResourceModel.Price = leadResourceModel.CountPrice();
-            GiveDiscountIfLeadIsVIP(leadResourceModel, role);  
+            GiveDiscountIfLeadIsVip(leadResourceModel, role);  
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
             var accountId = await _crmService.GetIdOfRubLeadAccount(jwtToken);
             var transactionId = await _transactionService.AddResourceTransaction(accountId, leadResourceModel.Price);
@@ -73,7 +73,7 @@ namespace MarvelousService.BusinessLayer.Clients
             return _mapper.Map<List<LeadResourceModel>>(leadResource);
         }
 
-        private void GiveDiscountIfLeadIsVIP(LeadResourceModel leadResourceModel, Role role)
+        private void GiveDiscountIfLeadIsVip(LeadResourceModel leadResourceModel, Role role)
         {
             _roleStrategy = _roleStrategyProvider.GetStrategy((int)role);
             _roleStrategy.GiveLeadDiscount(leadResourceModel, role);
