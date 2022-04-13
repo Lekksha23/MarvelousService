@@ -52,7 +52,7 @@ namespace MarvelousService.DataLayer.Repositories
                     resourcePayment.LeadResource = leadResource;
                     return resourcePayment;
                 },
-                new { Id = leadResourceId },
+                new { LeadResourceId = leadResourceId },
                 splitOn: "LeadResourceId",
                 commandType: CommandType.StoredProcedure);
 
