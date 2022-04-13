@@ -151,9 +151,9 @@ namespace MarvelousService.API.Extensions
                     {
                         p.BindAlternateExchangeQueue("Resource-exchange", "Resource-queue");
                     });
-                    cfg.Publish<LeadResourceExchangeModel>(p =>
+                    cfg.Publish<LeadResourceExchangeModel>(l =>
                     {
-                        p.BindAlternateExchangeQueue("LeadResource-exchange", "LeadResource-queue");
+                        l.BindAlternateExchangeQueue("LeadResource-exchange", "LeadResource-queue");
                     });
                 });
             });

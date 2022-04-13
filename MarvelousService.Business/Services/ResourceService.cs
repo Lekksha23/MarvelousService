@@ -5,6 +5,7 @@ using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
+using MarvelousService.BusinessLayer.Exceptions;
 
 namespace MarvelousService.BusinessLayer.Clients
 {
@@ -27,8 +28,12 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             _logger.LogInformation("Request for adding a resource");
             _logger.LogInformation($"Request for getting a resource by id {resourceModel.Id}");
-            var oldService = await _resourceRepository.GetResourceById(resourceModel.Id);
-            _helper.CheckIfEntityIsNotNull(resourceModel.Id, oldService);
+            var oldService =  _resourceRepository.GetResourceById(resourceModel.Id);
+            if (oldService != null)
+            {
+                _logger.LogError($"Error in receiving {oldService} by Id {oldService.Id}");
+                throw new DuplicationException($"{oldService} with Id {oldService.Id} already exists.");
+            }
             var resource = _mapper.Map<Resource>(resourceModel);
             resource.IsDeleted = false;
             var newResource = await _resourceRepository.AddResource(resource);

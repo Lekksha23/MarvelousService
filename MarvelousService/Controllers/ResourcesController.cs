@@ -101,7 +101,7 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<ResourceResponse>> GetActiveResource()
         {
             _logger.LogInformation($"Request for receiving all resources");
-            var lead = await CheckRole(Role.Admin);
+            var lead = await CheckRole(Role.Admin,Role.Regular,Role.Vip);
             _logger.LogInformation($"Role - {lead} successfully verified.");
             var resourceModels = await _resourceService.GetActiveResourceService();
             var result = _autoMapper.Map<List<ResourceResponse>>(resourceModels);

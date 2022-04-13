@@ -1,6 +1,5 @@
 ﻿using Marvelous.Contracts.ExchangeModels;
 using MarvelousService.API.Producer.Interface;
-using MarvelousService.BusinessLayer;
 using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MassTransit;
 
@@ -74,15 +73,15 @@ namespace MarvelousService.API.Producer
             await busControlfromLead.StartAsync(sourceLead.Token);
             try
             {
-                var  leadService = await _leadResource.GetById(id);
+                var  leadService = await _leadResource.GetByLeadId(id);
 
                 await busControlfromLead.Publish<LeadResourceExchangeModel>(new
                 {
-                    Id = leadService.Id,
-                    Period = leadService.Period,
-                    Status = leadService.Status,
-                    LeadId = leadService.LeadId,
-                    Price = leadService.Price
+                    //Id = leadService.Id,
+                    //Period = leadService.Period,
+                    //Status = leadService.Status,
+                    //LeadId = leadService.LeadId,
+                    //Price = leadService.Price
 
                 });
                 _logger.LogInformation("Resource published");
