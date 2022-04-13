@@ -52,14 +52,12 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var resources = connection.QueryAsync<Resource>(
+            var resources = await connection.QueryAsync<Resource>(
                 _getAllProcedure,
-                commandType: CommandType.StoredProcedure)
-                .Result
-                .ToList();
+                commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation("All resources were successfully recieved");
-            return resources;
+            return resources.ToList();
         }
 
         public async Task<Resource> GetResourceById(int id)

@@ -57,7 +57,7 @@ namespace MarvelousService.DataLayer.Repositories
                      return leadResource;
                  },
                 new
-                { Id = id },
+                { LeadId = id },
                 splitOn: "Id",
                 commandType: CommandType.StoredProcedure);
 
@@ -72,15 +72,13 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var leadResourceList = connection.QueryAsync<LeadResource>(
+            var leadResourceList = await connection.QueryAsync<LeadResource>(
                 _selectByPayDateProcedure,
                 new { PayDate = payDate },
-                commandType: CommandType.StoredProcedure)
-                .Result
-                .ToList();
+                commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Lead resources that need to be paid at {payDate} were received");
-            return leadResourceList;
+            return leadResourceList.ToList();
         }
 
         public async Task<LeadResource> GetLeadResourceById(int id)

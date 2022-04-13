@@ -5,7 +5,8 @@
         public int Id { get; set; }
         public int Period { get; set; }
         public decimal Price { get; set; }
+        public ResourceResponse Resource { get; set; }
+        public DateTime StartTime { get; set; } 
         public int Status { get; set; }
-        public int LeadId { get; set; }
     }
 }

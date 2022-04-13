@@ -71,6 +71,24 @@ namespace MarvelousService.API.Controllers
         }
 
         //api/leadResources
+        [HttpGet("leadId")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [SwaggerResponse(StatusCodes.Status200OK, "Successful", typeof(List<LeadResourceResponse>))]
+        [SwaggerOperation("Get lead resources by LeadId. Roles: VIP, Regular.")]
+        public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesByLeadId(int leadId2)
+        {
+            //var lead = await CheckRole(Role.Regular, Role.Vip);
+            //var leadId = (int)lead.Id;
+            _logger.LogInformation($"Request for getting all lead resources with LeadId {leadId2}");
+            var leadResourceModelList = await _leadResourceService.GetByLeadId(leadId2);
+            var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
+            _logger.LogInformation($"Lead resources were received by LeadId {leadId2}");
+            return Ok(result);
+        }
+
+        //api/leadResources
         [HttpGet("payDate")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
