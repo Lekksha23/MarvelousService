@@ -25,5 +25,14 @@ namespace MarvelousService.BusinessLayer.Clients
                 throw new NotFoundServiceException("Resource payment not found");
             }
         }
+
+        public void CheckIfEntityIsNotNull<T>(int id, T entity)
+        {
+            if (entity != null)
+            {
+                _logger.LogError($"Error in receiving {typeof(T).Name} by Id {id}");
+                throw new DuplicationException($"{typeof(T).Name} with Id {id} already exists.");
+            }
+        }
     }
 }
