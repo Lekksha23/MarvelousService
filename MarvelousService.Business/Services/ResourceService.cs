@@ -26,11 +26,7 @@ namespace MarvelousService.BusinessLayer.Clients
             _logger.LogInformation("Request for adding a resource");
             _logger.LogInformation($"Request for getting a resource by id {resourceModel.Id}");
             var oldService =  _resourceRepository.GetResourceById(resourceModel.Id);
-            if (oldService != null)
-            {
-                _logger.LogError($"Error in receiving {oldService} by Id {oldService.Id}");
-                throw new DuplicationException($"{oldService} with Id {oldService.Id} already exists.");
-            }
+            CheckErrorHelper.CheckIfEntityIsNotNull(oldService.Id, oldService);
             var resource = _mapper.Map<Resource>(resourceModel);
             resource.IsDeleted = false;
             var newResource = await _resourceRepository.AddResource(resource);
@@ -80,7 +76,8 @@ namespace MarvelousService.BusinessLayer.Clients
             var resourse = await _resourceRepository.GetAllResources();
             var tmp = _mapper.Map<List<ResourceModel>>(resourse);
             tmp.RemoveAll(t => t.IsDeleted == true);
-           
+            CheckErrorHelper.CheckIfResourceModelCountIsZero(tmp);
+
             return _mapper.Map<List<ResourceModel>>(tmp);
         }
     }
