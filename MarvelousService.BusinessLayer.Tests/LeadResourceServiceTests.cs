@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousService.BusinessLayer.Tests
 {
-    public class LeadResourceTests
+    public class LeadResourceServiceTests
     {
         private Mock<ILeadResourceRepository> _leadResourceRepositoryMock;
         private Mock<IResourcePaymentRepository> _resourcePaymentRepositoryMock;
@@ -23,12 +23,10 @@ namespace MarvelousService.BusinessLayer.Tests
         private Mock<ICRMService> _crmServiceMock;
         private readonly IRoleStrategy _roleStrategy;
         private readonly IRoleStrategyProvider _roleStrategyProvider;
-        private readonly LeadResourceTestData _leadResourceTestData;
         private readonly IMapper _autoMapper;
 
-        public LeadResourceTests()
+        public LeadResourceServiceTests()
         {
-            _leadResourceTestData = new LeadResourceTestData();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _roleStrategyProvider = new RoleStrategyProvider();
         }
@@ -48,10 +46,9 @@ namespace MarvelousService.BusinessLayer.Tests
             // given
             var expectedPrice = 3240.0M;
 
-            var leadResource = _leadResourceTestData.GetLeadResourceWithWeekPeriodForTests();
-            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithWeekPeriodForTests();
+            var leadResource = LeadResourceTestData.GetLeadResourceWithWeekPeriodForTests();
+            var leadResourceModel = LeadResourceTestData.GetLeadResourceModelWithWeekPeriodForTests();
             leadResource.Price = expectedPrice;
-            leadResource.Status = Status.Active;
             var token = "IndicativeToken";
             var leadResourceId = 23;
             var resourcePaymentId = 42;
@@ -79,8 +76,8 @@ namespace MarvelousService.BusinessLayer.Tests
             Assert.AreEqual(expectedPrice, leadResourceModel.Price);
             _crmServiceMock.Verify(m => m.GetIdOfRubLeadAccount(token), Times.Once());
             _transactionServiceMock.Verify(m => m.AddResourceTransaction(accountId, leadResourceModel.Price), Times.Once());
-            _leadResourceRepositoryMock.Verify(m => m.AddLeadResource(It.IsAny<LeadResource>()), Times.Once());
-            _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(0, transactionId), Times.Once());
+            _leadResourceRepositoryMock.Verify(m => m.AddLeadResource(leadResource), Times.Once());
+            _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(leadResourceId, transactionId), Times.Once());
         }
 
         [Test]
@@ -89,8 +86,8 @@ namespace MarvelousService.BusinessLayer.Tests
             // given
             var expectedPrice = 3600.0M;
 
-            var leadResource = _leadResourceTestData.GetLeadResourceWithWeekPeriodForTests();
-            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithWeekPeriodForTests();
+            var leadResource = LeadResourceTestData.GetLeadResourceWithWeekPeriodForTests();
+            var leadResourceModel = LeadResourceTestData.GetLeadResourceModelWithWeekPeriodForTests();
             leadResource.Price = expectedPrice;
             leadResource.Status = Status.Active;
             var token = "IndicativeToken";
@@ -130,8 +127,8 @@ namespace MarvelousService.BusinessLayer.Tests
             // given
             var expectedPrice = 1620.0M;
 
-            var leadResource = _leadResourceTestData.GetLeadResourceWithOneTimePeriodForTests();
-            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
+            var leadResource = LeadResourceTestData.GetLeadResourceWithOneTimePeriodForTests();
+            var leadResourceModel = LeadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
             leadResource.Price = expectedPrice;
             leadResource.Status = Status.Active;
             var token = "IndicativeToken";
@@ -171,8 +168,8 @@ namespace MarvelousService.BusinessLayer.Tests
             // given
             var expectedPrice = 1800.0M;
 
-            var leadResource = _leadResourceTestData.GetLeadResourceWithOneTimePeriodForTests();
-            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
+            var leadResource = LeadResourceTestData.GetLeadResourceWithOneTimePeriodForTests();
+            var leadResourceModel = LeadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
             leadResource.Price = expectedPrice;
             leadResource.Status = Status.Active;
             var token = "IndicativeToken";
@@ -210,7 +207,7 @@ namespace MarvelousService.BusinessLayer.Tests
         public void AddLeadResource_LeadWithRoleAdmin_ShouldThrowRoleException()
         {
             // given
-            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
+            var leadResourceModel = LeadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
             var token = "IndicativeToken";
 
             var sut = new LeadResourceService(
@@ -231,7 +228,7 @@ namespace MarvelousService.BusinessLayer.Tests
         {
             // given
             var leadId= 23;
-            var leadResources = _leadResourceTestData.GetLeadResourceListForTests();
+            var leadResources = LeadResourceTestData.GetLeadResourceListForTests();
             _leadResourceRepositoryMock.Setup(m => m.GetByLeadId(leadId)).ReturnsAsync(leadResources);
 
             var sut = new LeadResourceService(

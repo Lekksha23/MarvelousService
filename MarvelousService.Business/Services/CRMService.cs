@@ -19,9 +19,9 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             var count = 0;
             var accountId = 0;
-            _logger.LogInformation("Query for getting all Accounts for Lead from CRM");
+            _logger.LogInformation("Query for getting all Accounts for Lead from CRM.");
             var leadAccounts = await _crmClient.GetLeadAccounts(jwtToken);
-            _logger.LogInformation("All Accounts for Lead from CRM were received");
+            _logger.LogInformation("All Accounts for Lead from CRM were received.");
             for (int i = 0; i < leadAccounts.Count; i++)
             {
                 if (leadAccounts[i].CurrencyType == Currency.RUB)
@@ -33,9 +33,9 @@ namespace MarvelousService.BusinessLayer.Clients
             }
             if (count == 0)
             {
+                _logger.LogError($"There's no accounts with RUB CurrencyType was found in CRM for Lead with id {leadAccounts[0].Lead.Id}.");
                 throw new AccountNotFoundException(
-                    $"There's no accounts with RUB CurrencyType was found in CRM for Lead with id {leadAccounts[0].Lead.Id}");
-                _logger.LogError($"There's no accounts with RUB CurrencyType was found in CRM for Lead with id {leadAccounts[0].Lead.Id}");
+                    $"There's no accounts with RUB CurrencyType was found in CRM for Lead with id {leadAccounts[0].Lead.Id}.");
             }
             return accountId;
         }

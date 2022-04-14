@@ -1,6 +1,6 @@
 ﻿using Marvelous.Contracts.Enums;
 
-namespace MarvelousService.BusinessLayer.Models.CRMModels
+namespace MarvelousService.BusinessLayer.Models
 {
     public class AccountModel
     {

@@ -1,5 +1,4 @@
 ﻿using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Models.CRMModels;
 
 namespace MarvelousService.BusinessLayer.Clients
 {

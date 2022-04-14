@@ -49,7 +49,7 @@ namespace MarvelousService.DataLayer.Repositories
                 _selectByLeadResourceProcedure,
                 (resourcePayment, leadResource) =>
                 {
-                    resourcePayment.LeadResource = leadResource;
+                    //resourcePayment.LeadResource = leadResource;
                     return resourcePayment;
                 },
                 new { LeadResourceId = leadResourceId },
