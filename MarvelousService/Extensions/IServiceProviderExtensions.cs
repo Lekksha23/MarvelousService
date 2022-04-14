@@ -43,13 +43,11 @@ namespace MarvelousService.API.Extensions
 
         public static void RegisterMarvelousServiceHelpers(this IServiceCollection services)
         {
-            services.AddScoped<ICheckErrorHelper, CheckErrorHelper>();
             services.AddScoped<IRequestHelper, RequestHelper>();
             services.AddTransient<IInitializeHelper, InitializeHelper>();
             services.AddScoped<IRoleStrategyProvider, RoleStrategyProvider>();
             services.AddScoped<IRoleStrategy, RegularRoleStrategy>();
             services.AddScoped<IRoleStrategy, AdminRoleStrategy>();
-            services.AddScoped<IRoleStrategy, UknownRoleStrategy>();
             services.AddScoped<IRoleStrategy, VIPRoleStrategy>();
             services.AddScoped<IResourceProducer, ResourceProducer>();
         }

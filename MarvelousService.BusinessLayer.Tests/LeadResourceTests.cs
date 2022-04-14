@@ -2,7 +2,9 @@
 using Marvelous.Contracts.Enums;
 using MarvelousService.BusinessLayer.Clients;
 using MarvelousService.BusinessLayer.Configurations;
+using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Helpers;
+using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Tests.TestCaseSource;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Enums;
@@ -21,7 +23,6 @@ namespace MarvelousService.BusinessLayer.Tests
         private Mock<ICRMService> _crmServiceMock;
         private readonly IRoleStrategy _roleStrategy;
         private readonly IRoleStrategyProvider _roleStrategyProvider;
-        private readonly Mock<ICheckErrorHelper> _helper;
         private readonly LeadResourceTestData _leadResourceTestData;
         private readonly IMapper _autoMapper;
 
@@ -30,7 +31,6 @@ namespace MarvelousService.BusinessLayer.Tests
             _leadResourceTestData = new LeadResourceTestData();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _roleStrategyProvider = new RoleStrategyProvider();
-            _helper = new Mock<ICheckErrorHelper>();
         }
 
         [SetUp]
@@ -43,16 +43,15 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task AddLeadResource_ShouldCountPriceForWeekAndGiveDiscountToVipLead_ShouldCallCRMAndTransactionServices()
+        public async Task AddLeadResource_WeekPeriodAndVipLead_ShouldCountPriceForWeekAndGiveDiscount()
         {
             // given
             var expectedPrice = 3240.0M;
 
             var leadResource = _leadResourceTestData.GetLeadResourceWithWeekPeriodForTests();
             var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithWeekPeriodForTests();
-            var mappedLeadResource = _autoMapper.Map<LeadResource>(leadResourceModel);
-            mappedLeadResource.Price = expectedPrice;
-            mappedLeadResource.Status = Status.Active;
+            leadResource.Price = expectedPrice;
+            leadResource.Status = Status.Active;
             var token = "IndicativeToken";
             var leadResourceId = 23;
             var resourcePaymentId = 42;
@@ -60,7 +59,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var accountId = 4444444;
             _crmServiceMock.Setup(m => m.GetIdOfRubLeadAccount(token)).ReturnsAsync(accountId);
             _transactionServiceMock.Setup(m => m.AddResourceTransaction(accountId, expectedPrice)).ReturnsAsync(transactionId);
-            _leadResourceRepositoryMock.Setup(m => m.AddLeadResource(mappedLeadResource)).ReturnsAsync(leadResourceId);
+            _leadResourceRepositoryMock.Setup(m => m.AddLeadResource(leadResource)).ReturnsAsync(leadResourceId);
             _resourcePaymentRepositoryMock.Setup(m => m.AddResourcePayment(leadResourceId, transactionId)).ReturnsAsync(resourcePaymentId);
 
             var sut = new LeadResourceService(
@@ -70,8 +69,7 @@ namespace MarvelousService.BusinessLayer.Tests
                 _crmServiceMock.Object,
                 _roleStrategy, 
                 _roleStrategyProvider,
-                _autoMapper,
-                _helper.Object);
+                _autoMapper);
 
             // when
             var actual = await sut.AddLeadResource(leadResourceModel, Role.Vip, token);
@@ -83,6 +81,149 @@ namespace MarvelousService.BusinessLayer.Tests
             _transactionServiceMock.Verify(m => m.AddResourceTransaction(accountId, leadResourceModel.Price), Times.Once());
             _leadResourceRepositoryMock.Verify(m => m.AddLeadResource(It.IsAny<LeadResource>()), Times.Once());
             _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(0, transactionId), Times.Once());
+        }
+
+        [Test]
+        public async Task AddLeadResource_WeekPeriodAndRegularLead_ShouldCountPriceForWeek()
+        {
+            // given
+            var expectedPrice = 3600.0M;
+
+            var leadResource = _leadResourceTestData.GetLeadResourceWithWeekPeriodForTests();
+            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithWeekPeriodForTests();
+            leadResource.Price = expectedPrice;
+            leadResource.Status = Status.Active;
+            var token = "IndicativeToken";
+            var leadResourceId = 23;
+            var resourcePaymentId = 42;
+            var transactionId = 40000000;
+            var accountId = 4444444;
+            _crmServiceMock.Setup(m => m.GetIdOfRubLeadAccount(token)).ReturnsAsync(accountId);
+            _transactionServiceMock.Setup(m => m.AddResourceTransaction(accountId, expectedPrice)).ReturnsAsync(transactionId);
+            _leadResourceRepositoryMock.Setup(m => m.AddLeadResource(leadResource)).ReturnsAsync(leadResourceId);
+            _resourcePaymentRepositoryMock.Setup(m => m.AddResourcePayment(leadResourceId, transactionId)).ReturnsAsync(resourcePaymentId);
+
+            var sut = new LeadResourceService(
+                _leadResourceRepositoryMock.Object,
+                _resourcePaymentRepositoryMock.Object,
+                _transactionServiceMock.Object,
+                _crmServiceMock.Object,
+                _roleStrategy,
+                _roleStrategyProvider,
+                _autoMapper);
+
+            // when
+            var actual = await sut.AddLeadResource(leadResourceModel, Role.Regular, token);
+
+            // then
+            Assert.NotNull(actual);
+            Assert.AreEqual(expectedPrice, leadResourceModel.Price);
+            _crmServiceMock.Verify(m => m.GetIdOfRubLeadAccount(token), Times.Once());
+            _transactionServiceMock.Verify(m => m.AddResourceTransaction(accountId, leadResourceModel.Price), Times.Once());
+            _leadResourceRepositoryMock.Verify(m => m.AddLeadResource(It.IsAny<LeadResource>()), Times.Once());
+            _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(0, transactionId), Times.Once());
+        }
+
+        [Test]
+        public async Task AddLeadResource_OneTimePeriodAndVipLead_ShouldCountPriceForOneTimeAndGiveDiscount()
+        {
+            // given
+            var expectedPrice = 1620.0M;
+
+            var leadResource = _leadResourceTestData.GetLeadResourceWithOneTimePeriodForTests();
+            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
+            leadResource.Price = expectedPrice;
+            leadResource.Status = Status.Active;
+            var token = "IndicativeToken";
+            var leadResourceId = 23;
+            var resourcePaymentId = 42;
+            var transactionId = 40000000;
+            var accountId = 4444444;
+            _crmServiceMock.Setup(m => m.GetIdOfRubLeadAccount(token)).ReturnsAsync(accountId);
+            _transactionServiceMock.Setup(m => m.AddResourceTransaction(accountId, expectedPrice)).ReturnsAsync(transactionId);
+            _leadResourceRepositoryMock.Setup(m => m.AddLeadResource(leadResource)).ReturnsAsync(leadResourceId);
+            _resourcePaymentRepositoryMock.Setup(m => m.AddResourcePayment(leadResourceId, transactionId)).ReturnsAsync(resourcePaymentId);
+
+            var sut = new LeadResourceService(
+                _leadResourceRepositoryMock.Object,
+                _resourcePaymentRepositoryMock.Object,
+                _transactionServiceMock.Object,
+                _crmServiceMock.Object,
+                _roleStrategy,
+                _roleStrategyProvider,
+                _autoMapper);
+
+            // when
+            var actual = await sut.AddLeadResource(leadResourceModel, Role.Vip, token);
+
+            // then
+            Assert.NotNull(actual);
+            Assert.AreEqual(expectedPrice, leadResourceModel.Price);
+            _crmServiceMock.Verify(m => m.GetIdOfRubLeadAccount(token), Times.Once());
+            _transactionServiceMock.Verify(m => m.AddResourceTransaction(accountId, leadResourceModel.Price), Times.Once());
+            _leadResourceRepositoryMock.Verify(m => m.AddLeadResource(It.IsAny<LeadResource>()), Times.Once());
+            _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(0, transactionId), Times.Once());
+        }
+
+        [Test]
+        public async Task AddLeadResource_OneTimePeriodAndRegularLead_ShouldCountPriceForOneTime()
+        {
+            // given
+            var expectedPrice = 1800.0M;
+
+            var leadResource = _leadResourceTestData.GetLeadResourceWithOneTimePeriodForTests();
+            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
+            leadResource.Price = expectedPrice;
+            leadResource.Status = Status.Active;
+            var token = "IndicativeToken";
+            var leadResourceId = 23;
+            var resourcePaymentId = 42;
+            var transactionId = 40000000;
+            var accountId = 4444444;
+            _crmServiceMock.Setup(m => m.GetIdOfRubLeadAccount(token)).ReturnsAsync(accountId);
+            _transactionServiceMock.Setup(m => m.AddResourceTransaction(accountId, expectedPrice)).ReturnsAsync(transactionId);
+            _leadResourceRepositoryMock.Setup(m => m.AddLeadResource(leadResource)).ReturnsAsync(leadResourceId);
+            _resourcePaymentRepositoryMock.Setup(m => m.AddResourcePayment(leadResourceId, transactionId)).ReturnsAsync(resourcePaymentId);
+
+            var sut = new LeadResourceService(
+                _leadResourceRepositoryMock.Object,
+                _resourcePaymentRepositoryMock.Object,
+                _transactionServiceMock.Object,
+                _crmServiceMock.Object,
+                _roleStrategy,
+                _roleStrategyProvider,
+                _autoMapper);
+
+            // when
+            var actual = await sut.AddLeadResource(leadResourceModel, Role.Regular, token);
+
+            // then
+            Assert.NotNull(actual);
+            Assert.AreEqual(expectedPrice, leadResourceModel.Price);
+            _crmServiceMock.Verify(m => m.GetIdOfRubLeadAccount(token), Times.Once());
+            _transactionServiceMock.Verify(m => m.AddResourceTransaction(accountId, leadResourceModel.Price), Times.Once());
+            _leadResourceRepositoryMock.Verify(m => m.AddLeadResource(It.IsAny<LeadResource>()), Times.Once());
+            _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(0, transactionId), Times.Once());
+        }
+
+        [Test]
+        public void AddLeadResource_LeadWithRoleAdmin_ShouldThrowRoleException()
+        {
+            // given
+            var leadResourceModel = _leadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
+            var token = "IndicativeToken";
+
+            var sut = new LeadResourceService(
+                _leadResourceRepositoryMock.Object,
+                _resourcePaymentRepositoryMock.Object,
+                _transactionServiceMock.Object,
+                _crmServiceMock.Object,
+                _roleStrategy,
+                _roleStrategyProvider,
+                _autoMapper);
+
+            // then
+            Assert.ThrowsAsync<RoleException>(async () => await sut.AddLeadResource(leadResourceModel, Role.Admin, token));
         }
 
         [Test]
@@ -100,8 +241,7 @@ namespace MarvelousService.BusinessLayer.Tests
                 _crmServiceMock.Object,
                 _roleStrategy,
                 _roleStrategyProvider,
-                _autoMapper,
-                _helper.Object);
+                _autoMapper);
 
             // when
             var actual = await sut.GetByLeadId(leadId);
@@ -109,6 +249,7 @@ namespace MarvelousService.BusinessLayer.Tests
             // then
             Assert.NotNull(actual);
             Assert.AreEqual(leadResources.Count, actual.Count);
+            Assert.IsTrue(actual[0].GetType() == typeof(LeadResourceModel));
             _leadResourceRepositoryMock.Verify(m => m.GetByLeadId(leadId), Times.Once());
         }
     }

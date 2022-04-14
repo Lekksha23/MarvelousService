@@ -72,7 +72,6 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
             {
                 Id = 1,
                 Period = Period.OneTime,
-                Price = 3240.0M,
                 Status = Status.Active,
                 LeadId = 1,
                 Resource = new Resource
@@ -96,7 +95,6 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 {
                     Id = 1,
                 Period = Period.Week,
-                Price = 3240.0M,
                 Status = Status.Active,
                 LeadId = 1,
                 Resource = new Resource
@@ -113,7 +111,6 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 {
                 Id = 2,
                 Period = Period.OneTime,
-                Price = 3240.0M,
                 Status = Status.Active,
                 LeadId = 2,
                 Resource = new Resource
