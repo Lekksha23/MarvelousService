@@ -10,19 +10,20 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
         {
             var resourcePayment = new ResourcePayment
             {
-                Id = 1, 
-                LeadResource = new LeadResource 
+                Id = 1,
+                LeadResource = new LeadResource
                 {
                     Id = 2,
                     LeadId = 42,
                     Period = Period.Week,
                     Price = 6000,
-                    Resource =  new Resource 
-                    { 
+                    Resource = new Resource
+                    {
                         Id = 2,
                         Name = "Тренинг"
                     },
-                    Status = Status.Active},
+                    Status = Status.Active
+                },
                 TransactionId = 100000
             };
             return resourcePayment;
@@ -44,12 +45,12 @@ namespace MarvelousService.BusinessLayer.Tests.TestData
                         Resource = new Resource
                         {
                             Id = 3,
-                            Name = "Тренинг", 
-                            Price = 1000, 
-                            Description = "Скучный тренинг", 
+                            Name = "Тренинг",
+                            Price = 1000,
+                            Description = "Скучный тренинг",
                             IsDeleted = false
                         },
-                        Status = Status.Active, 
+                        Status = Status.Active,
                         ResourcePayments = new List<ResourcePayment>()
                     }
                 },

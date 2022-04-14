@@ -6,7 +6,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
 {
     public class ResourceServiceTestCaseSource
     {
-        public ResourceModel AddServiceModelTest()
+        public ResourceModel AddResourceModelTest()
         {
             ResourceModel resourceModel = new ResourceModel
             {
@@ -20,7 +20,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
         }
 
 
-        public Resource AddServiceTest()
+        public Resource AddResourceTest()
         {
             Resource resource = new Resource
             {

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
 {
-    public class LeadResourceTestData
+    public static class LeadResourceTestData
     {
-        public LeadResourceModel GetLeadResourceModelWithWeekPeriodForTests()
+        public static LeadResourceModel GetLeadResourceModelWithWeekPeriodForTests()
         {
             var leadResourceModel = new LeadResourceModel
             {
@@ -26,7 +26,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
             return leadResourceModel;
         }
 
-        public LeadResource GetLeadResourceWithWeekPeriodForTests()
+        public static LeadResource GetLeadResourceWithWeekPeriodForTests()
         {
             var leadResource = new LeadResource
             {
@@ -47,7 +47,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
             return leadResource;
         }
 
-        public LeadResourceModel GetLeadResourceModelWithOneTimePeriodForTests()
+        public static LeadResourceModel GetLeadResourceModelWithOneTimePeriodForTests()
         {
             var leadResourceModel = new LeadResourceModel
             {
@@ -66,7 +66,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
             return leadResourceModel;
         }
 
-        public LeadResource GetLeadResourceWithOneTimePeriodForTests()
+        public static LeadResource GetLeadResourceWithOneTimePeriodForTests()
         {
             var leadResource = new LeadResource
             {
@@ -87,7 +87,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
             return leadResource;
         }
 
-        public List<LeadResource> GetLeadResourceListForTests()
+        public static List<LeadResource> GetLeadResourceListForTests()
         {
             var leadResources = new List<LeadResource>
             {
