@@ -15,12 +15,10 @@ namespace MarvelousService.BusinessLayer.Tests
 {
     public class ResourceServiceTests
     {
-
         private Mock<IResourceRepository> _resourceRepositoryMock;
         private readonly ResourceServiceTestCaseSource _resourceTest;
         private readonly IMapper _autoMapper;
         private readonly Mock<ILogger<ResourceService>> _logger;
-        private readonly Mock<ICheckErrorHelper> _helper;
 
         public ResourceServiceTests()
         {
@@ -28,17 +26,16 @@ namespace MarvelousService.BusinessLayer.Tests
             _resourceTest = new ResourceServiceTestCaseSource();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _logger = new Mock<ILogger<ResourceService>>();
-            _helper = new Mock<ICheckErrorHelper>();
         }
 
         [SetUp]
-        public async Task Setup()
+        public void Setup()
         {
             _resourceRepositoryMock = new Mock<IResourceRepository>();
         }
 
         [Test]
-        public async Task AddServiceTest()
+        public async Task AddResource()
         {
             //given
             var resource = new Resource
@@ -50,10 +47,10 @@ namespace MarvelousService.BusinessLayer.Tests
                 IsDeleted = false,
             }; 
             _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            sut.AddResource( new ResourceModel
+            await sut.AddResource( new ResourceModel
             {
                 Id = 3,
                 Name = "qwe",
@@ -62,41 +59,41 @@ namespace MarvelousService.BusinessLayer.Tests
                 IsDeleted = false,
             });
 
-            var actual = sut.GetResourceById(3);
+            var actual = await sut.GetResourceById(3);
 
             //then
-            //Assert.IsNotNull(actual);
-            Assert.IsNotNull(actual.Result.Id);
-            Assert.IsNotNull(actual.Result.Name);
-            Assert.IsNotNull(actual.Result.Price);
-            Assert.IsNotNull(actual.Result.IsDeleted);
-            Assert.IsNotNull(actual.Result.Description);
+            Assert.IsNotNull(actual);
+            Assert.IsNotNull(actual.Id);
+            Assert.IsNotNull(actual.Name);
+            Assert.IsNotNull(actual.Price);
+            Assert.IsNotNull(actual.IsDeleted);
+            Assert.IsNotNull(actual.Description);
         }
 
         [Test]
-        public async Task AddServiceNegativeTest()
+        public void AddServiceNegativeTest()
         {
 
             //given
             var resourceId = 1;
             var resourceModel = _resourceTest.AddServiceModelTest();
             var resource = new Resource();
-            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId));
-            
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource); 
+
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //then
             Assert.ThrowsAsync<DuplicationException>(async () => await sut.AddResource(resourceModel));
         }
 
         [Test]
-        public async Task UpdateServiceTest()
+        public async Task UpdateResource()
         {
             //given
             var resourceId = 1;
             var resourceModel = _resourceTest.AddServiceTest();
-            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId));
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resourceModel);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
             await sut.UpdateResource(1, new ResourceModel());
@@ -107,12 +104,12 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task DeletedServiceTest()
+        public async Task SoftDelete()
         {
             //given
             var resource = new Resource();
             _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
             await sut.SoftDelete(1, new ResourceModel());
@@ -124,16 +121,16 @@ namespace MarvelousService.BusinessLayer.Tests
 
 
         [Test]
-        public async Task GetByIdTest()
+        public async Task GetById()
         {
             //given
             var resourceId = 1;
             var resource = _resourceTest.AddServiceTest();
             _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            var actual = sut.GetResourceById(It.IsAny<int>()).Result;
+            var actual = await sut.GetResourceById(It.IsAny<int>());
 
             //then
             Assert.IsNotNull(actual);
@@ -142,19 +139,18 @@ namespace MarvelousService.BusinessLayer.Tests
             Assert.IsNotNull(actual.Price);
             Assert.IsNotNull(actual.IsDeleted);
             Assert.IsNotNull(actual.Description);
-
         }
 
         [Test]
-        public async Task GetAllResourseTest()
+        public async Task GetAllResources()
         {
             //given
             var resource = _resourceTest.AddAllServiceTest();
             _resourceRepositoryMock.Setup(m => m.GetAllResources()).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            var actual =  sut.GetAllResources().Result;
+            var actual = await sut.GetAllResources();
 
             //then
             Assert.IsNotNull(actual);
@@ -168,19 +164,18 @@ namespace MarvelousService.BusinessLayer.Tests
                 Assert.IsNotNull(actual[i].IsDeleted);
                 Assert.IsNotNull(actual[i].Description);
             }
-            
         }
 
         [Test]
-        public async Task GetAllActiveResourseTest()
+        public async Task GetAllActiveResources()
         {
             //given
             var resource = _resourceTest.AddAllServiceTest();
             _resourceRepositoryMock.Setup(m => m.GetAllResources()).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            var actual = sut.GetActiveResourceService().Result;
+            var actual = await sut.GetActiveResourceService();
 
             //then
             Assert.IsNotNull(actual);
@@ -194,9 +189,6 @@ namespace MarvelousService.BusinessLayer.Tests
                 Assert.IsNotNull(actual[i].IsDeleted);
                 Assert.IsNotNull(actual[i].Description);
             }
-
         }
-
-
     }
 }

@@ -18,7 +18,6 @@ namespace MarvelousService.BusinessLayer.Clients
         private IRoleStrategy _roleStrategy;
         private readonly IRoleStrategyProvider _roleStrategyProvider;
         private readonly IMapper _mapper;
-        private readonly ICheckErrorHelper _helper;
 
         public LeadResourceService(
             ILeadResourceRepository LeadResourceRepository,
@@ -27,8 +26,7 @@ namespace MarvelousService.BusinessLayer.Clients
             ICRMService crmService,
             IRoleStrategy roleStrategy,
             IRoleStrategyProvider roleStrategyProvider,
-            IMapper mapper,
-            ICheckErrorHelper helper)
+            IMapper mapper)
         {
             _leadResourceRepository = LeadResourceRepository;
             _resourcePaymentRepository = resourcePaymentRepository;
@@ -37,13 +35,12 @@ namespace MarvelousService.BusinessLayer.Clients
             _roleStrategy = roleStrategy;
             _roleStrategyProvider = roleStrategyProvider;
             _mapper = mapper;
-            _helper = helper;
         }
 
         public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role, string jwtToken)
         {
             leadResourceModel.Price = leadResourceModel.CountPrice();
-            GiveDiscountIfLeadIsVIP(leadResourceModel, role);  
+            GiveDiscountIfLeadIsVip(leadResourceModel, role);  
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
             var accountId = await _crmService.GetIdOfRubLeadAccount(jwtToken);
             var transactionId = await _transactionService.AddResourceTransaction(accountId, leadResourceModel.Price);
@@ -55,9 +52,9 @@ namespace MarvelousService.BusinessLayer.Clients
 
         public async Task<List<LeadResourceModel>> GetByLeadId(int id)
         {
-            var leadResource = await _leadResourceRepository.GetByLeadId(id);
-            _helper.CheckIfEntityIsNull(id, leadResource);
-            return _mapper.Map<List<LeadResourceModel>>(leadResource);
+            var leadResources = await _leadResourceRepository.GetByLeadId(id);
+            CheckErrorHelper.CheckIfEntityIsNull(id, leadResources);
+            return _mapper.Map<List<LeadResourceModel>>(leadResources);
         }
 
         public async Task<List<LeadResourceModel>> GetByPayDate(DateTime payDate)
@@ -69,11 +66,11 @@ namespace MarvelousService.BusinessLayer.Clients
         public async Task<List<LeadResourceModel>> GetById(int id)
         {
             var leadResource = await _leadResourceRepository.GetLeadResourceById(id);
-            _helper.CheckIfEntityIsNull(id, leadResource);
+            CheckErrorHelper.CheckIfEntityIsNull(id, leadResource);
             return _mapper.Map<List<LeadResourceModel>>(leadResource);
         }
 
-        private void GiveDiscountIfLeadIsVIP(LeadResourceModel leadResourceModel, Role role)
+        private void GiveDiscountIfLeadIsVip(LeadResourceModel leadResourceModel, Role role)
         {
             _roleStrategy = _roleStrategyProvider.GetStrategy((int)role);
             _roleStrategy.GiveLeadDiscount(leadResourceModel, role);

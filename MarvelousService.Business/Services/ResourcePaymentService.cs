@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories;
 using Microsoft.Extensions.Logging;
 
@@ -24,17 +22,8 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             _logger.LogInformation("Query for receiving Resource payments by id");
             var resourcePayments = await _resourcePaymentRepository.GetResourcePaymentsByLeadResourceId(leadResourceId);
-            CheckResourcePayments(resourcePayments);
+            CheckErrorHelper.CheckIfResourcePaymentsIsNull(resourcePayments);
             return _mapper.Map<List<ResourcePaymentModel>>(resourcePayments);
-        }
-
-        private void CheckResourcePayments(List<ResourcePayment> resourcePayments)
-        {
-            if (resourcePayments is null)
-            {
-                _logger.LogError("Error in receiving information about Resource payment");
-                throw new NotFoundServiceException("Resource payment not found");
-            }
         }
     }
 }

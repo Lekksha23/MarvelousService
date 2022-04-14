@@ -1,43 +1,36 @@
 ﻿using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.DataLayer.Entities;
-using Microsoft.Extensions.Logging;
-using RestSharp;
-using System.Net;
+using NLog;
 
 namespace MarvelousService.BusinessLayer.Clients
 {
-    public class CheckErrorHelper : ICheckErrorHelper
+    public static class CheckErrorHelper
     {
-        private readonly ILogger<CheckErrorHelper> _logger;
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public CheckErrorHelper(ILogger<CheckErrorHelper> logger)
-        {
-            _logger = logger;
-        }
-
-        public void CheckIfEntityIsNull<T>(int id, T entity)
+        public static void CheckIfEntityIsNull<T>(int id, T entity)
         {
             if (entity is null)
             {
-                _logger.LogError($"Error in receiving {typeof(T).Name} by Id {id}");
+                _logger.Error($"Error in receiving {typeof(T).Name} by Id {id}");
                 throw new NotFoundServiceException($"{typeof(T).Name} with Id {id} does not exist.");
             }
         }
 
-        public void CheckIfResourcePaymentsIsNull(List<ResourcePayment> resourcePayments)
+        public static void CheckIfResourcePaymentsIsNull(List<ResourcePayment> resourcePayments)
         {
             if (resourcePayments is null)
             {
-                _logger.LogError("Error in receiving information about Resource payment");
+                _logger.Error("Error in receiving information about Resource payment");
                 throw new NotFoundServiceException("Resource payment not found");
             }
         }
 
-        public void CheckIfEntityIsNotNull<T>(int id, T entity)
+        public static void CheckIfEntityIsNotNull<T>(int id, T entity)
         {
             if (entity != null)
             {
-                _logger.LogError($"Error in receiving {typeof(T).Name} by Id {id}");
+                _logger.Error($"Error in receiving {typeof(T).Name} by Id {id}");
                 throw new DuplicationException($"{typeof(T).Name} with Id {id} already exists.");
             }
         }

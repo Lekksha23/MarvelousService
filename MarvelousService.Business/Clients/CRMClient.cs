@@ -1,7 +1,10 @@
 ﻿using Marvelous.Contracts.Autentificator;
+using Marvelous.Contracts.Endpoints;
+using Marvelous.Contracts.Enums;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Models.CRMModels;
+using Microsoft.Extensions.Configuration;
 using RestSharp;
 
 namespace MarvelousService.BusinessLayer.Clients
@@ -10,14 +13,14 @@ namespace MarvelousService.BusinessLayer.Clients
     {
         private readonly RestClient _client;
         private readonly IRequestHelper _requestHelper;
-        private const string _url = "https://piter-education.ru:5050"; // Get from IConfiguration
-        private const string _addLeadPath = "/api/leads/";
+        private readonly IConfiguration _config;
         private const string _getAccountByLeadIdPath = "/api/accounts/";
 
-        public CRMClient(IRequestHelper requestHelper)
+        public CRMClient(IRequestHelper requestHelper, IConfiguration config)
         {
-            _client = new RestClient(_url);
             _requestHelper = requestHelper;
+            _config = config;
+            _client = new RestClient(_config[Microservice.MarvelousCrm.ToString()]);
         }
 
         public async Task<List<AccountModel>> GetLeadAccounts(string jwtToken)
@@ -31,7 +34,7 @@ namespace MarvelousService.BusinessLayer.Clients
 
         public async Task<int> AddLead(LeadModel lead)
         {
-            var request = new RestRequest(_addLeadPath, Method.Post);
+            var request = new RestRequest(CrmEndpoints.LeadApi, Method.Post);
             request.AddJsonBody(lead);
             var response = await _client.PostAsync(request);
             _requestHelper.CheckMicroserviceResponse(response);
