@@ -26,11 +26,11 @@ namespace MarvelousService.BusinessLayer.Clients
             }
         }
 
-        public void CheckIfEntityIsNotNull<T>(int id, T entity)
+        public static void CheckIfEntityIsNotNull<T>(int id, T entity)
         {
             if (entity != null)
             {
-                _logger.LogError($"Error in receiving {typeof(T).Name} by Id {id}");
+                _logger.Error($"Error in receiving {typeof(T).Name} by Id {id}");
                 throw new DuplicationException($"{typeof(T).Name} with Id {id} already exists.");
             }
         }
