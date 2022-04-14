@@ -14,12 +14,10 @@ namespace MarvelousService.BusinessLayer.Tests
 {
     public class ResourceServiceTests
     {
-
         private Mock<IResourceRepository> _resourceRepositoryMock;
         private readonly ResourceServiceTestCaseSource _resourceTest;
         private readonly IMapper _autoMapper;
         private readonly Mock<ILogger<ResourceService>> _logger;
-        private readonly Mock<ICheckErrorHelper> _helper;
 
         public ResourceServiceTests()
         {
@@ -27,7 +25,6 @@ namespace MarvelousService.BusinessLayer.Tests
             _resourceTest = new ResourceServiceTestCaseSource();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _logger = new Mock<ILogger<ResourceService>>();
-            _helper = new Mock<ICheckErrorHelper>();
         }
 
         [SetUp]
@@ -37,14 +34,14 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task AddServiceTest()
+        public async Task AddResource()
         {
             //given
             var resourceModel = _resourceTest.AddServiceModelTest();
             var resource = new Resource();
             _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource); 
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
-            int role = 3;
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
+
             //when
             await sut.AddResource(resourceModel);
 
@@ -53,12 +50,12 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task UpdateServiceTest()
+        public async Task UpdateResource()
         {
             //given
             var resourceModel = _resourceTest.AddServiceTest();
             _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resourceModel);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
             await sut.UpdateResource(1, new ResourceModel());
@@ -69,12 +66,12 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task DeletedServiceTest()
+        public async Task SoftDelete()
         {
             //given
             var resource = new Resource();
             _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
             await sut.SoftDelete(1, new ResourceModel());
@@ -86,12 +83,12 @@ namespace MarvelousService.BusinessLayer.Tests
 
 
         [Test]
-        public async Task GetByIdTest()
+        public async Task GetById()
         {
             //given
             var resource = _resourceTest.AddServiceTest();
             _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
             var actual = await sut.GetResourceById(It.IsAny<int>());
@@ -106,12 +103,12 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task GetAllResourseTest()
+        public async Task GetAllResources()
         {
             //given
             var resource = _resourceTest.AddAllServiceTest();
             _resourceRepositoryMock.Setup(m => m.GetAllResources()).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
             var actual = await sut.GetAllResources();
@@ -132,12 +129,12 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task GetAllActiveResourseTest()
+        public async Task GetAllActiveResources()
         {
             //given
             var resource = _resourceTest.AddAllServiceTest();
             _resourceRepositoryMock.Setup(m => m.GetAllResources()).ReturnsAsync(resource);
-            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object, _helper.Object);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
             var actual = await sut.GetActiveResourceService();

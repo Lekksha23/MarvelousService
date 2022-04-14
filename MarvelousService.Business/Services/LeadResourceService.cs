@@ -18,7 +18,6 @@ namespace MarvelousService.BusinessLayer.Clients
         private IRoleStrategy _roleStrategy;
         private readonly IRoleStrategyProvider _roleStrategyProvider;
         private readonly IMapper _mapper;
-        private readonly ICheckErrorHelper _helper;
 
         public LeadResourceService(
             ILeadResourceRepository LeadResourceRepository,
@@ -27,8 +26,7 @@ namespace MarvelousService.BusinessLayer.Clients
             ICRMService crmService,
             IRoleStrategy roleStrategy,
             IRoleStrategyProvider roleStrategyProvider,
-            IMapper mapper,
-            ICheckErrorHelper helper)
+            IMapper mapper)
         {
             _leadResourceRepository = LeadResourceRepository;
             _resourcePaymentRepository = resourcePaymentRepository;
@@ -37,7 +35,6 @@ namespace MarvelousService.BusinessLayer.Clients
             _roleStrategy = roleStrategy;
             _roleStrategyProvider = roleStrategyProvider;
             _mapper = mapper;
-            _helper = helper;
         }
 
         public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role, string jwtToken)
@@ -56,7 +53,7 @@ namespace MarvelousService.BusinessLayer.Clients
         public async Task<List<LeadResourceModel>> GetByLeadId(int id)
         {
             var leadResources = await _leadResourceRepository.GetByLeadId(id);
-            _helper.CheckIfEntityIsNull(id, leadResources);
+            CheckErrorHelper.CheckIfEntityIsNull(id, leadResources);
             return _mapper.Map<List<LeadResourceModel>>(leadResources);
         }
 
@@ -69,7 +66,7 @@ namespace MarvelousService.BusinessLayer.Clients
         public async Task<List<LeadResourceModel>> GetById(int id)
         {
             var leadResource = await _leadResourceRepository.GetLeadResourceById(id);
-            _helper.CheckIfEntityIsNull(id, leadResource);
+            CheckErrorHelper.CheckIfEntityIsNull(id, leadResource);
             return _mapper.Map<List<LeadResourceModel>>(leadResource);
         }
 

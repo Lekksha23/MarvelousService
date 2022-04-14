@@ -18,7 +18,6 @@ namespace MarvelousService.BusinessLayer.Tests
         private Mock<IResourcePaymentRepository> _resourcePaymentRepositoryMock;
         private readonly ResourcePaymentTestData _resourcePaymentTestData;
         private readonly Mock<ILogger<ResourcePaymentService>> _logger;
-        private readonly Mock<ICheckErrorHelper> _helperMock;
         private readonly IMapper _autoMapper;
 
         public ResourcePaymentServiceTests()
@@ -26,7 +25,6 @@ namespace MarvelousService.BusinessLayer.Tests
             _resourcePaymentTestData = new ResourcePaymentTestData();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
             _logger = new Mock<ILogger<ResourcePaymentService>>();
-            _helperMock = new Mock<ICheckErrorHelper>();
         }
 
         [SetUp]

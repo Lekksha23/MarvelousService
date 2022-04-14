@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using MarvelousService.BusinessLayer.Helpers;
-using MarvelousService.BusinessLayer.Models;
 using MarvelousService.BusinessLayer.Clients.Interfaces;
+using MarvelousService.BusinessLayer.Models;
 using MarvelousService.DataLayer.Entities;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -13,12 +12,10 @@ namespace MarvelousService.BusinessLayer.Clients
         private readonly IResourceRepository _resourceRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<ResourceService> _logger;
-        private readonly ICheckErrorHelper _helper;
 
-        public ResourceService(IResourceRepository resourceRepository, IMapper mapper, ILogger<ResourceService> logger, ICheckErrorHelper helper)
+        public ResourceService(IResourceRepository resourceRepository, IMapper mapper, ILogger<ResourceService> logger)
         {
             _resourceRepository = resourceRepository;
-            _helper = helper;
             _mapper = mapper;
             _logger = logger;
         }
@@ -36,7 +33,7 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             _logger.LogInformation($"Request for getting a resource by id {id}");
             var resource = await _resourceRepository.GetResourceById(id);
-            _helper.CheckIfEntityIsNull(id, resource);
+            CheckErrorHelper.CheckIfEntityIsNull(id, resource);
             return _mapper.Map<ResourceModel>(resource);
         }
 
@@ -45,7 +42,7 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             _logger.LogInformation($"Request for soft deletion of resource by id {id}");
             var resource = await _resourceRepository.GetResourceById(id);
-            _helper.CheckIfEntityIsNull(id, resource);
+            CheckErrorHelper.CheckIfEntityIsNull(id, resource);
             resourceModel.Id = id;
             resourceModel.Name = resource.Name;
             var newResource =  _mapper.Map<Resource>(resourceModel);
@@ -56,7 +53,7 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             _logger.LogInformation($"Request for updating a status of Resource by id {id}");
             var oldResource = await _resourceRepository.GetResourceById(id);
-            _helper.CheckIfEntityIsNull(id, oldResource);
+            CheckErrorHelper.CheckIfEntityIsNull(id, oldResource);
             resourceModel.Id = id;
             var resource = _mapper.Map<Resource>(resourceModel);
             await _resourceRepository.UpdateResource(resource);
@@ -77,7 +74,6 @@ namespace MarvelousService.BusinessLayer.Clients
             tmp.RemoveAll(t => t.IsDeleted == true);
            
             return _mapper.Map<List<ResourceModel>>(tmp);
-
         }
     }
 }
