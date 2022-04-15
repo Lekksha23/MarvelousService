@@ -1,4 +1,5 @@
-﻿using Marvelous.Contracts.Enums;
+﻿using FluentValidation;
+using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
 using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Helpers;
@@ -28,6 +29,23 @@ namespace MarvelousService.API.Extensions
                 throw new ForbiddenException($"User with role:{leadRole} don't have acces to this method");
             }
             return lead.Data;
+        }
+
+        protected void Validate<T>(T requestModel, IValidator<T> validator)
+        {
+            if (requestModel == null)
+            {
+                var ex = new BadRequestException("You must specify the table details in the request body");
+                _logger.LogError(ex, ex.Message);
+                throw ex;
+            }
+            var validationResult = validator.Validate(requestModel);
+            if (!validationResult.IsValid)
+            {
+                var ex = new ValidationException(validationResult.Errors);
+                _logger.LogError(ex, ex.Message);
+                throw ex;
+            }
         }
     }
 }

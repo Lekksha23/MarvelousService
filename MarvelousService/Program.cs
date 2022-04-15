@@ -34,14 +34,15 @@ builder.Services.AddCustomAuth();
 
 
 builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddFluentValidation();
+builder.Services.AddMassTransit();
 builder.Services.RegisterMarvelousServiceRepositories();
 builder.Services.RegisterMarvelousServiceServices();
 builder.Services.RegisterMarvelousServiceHelpers();
 builder.Services.RegisterMarvelousServiceClients();
 builder.Services.RegisterMarvelousServiceAutomappers();
 builder.Services.RegisterLogger(config);
-builder.Services.AddMassTransit();
+
 
 var app = builder.Build();
 

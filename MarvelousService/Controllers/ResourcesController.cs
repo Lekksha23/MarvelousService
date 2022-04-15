@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using MarvelousService.API.Extensions;
 using Marvelous.Contracts.Enums;
+using FluentValidation;
 
 namespace MarvelousService.API.Controllers
 {
@@ -21,19 +22,22 @@ namespace MarvelousService.API.Controllers
         private readonly ILogger<ResourcesController> _logger;
         private readonly IResourceProducer _resourceProducer;
         private readonly IRequestHelper _requestHelper;
+        private readonly IValidator<ResourceInsertRequest> _validatorResourceInsertRequest;
 
         public ResourcesController(
             IResourceService resourceService, 
             IMapper autoMapper, 
             ILogger<ResourcesController> logger, 
             IResourceProducer resourceProducer,
-            IRequestHelper requestHelper) : base(requestHelper, logger)
+            IRequestHelper requestHelper,
+            IValidator<ResourceInsertRequest> validatorResourceInsertRequest) : base(requestHelper, logger)
         {
             _resourceService = resourceService;
             _autoMapper = autoMapper;
             _logger = logger;
             _resourceProducer = resourceProducer;
             _requestHelper = requestHelper;
+            _validatorResourceInsertRequest = validatorResourceInsertRequest;
         }
 
         //api/services
@@ -44,7 +48,10 @@ namespace MarvelousService.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<int>> AddResource([FromBody] ResourceInsertRequest serviceInsertRequest)
         {
+
             _logger.LogInformation($"Received a request to add a new resource.");
+
+            Validate(serviceInsertRequest, _validatorResourceInsertRequest);
             var lead = await CheckRole(Role.Admin);
             _logger.LogInformation($"Role - {lead} successfully verified.");
             var resourceModel = _autoMapper.Map<ResourceModel>(serviceInsertRequest);
