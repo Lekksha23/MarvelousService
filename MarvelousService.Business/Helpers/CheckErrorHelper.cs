@@ -1,4 +1,5 @@
 ﻿using MarvelousService.BusinessLayer.Exceptions;
+using MarvelousService.BusinessLayer.Models;
 using MarvelousService.DataLayer.Entities;
 using NLog;
 
@@ -14,6 +15,15 @@ namespace MarvelousService.BusinessLayer.Clients
             {
                 _logger.Error($"Error in receiving {typeof(T).Name} by Id {id}");
                 throw new NotFoundServiceException($"{typeof(T).Name} with Id {id} does not exist.");
+            }
+        }
+
+        public static void CheckIfResourceModelCountIsZero(List<ResourceModel> resource)
+        {
+            if (resource.Count == 0)
+            {
+                _logger.Error("Error No active services found");
+                throw new NotFoundServiceException("No active services found");
             }
         }
 

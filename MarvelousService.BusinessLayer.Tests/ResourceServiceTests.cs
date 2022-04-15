@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using MarvelousService.BusinessLayer.Exceptions;
+using System.Collections.Generic;
 
 namespace MarvelousService.BusinessLayer.Tests
 {
@@ -35,9 +36,11 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task AddResource()
+        public async Task TestingServiceAddons()
         {
             //given
+            var resourceId = 3;
+            var resourceOld = new Resource();
             var resource = new Resource
             {
                 Id = 3,
@@ -45,12 +48,12 @@ namespace MarvelousService.BusinessLayer.Tests
                 Description = "QWEQWE",
                 Price = 1500,
                 IsDeleted = false,
-            }; 
-            _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource);
+            };
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource);
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            await sut.AddResource( new ResourceModel
+            sut.AddResource(new ResourceModel // Не менять с await не тестит!
             {
                 Id = 3,
                 Name = "qwe",
@@ -71,14 +74,14 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public void AddResourceNegativeTest()
+        public void ResourceNegativeTestIssueAnDuplicationException()
         {
             //given
             var resourceId = 1;
             var resourceModel = _resourceTestData.AddResourceModelTest();
             var resource = new Resource();
-            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource); 
-
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource);
+            //when
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //then
@@ -86,16 +89,31 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task UpdateResource()
+        public async Task TestingServiceChange()
         {
             //given
-            var resourceId = 1;
-            var resourceModel = _resourceTestData.AddResourceTest();
-            _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resourceModel);
+            var resourceId = 3;
+            var resource = new Resource
+            {
+                Id = 3,
+                Name = "qwe",
+                Description = "QWEQWE",
+                Price = 1500,
+                IsDeleted = false,
+            };
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource);
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            await sut.UpdateResource(1, new ResourceModel());
+            var resourceNew = new ResourceModel
+            {
+                Id = 3,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                IsDeleted = false,
+            };
+            await sut.UpdateResource(resourceId, resourceNew);
 
             //then
             _resourceRepositoryMock.Verify(m => m.GetResourceById(It.IsAny<int>()), Times.Once());
@@ -103,33 +121,104 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task SoftDelete()
+        public async Task ResourceNegativeTest_FromUpdateIssueAnNotFoundServiceException()
         {
             //given
+            var resourceId = 1;
             var resource = new Resource();
-            _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource);
+            resource = null;
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource);
+
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            await sut.SoftDelete(1, new ResourceModel());
+
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                IsDeleted = false,
+            };
+            sut.UpdateResource(resourceId, resourceNew);
 
             //then
-            _resourceRepositoryMock.Verify(m => m.GetResourceById(It.IsAny<int>()), Times.Once());
-            _resourceRepositoryMock.Verify(m => m.SoftDelete(It.IsAny<Resource>()), Times.Once()); ;
+            Assert.ThrowsAsync<NotFoundServiceException>(async () => await sut.UpdateResource(resourceId, resourceNew));
+            
+        }
+
+        [Test]
+        public async Task TestingSoftDeleteService()
+        {
+            //given
+            var resourceId = 1;
+            var resource = new Resource
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                IsDeleted = false,
+            };
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
+
+            //when
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                IsDeleted = true,
+            };
+             await sut.SoftDelete(resourceId, resourceNew);
+
+            //then
+            _resourceRepositoryMock.Verify(m => m.GetResourceById(resourceId), Times.Once());
+            _resourceRepositoryMock.Verify(m => m.SoftDelete(It.IsAny<Resource>()), Times.Once());
+        }
+
+        [Test]
+        public async Task ResourceNegativeTest_FromSoftDeleteIssueAnNotFoundServiceException()
+        {
+            //given
+            var resourceId = 1;
+            var resource = new Resource();
+            resource = null;
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource);
+
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
+
+            //when
+
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                IsDeleted = true,
+            };
+            sut.UpdateResource(resourceId, resourceNew);
+
+            //then
+            Assert.ThrowsAsync<NotFoundServiceException>(async () => await sut.SoftDelete(resourceId, resourceNew));
         }
 
 
         [Test]
-        public async Task GetById()
+        public async Task TestingReceivingServiceById()
         {
             //given
             var resourceId = 1;
             var resource = _resourceTestData.AddResourceTest();
-            _resourceRepositoryMock.Setup(m => m.GetResourceById(It.IsAny<int>())).ReturnsAsync(resource);
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource);
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            var actual = await sut.GetResourceById(It.IsAny<int>());
+            var actual = await sut.GetResourceById(resourceId);
 
             //then
             Assert.IsNotNull(actual);
@@ -141,7 +230,27 @@ namespace MarvelousService.BusinessLayer.Tests
         }
 
         [Test]
-        public async Task GetAllResources()
+        public async Task ResourceNegativeTest_FromReceivingServiceByIdIssueAnNotFoundServiceException()
+        {
+            //given
+            var resourceId = 1;
+            var resource = new Resource();
+            resource = null;
+            _resourceRepositoryMock.Setup(m => m.GetResourceById(resourceId)).ReturnsAsync(resource);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
+
+            //when
+
+            sut.GetResourceById(resourceId);
+
+            //then
+            Assert.ThrowsAsync<NotFoundServiceException>(async () => await sut.GetResourceById(resourceId));
+        }
+
+        
+
+        [Test]
+        public async Task TestingGettingAllServices()
         {
             //given
             var resource = _resourceTestData.AddAllServiceTest();
@@ -164,9 +273,10 @@ namespace MarvelousService.BusinessLayer.Tests
                 Assert.IsNotNull(actual[i].Description);
             }
         }
+      
 
         [Test]
-        public async Task GetAllActiveResources()
+        public async Task TestingGettingAllActivelServices()
         {
             //given
             var resource = _resourceTestData.AddAllServiceTest();
@@ -188,6 +298,29 @@ namespace MarvelousService.BusinessLayer.Tests
                 Assert.IsNotNull(actual[i].IsDeleted);
                 Assert.IsNotNull(actual[i].Description);
             }
+        }
+
+        [Test]
+        public void ResourceNegativeTest_FromGettingAllActiveServicesIssueAnNotFoundServiceException()
+        {
+            //given
+
+            List<Resource> resource = new List<Resource>
+            {
+                new Resource() {Id = 1, Name = "qwe", Description = "QWEQWE", Price = 1500, IsDeleted = true,},
+                new Resource() {Id = 2, Name = "ewq", Description = "ewqewq", Price = 2000, IsDeleted = true,},
+                new Resource() {Id = 3, Name = "tmp", Description = "tmptmp", Price = 3000, IsDeleted = true,},
+                new Resource() {Id = 4, Name = "qwerty", Description = "qwerty", Price = 8000, IsDeleted = true,},
+            };
+
+            _resourceRepositoryMock.Setup(m => m.GetAllResources()).ReturnsAsync(resource);
+            var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
+
+            //when
+            sut.GetActiveResourceService();
+
+            //then
+            Assert.ThrowsAsync<NotFoundServiceException>(async () => await sut.GetActiveResourceService());
         }
     }
 }
