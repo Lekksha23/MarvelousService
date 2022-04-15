@@ -37,14 +37,14 @@ namespace MarvelousService.API.Tests
             _requestHelper = new Mock<IRequestHelper>();
         }
 
-        [Test]
-        public async Task ResourceTestIssueAnDuplicationException()
-        {
+        //[Test]
+        //public async Task ResourceTestIssueAnDuplicationException()
+        //{
 
            
 
 
-        }
+        //}
 
 
 
