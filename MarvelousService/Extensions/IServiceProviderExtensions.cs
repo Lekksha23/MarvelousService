@@ -1,7 +1,9 @@
-﻿using Marvelous.Contracts.ExchangeModels;
+﻿using FluentValidation.AspNetCore;
+using Marvelous.Contracts.ExchangeModels;
 using MarvelousService.API.Configuration;
 using MarvelousService.API.Producer;
 using MarvelousService.API.Producer.Interface;
+using MarvelousService.API.Validators;
 using MarvelousService.BusinessLayer.Clients;
 using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.BusinessLayer.Configurations;
@@ -9,7 +11,9 @@ using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.DataLayer.Repositories;
 using MarvelousService.DataLayer.Repositories.Interfaces;
 using MassTransit;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
@@ -50,6 +54,20 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IRoleStrategy, AdminRoleStrategy>();
             services.AddScoped<IRoleStrategy, VIPRoleStrategy>();
             services.AddScoped<IResourceProducer, ResourceProducer>();
+        }
+
+        public static void AddFluentValidation(this IServiceCollection services)
+        {
+            //Добавление FluentValidation
+            services.AddFluentValidation(fv =>
+            {
+                //Регистрация валидаторов по сборке с временем жизни = Singleton
+                fv.RegisterValidatorsFromAssemblyContaining<ResourceInsertRequestValidator>(lifetime: ServiceLifetime.Singleton);
+                //Отключение валидации с помощью DataAnnotations
+                fv.DisableDataAnnotationsValidation = true;
+            });
+            //Отключение стандартного валидатора
+            services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
         }
 
         public static void RegisterMarvelousServiceAutomappers(this IServiceCollection services)
@@ -114,6 +132,7 @@ namespace MarvelousService.API.Extensions
                     }
                 });
             });
+            swagger.AddFluentValidationRulesToSwagger();
         }
 
         public static void AddCustomAuth(this IServiceCollection services)

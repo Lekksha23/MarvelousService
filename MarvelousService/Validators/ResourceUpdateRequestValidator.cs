@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace MarvelousService.API.Validators
 {
-    public class ResourceInsertRequestValidator : AbstractValidator<ResourceInsertRequest>
+    public class ResourceUpdateRequestValidator : AbstractValidator<ResourceUpdateRequest>
     {
-        public ResourceInsertRequestValidator()
+        public ResourceUpdateRequestValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
@@ -21,7 +21,7 @@ namespace MarvelousService.API.Validators
                 .WithMessage("Price must not be more than 10 digits in total, with allowance for 0 decimals.");
             RuleFor(x => x.Type)
                 .NotEmpty();
-
         }
+
     }
 }

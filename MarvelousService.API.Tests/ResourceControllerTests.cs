@@ -37,31 +37,14 @@ namespace MarvelousService.API.Tests
             _requestHelper = new Mock<IRequestHelper>();
         }
 
-        //[Test]
-        //public async Task ResourceTestIssueAnDuplicationException()
-        //{
+        [Test]
+        public async Task ResourceTestIssueAnDuplicationException()
+        {
 
-        //    // Arrange
-        //    var model = new ResourceInsertRequest { Name = "" }; 
-        //    var controller = new ResourcesController(
-        //        _resourceService.Object,
-        //        _autoMapper,
-        //        _logger.Object,
-        //        _resourceProducer.Object,
-        //        _requestHelper.Object
-        //        );
+           
 
 
-        //    //Have to explictly add this
-        //    controller.ModelState.AddModelError("Slug", "Required");
-
-        //    //Act
-        //   var result = await controller.AddResource(model);
-
-            
-        //    Assert.ThrowsAsync<ValidationException>(async () => await controller.AddResource(model));
-
-        //}
+        }
 
 
 
