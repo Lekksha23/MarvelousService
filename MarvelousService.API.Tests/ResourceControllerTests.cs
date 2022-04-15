@@ -1,5 +1,7 @@
 using AutoMapper;
 using FluentValidation;
+using Marvelous.Contracts.ExchangeModels;
+using Marvelous.Contracts.ResponseModels;
 using MarvelousService.API.Controllers;
 using MarvelousService.API.Models;
 using MarvelousService.API.Producer.Interface;
@@ -8,6 +10,8 @@ using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -28,11 +32,17 @@ namespace MarvelousService.API.Tests
         private readonly IValidator<ResourceSoftDeleteRequest> _validatorResourceSoftDeletetRequest;
         private readonly IValidator<ResourceUpdateRequest> _validatorResourceUpdatetRequest;
         private readonly Mock<IResourceProducer> _resourceProducer;
-
+        private readonly ResourcesController _controller;
 
         public Tests()
         {
             _resourceService = new Mock<IResourceService>();
+            _controller = new ResourcesController(
+                _resourceService.Object,
+                _autoMapper,_logger.Object,
+                _resourceProducer.Object,
+                _requestHelper.Object,
+                _validatorResourceInsertRequest);
             _logger = new Mock<ILogger<ResourcesController>>();
             _configuration = new Mock<IConfiguration>();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
@@ -78,31 +88,7 @@ namespace MarvelousService.API.Tests
         }
 
 
-        //[Test]
-        //public void SoftDeleteReturnsOk()
-        //{
-        //    // Arrange
-        //    var resourceId = 1;
-        //    var resource = new ResourceResponse
-        //    {
-        //        Id = 1,
-        //        Name = "ewq",
-        //        Description = "EWQEWQ",
-        //        Price = 3000,   
-                
-        //    };
-        //    string token = "token";
-        //    var context = new DefaultHttpContext();
-        //    context.Request.Headers.Authorization = token;
-        //    _controller.ControllerContext.HttpContext = context;
-        //    var resourseModel = _autoMapper.Map<ResourceModel>(resource);
-            
-        //    // Act
-        //     _controller.(10);
-
-        //    // Assert
-        //    Assert.IsInstanceOfType(actionResult, typeof(OkResult));
-        //}
+     
 
 
 

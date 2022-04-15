@@ -61,7 +61,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            sut.AddResource(resourceModel); // Не менять с await не тестит!;
+            sut.AddResource(resourceModel); 
 
             var actual = await sut.GetResourceById(3);
 
