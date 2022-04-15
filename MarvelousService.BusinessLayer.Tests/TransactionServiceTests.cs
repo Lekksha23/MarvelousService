@@ -25,7 +25,7 @@ namespace MarvelousService.BusinessLayer.Tests
         {
             // given
             var accountId = 23;
-            var totalPrice = 3240.0M;
+            var totalPrice = 3000.0M;
             var transactionId = 40000000;
             var resourceTransaction = new TransactionRequestModel
             {
@@ -41,7 +41,7 @@ namespace MarvelousService.BusinessLayer.Tests
 
             // then
             Assert.NotNull(actual);
-            //Assert.AreEqual(transactionId, actual);
+            Assert.AreEqual(transactionId, actual);
             _transactionClientMock.Verify(m => m.AddResourceTransaction(It.IsAny<TransactionRequestModel>()), Times.Once);
             _loggerMock.Verify(x => x.Log(LogLevel.Information,
                     It.IsAny<EventId>(),
