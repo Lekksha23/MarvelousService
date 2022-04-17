@@ -154,7 +154,7 @@ namespace MarvelousService.API.Extensions
         {
             services.AddMassTransit(x =>
             {
-                //x.AddConsumer<>();
+                x.AddConsumer<ConfigsConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
@@ -168,9 +168,16 @@ namespace MarvelousService.API.Extensions
                     {
                         p.BindAlternateExchangeQueue("Resource-exchange", "Resource-queue");
                     });
+
                     cfg.Publish<LeadResourceExchangeModel>(l =>
                     {
                         l.BindAlternateExchangeQueue("LeadResource-exchange", "LeadResource-queue");
+                    });
+
+                    cfg.ReceiveEndpoint("ChangeConfigResource", e =>
+                    {
+                        e.PurgeOnStartup = true;
+                        e.ConfigureConsumer<ConfigsConsumer>(context);
                     });
                 });
             });
