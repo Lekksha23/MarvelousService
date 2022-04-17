@@ -87,6 +87,86 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
             return leadResource;
         }
 
+        public static LeadResourceModel GetLeadResourceModelWithMonthPeriodForTests()
+        {
+            var leadResourceModel = new LeadResourceModel
+            {
+                Id = 1,
+                Period = Period.Month,
+                LeadId = 1,
+                Resource = new ResourceModel
+                {
+                    Id = 1,
+                    Name = "qwe",
+                    Description = "qweqwe",
+                    Price = 1800,
+                    IsDeleted = false
+                }
+            };
+            return leadResourceModel;
+        }
+
+        public static LeadResource GetLeadResourceWithMonthPeriodForTests()
+        {
+            var leadResource = new LeadResource
+            {
+                Id = 1,
+                Period = Period.Month,
+                Status = Status.Active,
+                LeadId = 1,
+                Resource = new Resource
+                {
+                    Id = 1,
+                    Name = "qwe",
+                    Description = "qweqwe",
+                    Price = 1800,
+                    IsDeleted = false
+                },
+                ResourcePayments = new List<ResourcePayment>()
+            };
+            return leadResource;
+        }
+
+        public static LeadResourceModel GetLeadResourceModelWithYearPeriodForTests()
+        {
+            var leadResourceModel = new LeadResourceModel
+            {
+                Id = 1,
+                Period = Period.Year,
+                LeadId = 1,
+                Resource = new ResourceModel
+                {
+                    Id = 1,
+                    Name = "qwe",
+                    Description = "qweqwe",
+                    Price = 1800,
+                    IsDeleted = false
+                }
+            };
+            return leadResourceModel;
+        }
+
+        public static LeadResource GetLeadResourceWithYearPeriodForTests()
+        {
+            var leadResource = new LeadResource
+            {
+                Id = 1,
+                Period = Period.Year,
+                Status = Status.Active,
+                LeadId = 1,
+                Resource = new Resource
+                {
+                    Id = 1,
+                    Name = "qwe",
+                    Description = "qweqwe",
+                    Price = 1800,
+                    IsDeleted = false
+                },
+                ResourcePayments = new List<ResourcePayment>()
+            };
+            return leadResource;
+        }
+
         public static List<LeadResource> GetLeadResourceListForTests()
         {
             var leadResources = new List<LeadResource>

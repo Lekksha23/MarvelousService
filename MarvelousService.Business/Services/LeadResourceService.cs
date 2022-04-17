@@ -63,11 +63,11 @@ namespace MarvelousService.BusinessLayer.Clients
             return _mapper.Map<List<LeadResourceModel>>(leadResources);
         }
 
-        public async Task<List<LeadResourceModel>> GetById(int id)
+        public async Task<LeadResourceModel> GetById(int id)
         {
             var leadResource = await _leadResourceRepository.GetLeadResourceById(id);
             CheckErrorHelper.CheckIfEntityIsNull(id, leadResource);
-            return _mapper.Map<List<LeadResourceModel>>(leadResource);
+            return _mapper.Map<LeadResourceModel>(leadResource);
         }
 
         private void GiveDiscountIfLeadIsVip(LeadResourceModel leadResourceModel, Role role)

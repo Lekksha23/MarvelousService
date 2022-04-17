@@ -1,7 +1,5 @@
 using AutoMapper;
 using FluentValidation;
-using Marvelous.Contracts.ExchangeModels;
-using Marvelous.Contracts.ResponseModels;
 using MarvelousService.API.Controllers;
 using MarvelousService.API.Models;
 using MarvelousService.API.Producer.Interface;
@@ -10,14 +8,11 @@ using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace MarvelousService.API.Tests
 {
