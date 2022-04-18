@@ -1,7 +1,7 @@
 ﻿using Marvelous.Contracts.Configurations;
 using MassTransit;
 
-public class ConfigsConsumer
+public class ConfigsConsumer : IConsumer<ConfigsExchangeModel>
 {
     private readonly IConfiguration _config;
     private readonly ILogger<ConfigsConsumer> _logger;
@@ -12,7 +12,7 @@ public class ConfigsConsumer
         _config = config;
     }
 
-    public Task Consume(ConsumeContext<ResourceCfg> context)
+    public Task Consume(ConsumeContext<ConfigsExcangeModel> context)
     {
         _logger.LogInformation($"Configuration {context.Message.Key} change value {_config[context.Message.Key]} to {context.Message.Value}");
         _config[context.Message.Key] = context.Message.Value;
