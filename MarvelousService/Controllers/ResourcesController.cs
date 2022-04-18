@@ -52,8 +52,8 @@ namespace MarvelousService.API.Controllers
             _logger.LogInformation($"Received a request to add a new resource.");
 
             Validate(serviceInsertRequest, _validatorResourceInsertRequest);
-            var lead = await CheckRole(Role.Admin);
-            _logger.LogInformation($"Role - {lead} successfully verified.");
+            //var lead = await CheckRole(Role.Admin);
+            //_logger.LogInformation($"Role - {lead} successfully verified.");
             var resourceModel = _autoMapper.Map<ResourceModel>(serviceInsertRequest);
             var id = await _resourceService.AddResource(resourceModel);
             _logger.LogInformation($"Resource with id {id} successfully added.");
