@@ -87,7 +87,7 @@ namespace MarvelousService.DataLayer.Repositories
             using IDbConnection connection = ProvideConnection();
             _logger.LogInformation("Connection succedded");
 
-            var service = connection.QueryAsync<LeadResource, Resource, LeadResource>(
+            var resource = await connection.QueryAsync<LeadResource, Resource, LeadResource>(
                 _selectByIdProcedure,
                  (leadResource, resource) =>
                  {
@@ -96,13 +96,11 @@ namespace MarvelousService.DataLayer.Repositories
                  },
                 new
                 { Id = id },
-                splitOn: "Id",
-                commandType: CommandType.StoredProcedure)
-                .Result
-                .FirstOrDefault();
+                splitOn: "ResourceId",
+                commandType: CommandType.StoredProcedure);
 
             _logger.LogInformation($"Service with id {id} received");
-            return service;
+            return resource.FirstOrDefault();
         }
 
         public async void UpdateStatusById(int id, Status status)
