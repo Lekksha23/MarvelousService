@@ -22,8 +22,8 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             if (resource.Count == 0)
             {
-                _logger.Error("Error No active services found");
-                throw new NotFoundServiceException("No active services found");
+                _logger.Error("Error! No active resources found");
+                throw new NotFoundServiceException("No active resources found");
             }
         }
 
