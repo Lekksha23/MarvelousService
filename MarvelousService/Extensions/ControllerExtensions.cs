@@ -35,7 +35,7 @@ namespace MarvelousService.API.Extensions
         {
             if (requestModel == null)
             {
-                var ex = new BadRequestException("You must specify the table details in the request body");
+                var ex = new BadRequestException("You must specify the details in the request body");
                 _logger.LogError(ex, ex.Message);
                 throw ex;
             }

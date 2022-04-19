@@ -7,6 +7,7 @@ using MarvelousService.BusinessLayer.Clients.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using MarvelousService.API.Extensions;
+using FluentValidation;
 
 namespace MarvelousService.API.Controllers
 {
@@ -18,6 +19,7 @@ namespace MarvelousService.API.Controllers
         private readonly IResourceService _resourceService;
         private readonly IMapper _autoMapper;
         private readonly ILogger<ResourcesController> _logger;
+        private readonly IValidator<LeadResourceInsertRequest> _leadResourceInsertRequestValidator;
         private readonly IRequestHelper _requestHelper;
 
         public LeadResourcesController(
@@ -25,13 +27,15 @@ namespace MarvelousService.API.Controllers
             ILeadResourceService leadResource,
             IResourceService resourceService,
             IRequestHelper requestHelper,
-            ILogger<ResourcesController> logger) : base(requestHelper, logger)
+            ILogger<ResourcesController> logger,
+            IValidator<LeadResourceInsertRequest> leadResourceInsertRequestValidator) : base(requestHelper, logger)
         {
             _leadResourceService = leadResource;
             _resourceService = resourceService;
             _autoMapper = autoMapper;
             _requestHelper = requestHelper;
             _logger = logger;
+            _leadResourceInsertRequestValidator = leadResourceInsertRequestValidator;
         }
 
         //api/leadResources
@@ -42,6 +46,7 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
+            Validate(leadResourceInsertRequest, _leadResourceInsertRequestValidator);
             var lead = await CheckRole(Role.Regular, Role.Vip); 
             var role = (Role)Enum.Parse(typeof(Role), lead.Role);
             _logger.LogInformation($"Access to the method for lead {lead.Id} granted");
