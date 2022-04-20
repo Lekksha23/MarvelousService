@@ -18,17 +18,20 @@ namespace MarvelousService.API.Extensions
             _logger = logger;
         }
 
-        protected async Task<IdentityResponseModel> CheckRole(params Role[] roles)
+        protected void CheckRole(IdentityResponseModel identity, params Role[] roles)
         {
-            _logger.LogInformation($"Query for checking role in the IdentityService");
-            var lead = await _requestHelper.SendRequestToValidateToken(HttpContext.Request.Headers.Authorization.First());
-            var leadRole = lead.Data.Role;
-            if (!roles.Select(r => r.ToString()).Contains(leadRole))
+            if (identity.Role == null)
             {
-                _logger.LogError($"User with role:{leadRole} don't have acces to the method");
-                throw new ForbiddenException($"User with role:{leadRole} don't have acces to this method");
+                var ex = new ForbiddenException($"Invalid token");
+                _logger.LogError(ex.Message);
+                throw ex;
             }
-            return lead.Data;
+            if (!roles.Select(r => r.ToString()).Contains(identity.Role))
+            {
+                var ex = new ForbiddenException($"Lead id = {identity.Id} doesn't have access to this endpiont");
+                _logger.LogError(ex.Message);
+                throw ex;
+            }
         }
 
         protected void Validate<T>(T requestModel, IValidator<T> validator)

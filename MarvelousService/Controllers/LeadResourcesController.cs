@@ -18,7 +18,7 @@ namespace MarvelousService.API.Controllers
         private readonly ILeadResourceService _leadResourceService;
         private readonly IResourceService _resourceService;
         private readonly IMapper _autoMapper;
-        private readonly ILogger<ResourcesController> _logger;
+        private readonly ILogger<LeadResourcesController> _logger;
         private readonly IValidator<LeadResourceInsertRequest> _leadResourceInsertRequestValidator;
         private readonly IRequestHelper _requestHelper;
 
@@ -27,7 +27,7 @@ namespace MarvelousService.API.Controllers
             ILeadResourceService leadResource,
             IResourceService resourceService,
             IRequestHelper requestHelper,
-            ILogger<ResourcesController> logger,
+            ILogger<LeadResourcesController> logger,
             IValidator<LeadResourceInsertRequest> leadResourceInsertRequestValidator) : base(requestHelper, logger)
         {
             _leadResourceService = leadResource;

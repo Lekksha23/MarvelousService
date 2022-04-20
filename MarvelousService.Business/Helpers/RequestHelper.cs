@@ -56,6 +56,14 @@ namespace MarvelousService.BusinessLayer.Helpers
             return response;
         }
 
+        public async Task<IdentityResponseModel> GetLeadIdentityByToken(string token)
+        {
+            _logger.LogInformation($"Query for checking role in the IdentityService");
+            var lead = await _requestHelper.SendRequestToValidateToken(HttpContext.Request.Headers.Authorization.First());
+            var leadRole = lead.Data.Role;
+            return lead.Data;
+        }
+
         public void CheckMicroserviceResponse(RestResponse response)
         {
             switch (response.StatusCode)
