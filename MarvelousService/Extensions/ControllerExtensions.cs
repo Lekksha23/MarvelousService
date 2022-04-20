@@ -22,13 +22,13 @@ namespace MarvelousService.API.Extensions
         {
             _logger.LogInformation($"Query for checking role in the IdentityService");
             var lead = await _requestHelper.SendRequestToValidateToken(HttpContext.Request.Headers.Authorization.First());
-            var leadRole = lead.Data.Role;
+            var leadRole = lead.Role;
             if (!roles.Select(r => r.ToString()).Contains(leadRole))
             {
                 _logger.LogError($"User with role:{leadRole} don't have acces to the method");
                 throw new ForbiddenException($"User with role:{leadRole} don't have acces to this method");
             }
-            return lead.Data;
+            return lead;
         }
 
         protected void Validate<T>(T requestModel, IValidator<T> validator)
