@@ -50,16 +50,16 @@ namespace MarvelousService.API.Tests
         [Test]
         public async Task AddLeadResource_()
         {
-            //given
+            // given
             var token = "IndicativeToken";
             var leadResourceInsertRequest = new LeadResourceInsertRequest { Period = 1, ResourceId = 1 };
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             AddContext(token);
 
-            //when
+            // when
             var actualResult = await _controller.AddLeadResource(leadResourceInsertRequest);
 
-            //then
+            // then
 
         }
 

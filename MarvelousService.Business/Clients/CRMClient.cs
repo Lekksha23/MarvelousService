@@ -10,7 +10,7 @@ namespace MarvelousService.BusinessLayer.Clients
 {
     public class CRMClient : ICRMClient
     {
-        private readonly RestClient _client;
+        private RestClient _client;
         private readonly IRequestHelper _requestHelper;
         private readonly IConfiguration _config;
         private const string _getAccountByLeadIdPath = "/api/accounts/";
@@ -18,8 +18,8 @@ namespace MarvelousService.BusinessLayer.Clients
         public CRMClient(IRequestHelper requestHelper, IConfiguration config)
         {
             _requestHelper = requestHelper;
-            _config = config;
-            _client = new RestClient(_config[Microservice.MarvelousCrm.ToString()]);
+            _config = config; 
+            _client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
         }
 
         public async Task<List<AccountModel>> GetLeadAccounts(string jwtToken)

@@ -2,6 +2,6 @@
 {
     public interface IInitializeHelper
     {
-        Task InitializeConfig();
+        Task InitializeConfigs();
     }
 }

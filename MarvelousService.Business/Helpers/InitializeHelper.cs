@@ -19,7 +19,7 @@ namespace MarvelousService.BusinessLayer.Helpers
             _config = config;
         }
 
-        public async Task InitializeConfig()
+        public async Task InitializeConfigs()
         {
             _logger.LogInformation("Query for getting a token from IdentityMicroservice for communication between microservices.");
             var token = await _requestHelper
@@ -28,6 +28,7 @@ namespace MarvelousService.BusinessLayer.Helpers
             var configData = await _requestHelper
                 .SendRequest<IEnumerable<ConfigResponseModel>>(ConfigsEndpoints.Configs, Microservice.MarvelousConfigs, token.Data); // Получили от настроек конфигурации.
             _logger.LogInformation("Configurations have been received.");
+
             foreach (var e in configData.Data)
             {
                 // Key название Микросервиса. Value нужные нам url

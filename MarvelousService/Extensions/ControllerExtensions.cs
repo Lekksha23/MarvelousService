@@ -28,10 +28,23 @@ namespace MarvelousService.API.Extensions
             }
             if (!roles.Select(r => r.ToString()).Contains(identity.Role))
             {
-                var ex = new ForbiddenException($"Lead id = {identity.Id} doesn't have access to this endpiont");
+                var ex = new ForbiddenException($"Lead {identity.Id} doesn't have access to this endpiont");
                 _logger.LogError(ex.Message);
                 throw ex;
             }
+        }
+
+        protected IdentityResponseModel GetIdentity()
+        {
+            var token = HttpContext.Request.Headers.Authorization.FirstOrDefault();
+            if (token == null)
+            {
+                var ex = new ForbiddenException($"Anonymous doesn't have access to this endpiont");
+                _logger.LogError(ex.Message);
+                throw ex;
+            }
+            var identity = _requestHelper.GetLeadIdentityByToken(token).Result;
+            return identity;
         }
 
         protected void Validate<T>(T requestModel, IValidator<T> validator)
