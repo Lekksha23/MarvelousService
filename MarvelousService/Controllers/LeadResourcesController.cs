@@ -46,15 +46,17 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
+            var leadIdentity = GetIdentity();
+            CheckRole(leadIdentity, Role.Regular, Role.Vip);
             Validate(leadResourceInsertRequest, _leadResourceInsertRequestValidator);
-            var lead = await CheckRole(Role.Regular, Role.Vip); 
-            var role = (Role)Enum.Parse(typeof(Role), lead.Role);
-            _logger.LogInformation($"Access to the method for lead {lead.Id} granted");
-            _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead.Id}.");
+            var role = (Role)Enum.Parse(typeof(Role), leadIdentity.Role);
+            var leadId = (int)leadIdentity.Id;
+            _logger.LogInformation($"Access to the method for lead {leadId} granted");
+            _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadId}.");
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
             var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
             leadResourceModel.Resource = resource.Result;
-            leadResourceModel.LeadId = (int)lead.Id;
+            leadResourceModel.LeadId = leadId;
             var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
             return StatusCode(StatusCodes.Status201Created, id);
         }
@@ -68,6 +70,8 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Get lead resources by id. Roles: Anonymous.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesById(int id)
         {
+            var leadIdentity = GetIdentity();
+            CheckRole(leadIdentity, Role.Vip, Role.Regular);
             _logger.LogInformation($"Request for getting all lead resources with id {id}");
             var leadResourceModelList = await _leadResourceService.GetById(id);
             var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
@@ -84,9 +88,10 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Get lead resources by LeadId. Roles: VIP, Regular.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesByLeadId()
         {
-            var lead = await CheckRole(Role.Regular, Role.Vip);
-            var leadId = (int)lead.Id;
-            _logger.LogInformation($"Request for getting all lead resources with LeadId {leadId}");
+            var leadIdentity = GetIdentity();
+            CheckRole(leadIdentity, Role.Vip, Role.Regular);
+            var leadId = (int)leadIdentity.Id;
+            _logger.LogInformation($"Request for getting all lead resources with LeadId {leadId }");
             var leadResourceModelList = await _leadResourceService.GetByLeadId(leadId);
             var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
             _logger.LogInformation($"Lead resources were received by LeadId {leadId}");
