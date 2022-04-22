@@ -147,111 +147,110 @@ namespace MarvelousService.API.Tests
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
             _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
 
-            //}
+        }
 
-            [Test]
-            public async Task SoftDeleteResourseTest_ShouldReturnStatusCode200()
+        [Test]
+        public async Task SoftDeleteResourseTest_ShouldReturnStatusCode200()
+        {
+            // Arrange
+            var resourceId = 1;
+
+            var resourceNew = new ResourceModel
             {
-                // Arrange
-                var resourceId = 1;
-
-                var resourceNew = new ResourceModel
-                {
-                    Id = 1,
-                    Name = "ewq",
-                    Description = "EWQEWQ",
-                    Price = 3000,
-                    Type = DataLayer.Enums.ServiceType.OneTime,
-                    IsDeleted = false,
-                };
-                var resoerceRequestModel = new ResourceSoftDeleteRequest
-                {
-                    IsDeleted = true,
-                };
-
-                var token = "token";
-                AddContext(token);
-                _requestHelper
-                    .Setup(m => m.SendRequestToValidateToken(token))
-                    .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
-
-                //when
-                var actual = await _resourceController.SoftDelete(resourceId, resoerceRequestModel);
-
-
-                //then
-                Assert.IsInstanceOf<ObjectResult>(actual.Result);
-                _resourceService.Verify(r => r.SoftDelete(resourceId, It.IsAny<ResourceModel>()), Times.Once);
-                _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
-                _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
-
-            }
-
-            [Test]
-            public async Task GetResourceById_ShouldReturnStatusCode200()
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceSoftDeleteRequest
             {
-                // Arrange
-                var resourceId = 1;
+                IsDeleted = true,
+            };
 
-                var token = "token";
-                AddContext(token);
-                _requestHelper
-                    .Setup(m => m.SendRequestToValidateToken(token))
-                    .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
 
-                //when
-                var actual = await _resourceController.GetResourceById(resourceId);
-
-
-                //then
-                Assert.IsInstanceOf<ObjectResult>(actual.Result);
-                _resourceService.Verify(r => r.GetResourceById(It.IsAny<int>()), Times.Once);
-                _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
-                _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
-            }
-
-            [Test]
-            public async Task GetActiveResource_ShouldReturnStatusCode200()
-            {
-                // Arrange
-                var token = "token";
-                AddContext(token);
-                _requestHelper
-                    .Setup(m => m.SendRequestToValidateToken(token))
-                    .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
-
-                //when
-                var actual = await _resourceController.GetActiveResource();
+            //when
+            var actual = await _resourceController.SoftDelete(resourceId, resoerceRequestModel);
 
 
-                //then
-                Assert.IsInstanceOf<ObjectResult>(actual.Result);
-                _resourceService.Verify(r => r.GetActiveResourceService(), Times.Once);
-                _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.SoftDelete(resourceId, It.IsAny<ResourceModel>()), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
 
-            }
+        }
 
-            [Test]
-            public async Task GetAllResource_ShouldReturnStatusCode200()
-            {
-                // Arrange
-                var token = "token";
-                AddContext(token);
-                _requestHelper
-                    .Setup(m => m.SendRequestToValidateToken(token))
-                    .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+        [Test]
+        public async Task GetResourceById_ShouldReturnStatusCode200()
+        {
+            // Arrange
+            var resourceId = 1;
 
-                //when
-                var actual = await _resourceController.GetAllResources();
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
 
-                //then
-                Assert.IsInstanceOf<ObjectResult>(actual.Result);
-                _resourceService.Verify(r => r.GetAllResources(), Times.Once);
-                _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            //when
+            var actual = await _resourceController.GetResourceById(resourceId);
 
-            }
+
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.GetResourceById(It.IsAny<int>()), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
+        }
+
+        [Test]
+        public async Task GetActiveResource_ShouldReturnStatusCode200()
+        {
+            // Arrange
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+
+            //when
+            var actual = await _resourceController.GetActiveResource();
+
+
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.GetActiveResourceService(), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+
+        }
+
+        [Test]
+        public async Task GetAllResource_ShouldReturnStatusCode200()
+        {
+            // Arrange
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+
+            //when
+            var actual = await _resourceController.GetAllResources();
+
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.GetAllResources(), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
 
         }
 
     }
+
 }

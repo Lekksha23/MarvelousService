@@ -21,7 +21,6 @@ namespace MarvelousService.API.Controllers
         private readonly ILogger<LeadResourcesController> _logger;
         private readonly IValidator<LeadResourceInsertRequest> _leadResourceInsertRequestValidator;
         private readonly IRequestHelper _requestHelper;
-        private readonly IValidator<LeadResourceInsertRequest> _validatorLeadResourceInsertRequest;
 
         public LeadResourcesController(
             IMapper autoMapper,
@@ -48,7 +47,7 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
 
-            var validationResult = await _validatorLeadResourceInsertRequest.ValidateAsync(leadResourceInsertRequest);
+            var validationResult = await _leadResourceInsertRequestValidator.ValidateAsync(leadResourceInsertRequest);
 
             if (validationResult.IsValid)
             {
