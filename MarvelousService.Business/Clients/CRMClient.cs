@@ -18,7 +18,8 @@ namespace MarvelousService.BusinessLayer.Clients
         public CRMClient(IRequestHelper requestHelper, IConfiguration config)
         {
             _requestHelper = requestHelper;
-            _config = config; 
+            _config = config;
+            _client = new RestClient();
             _client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
         }
 

@@ -5,10 +5,11 @@ namespace MarvelousService.BusinessLayer.Models
     public class LeadResourceModel
     {
         public int Id { get; set; }
-        public Period Period { get; set; }  
+        public Period Period { get; set; }
         public ResourceModel Resource { get; set; }
         public Status Status { get; set; }
         public int LeadId { get; set; }
+        public DateTime StartDate { get; set; }
         public List<ResourcePaymentModel> ResourcePayments { get; set; }
         public decimal Price { get; set; }
 
