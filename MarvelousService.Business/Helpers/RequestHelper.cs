@@ -45,7 +45,7 @@ namespace MarvelousService.BusinessLayer.Helpers
             return response;
         }
 
-        public async Task<RestResponse<IdentityResponseModel>> SendRequestToValidateToken(string jwtToken)
+        public async Task<IdentityResponseModel>SendRequestToValidateToken(string jwtToken)
         {
             var request = new RestRequest(AuthEndpoints.ApiAuth + AuthEndpoints.ValidationFront);
             var client = new RestClient(_config[Microservice.MarvelousAuth.ToString()]);
@@ -53,7 +53,7 @@ namespace MarvelousService.BusinessLayer.Helpers
             client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
             var response = await client.ExecuteAsync<IdentityResponseModel>(request);
             CheckMicroserviceResponse(response);
-            return response;
+            return response.Data;
         }
 
         public async Task<IdentityResponseModel> GetLeadIdentityByToken(string jwtToken)

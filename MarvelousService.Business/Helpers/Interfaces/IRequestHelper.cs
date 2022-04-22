@@ -10,7 +10,7 @@ namespace MarvelousService.BusinessLayer.Helpers
         Task<RestResponse<T>> GetTokenForFront<T>(Microservice service, AuthRequestModel authReguest);
         Task<RestResponse<T>> SendRequest<T>(string path, Microservice service, string jwtToken = "null");
         void CheckMicroserviceResponse(RestResponse response);
-        Task<RestResponse<IdentityResponseModel>> SendRequestToValidateToken(string jwtToken);
+        Task<IdentityResponseModel>SendRequestToValidateToken(string jwtToken);
         Task<IdentityResponseModel> GetLeadIdentityByToken(string jwtToken);
     }
 }

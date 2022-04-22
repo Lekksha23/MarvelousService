@@ -21,6 +21,7 @@ namespace MarvelousService.API.Controllers
         private readonly ILogger<LeadResourcesController> _logger;
         private readonly IValidator<LeadResourceInsertRequest> _leadResourceInsertRequestValidator;
         private readonly IRequestHelper _requestHelper;
+        private readonly IValidator<LeadResourceInsertRequest> _validatorLeadResourceInsertRequest;
 
         public LeadResourcesController(
             IMapper autoMapper,
@@ -46,19 +47,28 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-            var leadIdentity = GetIdentity();
-            CheckRole(leadIdentity, Role.Regular, Role.Vip);
-            Validate(leadResourceInsertRequest, _leadResourceInsertRequestValidator);
-            var role = (Role)Enum.Parse(typeof(Role), leadIdentity.Role);
-            var leadId = (int)leadIdentity.Id;
-            _logger.LogInformation($"Access to the method for lead {leadId} granted");
-            _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {leadId}.");
-            var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
-            var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
-            leadResourceModel.Resource = resource.Result;
-            leadResourceModel.LeadId = leadId;
-            var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
-            return StatusCode(StatusCodes.Status201Created, id);
+
+            var validationResult = await _validatorLeadResourceInsertRequest.ValidateAsync(leadResourceInsertRequest);
+
+            if (validationResult.IsValid)
+            {
+                var lead = await CheckRole(Role.Regular, Role.Vip);
+                var role = (Role)Enum.Parse(typeof(Role), lead.Role);
+                _logger.LogInformation($"Access to the method for lead {lead.Id} granted");
+                _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead.Id}.");
+                var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
+                var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
+                leadResourceModel.Resource = resource.Result;
+                leadResourceModel.LeadId = (int)lead.Id;
+                var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
+                return StatusCode(StatusCodes.Status201Created, id);
+            }
+            else
+            {
+                _logger.LogError("Error: LeadResourceInsertRequest isn't valid");
+                throw new ValidationException("LeadResourceInsertRequest isn't valid");
+            }
+                
         }
 
         //api/leadResources
