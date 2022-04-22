@@ -54,20 +54,16 @@ namespace MarvelousService.API.Tests
             var token = "IndicativeToken";
             var leadResourceInsertRequest = new LeadResourceInsertRequest { Period = 1, ResourceId = 1 };
             var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
-            AddContext(token);
+            var context = new DefaultHttpContext();
+            context.Request.Headers.Authorization = token;
+            _controller.ControllerContext.HttpContext = context;
 
             // when
-            var actualResult = await _controller.AddLeadResource(leadResourceInsertRequest);
+            //var actualResult = await _controller.AddLeadResource(leadResourceInsertRequest);
 
             // then
 
         }
 
-        private void AddContext(string token)
-        {
-            var context = new DefaultHttpContext();
-            context.Request.Headers.Authorization = token;
-            _controller.ControllerContext.HttpContext = context;
-        }
     }
 }

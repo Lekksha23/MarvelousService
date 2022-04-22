@@ -20,13 +20,12 @@ namespace MarvelousService.BusinessLayer.Clients
             _requestHelper = requestHelper;
             _config = config;
             _client = new RestClient();
-            _client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
         }
 
         public async Task<List<AccountModel>> GetLeadAccounts(string jwtToken)
         {
             _client.Authenticator = new MarvelousAuthenticator(jwtToken);
-            var request = new RestRequest(_getAccountByLeadIdPath, Method.Get);
+            var request = new RestRequest($"{_config[Microservice.MarvelousCrm.ToString() + "Url"]}{_getAccountByLeadIdPath}", Method.Get);
             var response = await _client.ExecuteAsync<List<AccountModel>>(request);
             _requestHelper.CheckMicroserviceResponse(response);
             return response.Data;
@@ -34,7 +33,7 @@ namespace MarvelousService.BusinessLayer.Clients
 
         public async Task<int> AddLead(LeadModel lead)
         {
-            var request = new RestRequest(CrmEndpoints.LeadApi, Method.Post);
+            var request = new RestRequest($"{_config[Microservice.MarvelousCrm.ToString() + "Url"]}{CrmEndpoints.LeadApi}", Method.Post);
             request.AddJsonBody(lead);
             var response = await _client.PostAsync(request);
             _requestHelper.CheckMicroserviceResponse(response);
