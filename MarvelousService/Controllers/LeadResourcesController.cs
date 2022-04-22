@@ -80,8 +80,8 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Get lead resource by id. Roles: VIP, Regular.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourceById(int id)
         {
-            var leadIdentity = GetIdentity();
-            CheckRole(leadIdentity, Role.Vip, Role.Regular);
+            var lead = await CheckRole(Role.Vip, Role.Regular);
+            var leadId = (int)lead.Id;
             _logger.LogInformation($"Request for getting lead resource with id {id}");
             var leadResourceModel = await _leadResourceService.GetById(id);
             var result = _autoMapper.Map<LeadResourceResponse>(leadResourceModel);
@@ -98,9 +98,8 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Get lead resources by LeadId. Roles: VIP, Regular.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesByLeadId()
         {
-            var leadIdentity = GetIdentity();
-            CheckRole(leadIdentity, Role.Vip, Role.Regular);
-            var leadId = (int)leadIdentity.Id;
+            var lead = await CheckRole(Role.Vip, Role.Regular);
+            var leadId = (int)lead.Id;
             _logger.LogInformation($"Request for getting all lead resources with LeadId {leadId }");
             var leadResourceModelList = await _leadResourceService.GetByLeadId(leadId);
             var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
@@ -116,11 +115,9 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Get lead resources by pay date. Roles: VIP, Regular, Admin.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourcesByPayDate([FromQuery] DateTime payDate)
         {
-            var leadIdentity = GetIdentity();
-            CheckRole(leadIdentity, Role.Vip, Role.Regular, Role.Admin);
+            await CheckRole(Role.Vip, Role.Regular, Role.Admin);
             _logger.LogInformation($"Request for getting all lead resources with pay date {payDate}");
             var leadResourceModelList = await _leadResourceService.GetByPayDate(payDate);
-
             var result = _autoMapper.Map<List<LeadResourceByPayDateResponse>>(leadResourceModelList);
             _logger.LogInformation($"Lead resources were received by pay date {payDate}");
             return Ok(result);
