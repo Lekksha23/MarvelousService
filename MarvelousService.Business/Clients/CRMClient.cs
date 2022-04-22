@@ -19,7 +19,6 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             _requestHelper = requestHelper;
             _config = config;
-            _client = new RestClient(_config[Microservice.MarvelousCrm.ToString()]);
         }
 
         public async Task<List<AccountModel>> GetLeadAccounts(string jwtToken)

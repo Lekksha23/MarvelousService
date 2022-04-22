@@ -164,16 +164,6 @@ namespace MarvelousService.API.Extensions
                         hst.Password("qwe!23");
                     });
 
-                    cfg.Publish<ServiceExchangeModel>(p =>
-                    {
-                        p.BindAlternateExchangeQueue("Resource-exchange", "Resource-queue");
-                    });
-
-                    cfg.Publish<LeadResourceExchangeModel>(l =>
-                    {
-                        l.BindAlternateExchangeQueue("LeadResource-exchange", "LeadResource-queue");
-                    });
-
                     cfg.ReceiveEndpoint("ChangeConfigResource", e =>
                     {
                         e.PurgeOnStartup = true;

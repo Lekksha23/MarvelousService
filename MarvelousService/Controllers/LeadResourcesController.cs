@@ -7,6 +7,7 @@ using MarvelousService.BusinessLayer.Clients.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using MarvelousService.API.Extensions;
+using MarvelousService.API.Producer.Interface;
 
 namespace MarvelousService.API.Controllers
 {
@@ -19,18 +20,21 @@ namespace MarvelousService.API.Controllers
         private readonly IMapper _autoMapper;
         private readonly ILogger<ResourcesController> _logger;
         private readonly IRequestHelper _requestHelper;
+        private readonly IResourceProducer _resourceProducer;
 
         public LeadResourcesController(
             IMapper autoMapper,
             ILeadResourceService leadResource,
             IResourceService resourceService,
             IRequestHelper requestHelper,
+            IResourceProducer resourceProducer,
             ILogger<ResourcesController> logger) : base(requestHelper, logger)
         {
             _leadResourceService = leadResource;
             _resourceService = resourceService;
             _autoMapper = autoMapper;
             _requestHelper = requestHelper;
+            _resourceProducer = resourceProducer;
             _logger = logger;
         }
 
@@ -51,6 +55,7 @@ namespace MarvelousService.API.Controllers
             leadResourceModel.Resource = resource.Result;
             leadResourceModel.LeadId = (int)lead.Id;
             var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
+            await _resourceProducer.NotifyLeadResourceAdded(id);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
