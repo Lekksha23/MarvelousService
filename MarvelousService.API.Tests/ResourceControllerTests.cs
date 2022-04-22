@@ -74,10 +74,6 @@ namespace MarvelousService.API.Tests
         public async Task AddResourseTest_ShouldReturnStatusCode200()
         {
             // Arrange
-
-            var resourceId = 1;
-
-
             var resourceNew = new ResourceModel
             {
                 Id = 1,
@@ -161,7 +157,6 @@ namespace MarvelousService.API.Tests
         public async Task SoftDeleteResourseTest_ShouldReturnStatusCode200()
         {
             // Arrange
-
             var resourceId = 1;
 
             var resourceNew = new ResourceModel
@@ -200,25 +195,7 @@ namespace MarvelousService.API.Tests
         public async Task GetResourceById_ShouldReturnStatusCode200()
         {
             // Arrange
-
             var resourceId = 1;
-
-            var resourceNew = new ResourceModel
-            {
-                Id = 1,
-                Name = "ewq",
-                Description = "EWQEWQ",
-                Price = 3000,
-                Type = DataLayer.Enums.ServiceType.OneTime,
-                IsDeleted = false,
-            };
-            var resoerceRequestModel = new ResourceInsertRequest
-            {
-                Name = "ewq",
-                Description = "EWQEWQ",
-                Price = 3000,
-                Type = 1,
-            };
 
             var token = "token";
             AddContext(token);
@@ -241,26 +218,6 @@ namespace MarvelousService.API.Tests
         public async Task GetActiveResource_ShouldReturnStatusCode200()
         {
             // Arrange
-
-            var resourceId = 1;
-
-            var resourceNew = new ResourceModel
-            {
-                Id = 1,
-                Name = "ewq",
-                Description = "EWQEWQ",
-                Price = 3000,
-                Type = DataLayer.Enums.ServiceType.OneTime,
-                IsDeleted = false,
-            };
-            var resoerceRequestModel = new ResourceInsertRequest
-            {
-                Name = "ewq",
-                Description = "EWQEWQ",
-                Price = 3000,
-                Type = 1,
-            };
-
             var token = "token";
             AddContext(token);
             _requestHelper
@@ -276,6 +233,26 @@ namespace MarvelousService.API.Tests
             _resourceService.Verify(r => r.GetActiveResourceService(), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
             
+        }
+
+        [Test]
+        public async Task GetAllResource_ShouldReturnStatusCode200()
+        {
+            // Arrange
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+
+            //when
+            var actual = await _resourceController.GetAllResources();
+
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.GetAllResources(), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+
         }
 
     }
