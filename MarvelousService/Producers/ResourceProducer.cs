@@ -27,7 +27,6 @@ namespace MarvelousService.API.Producer
         public async Task NotifyResourceAdded(int id)
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-
             var resource = await _resourceService.GetResourceById(id);
 
             await _bus.Publish(new ServiceExchangeModel
@@ -45,8 +44,7 @@ namespace MarvelousService.API.Producer
         public async Task NotifyLeadResourceAdded(int id)
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-
-            var leadResource = await _leadResource.GetByLeadId(id);
+            var leadResource = await _leadResource.GetById(id);
 
             await _bus.Publish(new LeadResourceExchangeModel
             {

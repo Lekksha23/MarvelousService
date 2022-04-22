@@ -30,6 +30,7 @@ namespace MarvelousService.API.Controllers
             IResourceService resourceService,
             IRequestHelper requestHelper,
             ILogger<LeadResourcesController> logger,
+            IResourceProducer resourceProducer,
             IValidator<LeadResourceInsertRequest> leadResourceInsertRequestValidator) : base(requestHelper, logger)
         {
             _leadResourceService = leadResource;
@@ -49,7 +50,6 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-
             var validationResult = await _leadResourceInsertRequestValidator.ValidateAsync(leadResourceInsertRequest);
 
             if (validationResult.IsValid)
@@ -70,7 +70,6 @@ namespace MarvelousService.API.Controllers
                 _logger.LogError("Error: LeadResourceInsertRequest isn't valid");
                 throw new ValidationException("LeadResourceInsertRequest isn't valid");
             }
-                
         }
 
         //api/leadResources
