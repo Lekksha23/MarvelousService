@@ -42,6 +42,7 @@ namespace MarvelousService.API.Controllers
             _resourceProducer = resourceProducer;
             _requestHelper = requestHelper;
             _validatorResourceInsertRequest = validatorResourceInsertRequest;
+            _validatorSoftDeleteReques = validatorSoftDeleteReques;
         }
 
         //api/services
@@ -173,7 +174,7 @@ namespace MarvelousService.API.Controllers
         {
             _logger.LogInformation($"Request for deletion a resource with id {id}.");
 
-            var validationResult = await _validatorResourceInsertRequest.ValidateAsync((IValidationContext)serviceDeletedRequest);
+            var validationResult = await _validatorSoftDeleteReques.ValidateAsync(serviceDeletedRequest);
 
             if(validationResult.IsValid)
             {

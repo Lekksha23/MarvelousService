@@ -10,14 +10,14 @@ namespace MarvelousService.API.Configuration
         {
             CreateMap<AuthRequest, AuthModel>(); 
 
-            CreateMap<ResourceInsertRequest, ResourceModel>().ReverseMap();
-            CreateMap<ResourceModel, ResourceResponse>().ReverseMap();
-            CreateMap<ResourceSoftDeleteRequest, ResourceModel>().ReverseMap();
-            CreateMap<LeadInsertRequest, LeadModel>().ReverseMap();
+            CreateMap<ResourceInsertRequest, ResourceModel>();
+            CreateMap<ResourceModel, ResourceResponse>();
+            CreateMap<ResourceSoftDeleteRequest, ResourceModel>();
+            CreateMap<LeadInsertRequest, LeadModel>();
 
-            CreateMap<LeadResourceInsertRequest, LeadResourceModel>().ReverseMap();
-            CreateMap<LeadResourceModel, LeadResourceByPayDateResponse>().ReverseMap();
-            CreateMap<LeadResourceModel, LeadResourceResponse>().ReverseMap();
+            CreateMap<LeadResourceInsertRequest, LeadResourceModel>();
+            CreateMap<LeadResourceModel, LeadResourceByPayDateResponse>();
+            CreateMap<LeadResourceModel, LeadResourceResponse>();
         }
     }
 }
