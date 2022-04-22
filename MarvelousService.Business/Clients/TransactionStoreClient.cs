@@ -22,7 +22,7 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             var client = new RestClient();
             var request = new RestRequest($"{_config[Microservice.MarvelousTransactionStore.ToString() + "Url"]}{TransactionEndpoints.ApiTransactions + TransactionEndpoints.ServicePayment}", Method.Post);
-            request.AddJsonBody(transactionRequestModel);
+            request.AddBody(transactionRequestModel);
             var response = await client.PostAsync(request);
             _requestHelper.CheckMicroserviceResponse(response);
             return Convert.ToInt64(response.Content);
