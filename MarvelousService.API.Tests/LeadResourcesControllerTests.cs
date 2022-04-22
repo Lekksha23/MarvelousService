@@ -47,23 +47,23 @@ namespace MarvelousService.API.Tests
                 _leadResourceInsertRequestValidator);
         }
 
-        [Test]
-        public async Task AddLeadResource_()
-        {
-            // given
-            var token = "IndicativeToken";
-            var leadResourceInsertRequest = new LeadResourceInsertRequest { Period = 1, ResourceId = 1 };
-            var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
-            var context = new DefaultHttpContext();
-            context.Request.Headers.Authorization = token;
-            _controller.ControllerContext.HttpContext = context;
+        //[Test]
+        //public async Task AddLeadResource_()
+        //{
+        //    // given
+        //    var token = "IndicativeToken";
+        //    var leadResourceInsertRequest = new LeadResourceInsertRequest { Period = 1, ResourceId = 1 };
+        //    var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
+        //    var context = new DefaultHttpContext();
+        //    context.Request.Headers.Authorization = token;
+        //    _controller.ControllerContext.HttpContext = context;
 
-            // when
-            //var actualResult = await _controller.AddLeadResource(leadResourceInsertRequest);
+        //    // when
+        //    //var actualResult = await _controller.AddLeadResource(leadResourceInsertRequest);
 
-            // then
+        //    // then
 
-        }
+        //}
 
     }
 }

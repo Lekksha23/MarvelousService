@@ -7,6 +7,6 @@ namespace MarvelousService.BusinessLayer.Helpers
     {
         int Id { get; }
 
-        void GiveLeadDiscount(LeadResourceModel leadResourceModel, Role role);
+        void GiveDiscountToLead(LeadResourceModel leadResourceModel, Role role);
     }
 }

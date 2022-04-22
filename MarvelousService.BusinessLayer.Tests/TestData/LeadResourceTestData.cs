@@ -94,6 +94,7 @@ namespace MarvelousService.BusinessLayer.Tests.TestCaseSource
                 Id = 1,
                 Period = Period.Month,
                 LeadId = 1,
+                Price = 1800,
                 Resource = new ResourceModel
                 {
                     Id = 1,

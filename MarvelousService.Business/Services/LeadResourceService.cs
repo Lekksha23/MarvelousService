@@ -73,7 +73,8 @@ namespace MarvelousService.BusinessLayer.Clients
         private void GiveDiscountIfLeadIsVip(LeadResourceModel leadResourceModel, Role role)
         {
             _roleStrategy = _roleStrategyProvider.GetStrategy((int)role);
-            _roleStrategy.GiveLeadDiscount(leadResourceModel, role);
+            CheckErrorHelper.CheckIfRoleStrategyIsNull(_roleStrategy);
+            _roleStrategy.GiveDiscountToLead(leadResourceModel, role);
         }
     }
 }

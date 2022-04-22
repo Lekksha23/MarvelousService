@@ -48,39 +48,39 @@ namespace MarvelousService.API.Tests
             _requestHelper = new Mock<IRequestHelper>();
         }
 
-        [Test]
-        public async Task ResourceTestIssueAnDuplicationException()
-        {
-            // Arrange
-            var resourceId = 1;
-            var resourceNew = new ResourceModel
-            {
-                Id = 1,
-                Name = "ewq",
-                Description = "EWQEWQ",
-                Price = 3000,
-                IsDeleted = false,
-            };
-            var resoerceRequestModel = new ResourceInsertRequest
-            {
+        //[Test]
+        //public async Task ResourceTestIssueAnDuplicationException()
+        //{
+        //    // Arrange
+        //    var resourceId = 1;
+        //    var resourceNew = new ResourceModel
+        //    {
+        //        Id = 1,
+        //        Name = "ewq",
+        //        Description = "EWQEWQ",
+        //        Price = 3000,
+        //        IsDeleted = false,
+        //    };
+        //    var resoerceRequestModel = new ResourceInsertRequest
+        //    {
                 
-                Name = "qwe",
-                Description = "EWQEWQ",
-                Price = 1500,
-                Type = 0
-            };
+        //        Name = "qwe",
+        //        Description = "EWQEWQ",
+        //        Price = 1500,
+        //        Type = 0
+        //    };
             
             
-            _resourceService.Setup(t => t.GetResourceById(resourceId)).ReturnsAsync(resourceNew);
-            var resourseModel = _autoMapper.Map<ResourceModel>(resoerceRequestModel);
+        //    _resourceService.Setup(t => t.GetResourceById(resourceId)).ReturnsAsync(resourceNew);
+        //    var resourseModel = _autoMapper.Map<ResourceModel>(resoerceRequestModel);
 
-            //when
-            var actual =  _controller.AddResource(resoerceRequestModel);
+        //    //when
+        //    var actual =  _controller.AddResource(resoerceRequestModel);
 
-            //then
-            _resourceService.Verify(m => m.AddResource(It.IsAny<ResourceModel>()), Times.Once());
+        //    //then
+        //    _resourceService.Verify(m => m.AddResource(It.IsAny<ResourceModel>()), Times.Once());
 
-        }
+        //}
 
 
      
