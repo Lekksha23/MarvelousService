@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using MarvelousService.API.Extensions;
 using FluentValidation;
+using MarvelousService.API.Producer.Interface;
 
 namespace MarvelousService.API.Controllers
 {
@@ -21,6 +22,7 @@ namespace MarvelousService.API.Controllers
         private readonly ILogger<LeadResourcesController> _logger;
         private readonly IValidator<LeadResourceInsertRequest> _leadResourceInsertRequestValidator;
         private readonly IRequestHelper _requestHelper;
+        private readonly IResourceProducer _resourceProducer;
 
         public LeadResourcesController(
             IMapper autoMapper,
@@ -28,12 +30,14 @@ namespace MarvelousService.API.Controllers
             IResourceService resourceService,
             IRequestHelper requestHelper,
             ILogger<LeadResourcesController> logger,
+            IResourceProducer resourceProducer,
             IValidator<LeadResourceInsertRequest> leadResourceInsertRequestValidator) : base(requestHelper, logger)
         {
             _leadResourceService = leadResource;
             _resourceService = resourceService;
             _autoMapper = autoMapper;
             _requestHelper = requestHelper;
+            _resourceProducer = resourceProducer;
             _logger = logger;
             _leadResourceInsertRequestValidator = leadResourceInsertRequestValidator;
         }
@@ -46,7 +50,6 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
-
             var validationResult = await _leadResourceInsertRequestValidator.ValidateAsync(leadResourceInsertRequest);
 
             if (validationResult.IsValid)
@@ -67,7 +70,6 @@ namespace MarvelousService.API.Controllers
                 _logger.LogError("Error: LeadResourceInsertRequest isn't valid");
                 throw new ValidationException("LeadResourceInsertRequest isn't valid");
             }
-                
         }
 
         //api/leadResources
