@@ -9,7 +9,6 @@ using MarvelousService.API.Models;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.API.Validators;
 using MarvelousService.BusinessLayer.Clients.Interfaces;
-using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MarvelousService.API.Tests
@@ -27,24 +25,22 @@ namespace MarvelousService.API.Tests
     {
         private Mock<IResourceService> _resourceService;
         private Mock<ControllerExtensions> _controllerExtensions;
-        private  Mock<ILogger<ResourcesController>> _logger;
-        private  Mock<IConfiguration> _configuration;
-        private  IMapper _autoMapper;
-        private  Mock<IRequestHelper> _requestHelper;
-        private  IValidator<ResourceInsertRequest> _validatorResourceInsertRequest;
-        private  IValidator<ResourceSoftDeleteRequest> _validatorResourceSoftDeletetRequest;
-        private  IValidator<ResourceUpdateRequest> _validatorResourceUpdatetRequest;
-        private  Mock<IResourceProducer> _resourceProducer;
-        private  ResourcesController _resourceController;
-
-
+        private Mock<ILogger<ResourcesController>> _logger;
+        private Mock<IConfiguration> _configuration;
+        private IMapper _autoMapper;
+        private Mock<IRequestHelper> _requestHelper;
+        private IValidator<ResourceInsertRequest> _validatorResourceInsertRequest;
+        private IValidator<ResourceSoftDeleteRequest> _validatorResourceSoftDeletetRequest;
+        private IValidator<ResourceUpdateRequest> _validatorResourceUpdatetRequest;
+        private Mock<IResourceProducer> _resourceProducer;
+        private ResourcesController _resourceController;
 
         [SetUp]
         public void Setup()
         {
             _controllerExtensions = new Mock<ControllerExtensions>();
             _logger = new Mock<ILogger<ResourcesController>>();
-            _resourceService = new Mock<IResourceService>();                     
+            _resourceService = new Mock<IResourceService>();
             _configuration = new Mock<IConfiguration>();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperFromApi>()));
             _validatorResourceInsertRequest = new ResourceInsertRequestValidator();
@@ -70,7 +66,7 @@ namespace MarvelousService.API.Tests
         }
 
 
-            [Test]
+        [Test]
         public async Task AddResourseTest_ShouldReturnStatusCode200()
         {
             // Arrange
@@ -106,7 +102,7 @@ namespace MarvelousService.API.Tests
             Assert.IsInstanceOf<ObjectResult>(actual.Result);
             _resourceService.Verify(r => r.AddResource(It.IsAny<ResourceModel>()), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
-            _resourceProducer.Verify(r=> r.NotifyResourceAdded(It.IsAny<int>()));
+            _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
 
         }
 
@@ -147,7 +143,7 @@ namespace MarvelousService.API.Tests
 
             //then
             Assert.IsInstanceOf<ObjectResult>(actual.Result);
-            _resourceService.Verify(r => r.UpdateResource(resourceId,It.IsAny<ResourceModel>()), Times.Once);
+            _resourceService.Verify(r => r.UpdateResource(resourceId, It.IsAny<ResourceModel>()), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
             _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
 
@@ -232,7 +228,7 @@ namespace MarvelousService.API.Tests
             Assert.IsInstanceOf<ObjectResult>(actual.Result);
             _resourceService.Verify(r => r.GetActiveResourceService(), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
-            
+
         }
 
         [Test]

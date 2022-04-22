@@ -3,11 +3,12 @@
 as
 begin
 	select 
-		Id, 
-		LeadId, 
-		ResourceId, 
-		Price 
-	from dbo.LeadResource
+		lr.Id, 
+		lr.LeadId, 
+		lr.Price,
+		r.[Id],
+		r.[Name]
+	from dbo.LeadResource lr inner join dbo.[Resource] r ON lr.ResourceId = r.Id
 	where datediff(week, StartDate, @PayDate) = 1 and [Status] = 1 and [Period] = 2 or 
 		  datediff(month, StartDate, @PayDate) = 1 and [Status] = 1 and [Period] = 3 or 
 		  datediff(year, StartDate, @PayDate) = 1 and [Status] = 1 and [Period] = 4

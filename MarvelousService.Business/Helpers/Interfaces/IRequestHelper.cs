@@ -11,5 +11,6 @@ namespace MarvelousService.BusinessLayer.Helpers
         Task<RestResponse<T>> SendRequest<T>(string path, Microservice service, string jwtToken = "null");
         void CheckMicroserviceResponse(RestResponse response);
         Task<IdentityResponseModel>SendRequestToValidateToken(string jwtToken);
+        Task<IdentityResponseModel> GetLeadIdentityByToken(string jwtToken);
     }
 }

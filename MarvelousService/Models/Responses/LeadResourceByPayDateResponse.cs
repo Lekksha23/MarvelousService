@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public decimal Price { get; set; }
         public int LeadId { get; set; }
-        public int ResourceId { get; set; }
+        public ResourceForPayDateResponse Resource { get; set; }
     }
 }

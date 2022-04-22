@@ -7,7 +7,7 @@ namespace MarvelousService.BusinessLayer.Helpers
     {
         public int Id { get => (int)Role.Regular; }
 
-        public void GiveLeadDiscount(LeadResourceModel leadResourceModel, Role role)
+        public void GiveDiscountToLead(LeadResourceModel leadResourceModel, Role role)
         {
 
         }

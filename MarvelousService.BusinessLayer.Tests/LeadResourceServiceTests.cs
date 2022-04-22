@@ -78,7 +78,6 @@ namespace MarvelousService.BusinessLayer.Tests
             _crmServiceMock.Verify(m => m.GetIdOfRubLeadAccount(token), Times.Once());
             _transactionServiceMock.Verify(m => m.AddResourceTransaction(accountId, leadResourceModel.Price), Times.Once());
             _leadResourceRepositoryMock.Verify(m => m.AddLeadResource(It.IsAny<LeadResource>()), Times.Once());
-
             _resourcePaymentRepositoryMock.Verify(m => m.AddResourcePayment(leadResourceId, transactionId), Times.Once());
         }
 

@@ -31,6 +31,19 @@ namespace MarvelousService.API.Extensions
             return lead;
         }
 
+        protected IdentityResponseModel GetIdentity()
+        {
+            var token = HttpContext.Request.Headers.Authorization.FirstOrDefault();
+            if (token == null)
+            {
+                var ex = new ForbiddenException($"Anonymous doesn't have access to this endpiont");
+                _logger.LogError(ex.Message);
+                throw ex;
+            }
+            var identity = _requestHelper.GetLeadIdentityByToken(token).Result;
+            return identity;
+        }
+
         protected void Validate<T>(T requestModel, IValidator<T> validator)
         {
             if (requestModel == null)

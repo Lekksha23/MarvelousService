@@ -88,7 +88,7 @@ namespace MarvelousService.API.Extensions
 
         public static void InitializeConfigs(this WebApplication app)
         {
-            app.Services.CreateScope().ServiceProvider.GetRequiredService<IInitializeHelper>().InitializeConfig();
+            app.Services.CreateScope().ServiceProvider.GetRequiredService<IInitializeHelper>().InitializeConfigs();
         }
 
         public static void RegisterSwaggerAuth(this IServiceCollection swagger)

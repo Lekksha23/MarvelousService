@@ -8,11 +8,11 @@ namespace MarvelousService.API.Configuration
     {
         public AutoMapperFromApi()
         {
-            CreateMap<AuthRequest, AuthModel>(); 
-
             CreateMap<ResourceInsertRequest, ResourceModel>();
             CreateMap<ResourceModel, ResourceResponse>();
             CreateMap<ResourceSoftDeleteRequest, ResourceModel>();
+            CreateMap<ResourceModel, ResourceForPayDateResponse>();
+            
             CreateMap<LeadInsertRequest, LeadModel>();
 
             CreateMap<LeadResourceInsertRequest, LeadResourceModel>();
