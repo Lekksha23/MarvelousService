@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
+using MarvelousService.API.Configuration;
 using MarvelousService.API.Controllers;
 using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
@@ -12,10 +13,12 @@ using MarvelousService.BusinessLayer.Configurations;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MarvelousService.API.Tests
@@ -43,7 +46,7 @@ namespace MarvelousService.API.Tests
             _logger = new Mock<ILogger<ResourcesController>>();
             _resourceService = new Mock<IResourceService>();                     
             _configuration = new Mock<IConfiguration>();
-            _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperToData>()));
+            _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperFromApi>()));
             _validatorResourceInsertRequest = new ResourceInsertRequestValidator();
             _validatorResourceSoftDeletetRequest = new ResourceSoftDeleteRequestValidator();
             _validatorResourceUpdatetRequest = new ResourceUpdateRequestValidator();
@@ -68,52 +71,212 @@ namespace MarvelousService.API.Tests
 
 
             [Test]
-        public async Task ResourceTestIssueAnDuplicationException()
+        public async Task AddResourseTest_ShouldReturnStatusCode200()
         {
-            //// Arrange
-            //var resourceId = 1;
-            //var resourceNew = new ResourceModel
-            //{
-            //    Id = 1,
-            //    Name = "ewq",
-            //    Description = "EWQEWQ",
-            //    Price = 3000,
-            //    Type = DataLayer.Enums.ServiceType.OneTime,
-            //    IsDeleted = false,
-            //};
-            //var resoerceRequestModel = new ResourceInsertRequest
-            //{
-                
-            //    Name = "qwe",
-            //    Description = "EWQEWQ",
-            //    Price = 1500,
-            //    Type = 1,
-            //};
+            // Arrange
 
-            //var token = "token";
-            //AddContext(token);
-            //_requestHelper
-            //    .Setup(m => m.SendRequestToValidateToken(token))
-            //    .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
-            
-
-            ////when
-            // var actual = _resourceController.AddResource(resoerceRequestModel);
-
-            ////then
-            ////_resourceService.Verify(m => m.AddResource(resourceNew));
-            //_requestHelper.Verify(m => m.SendRequestToValidateToken(token), Times.Once());
-            //_resourceProducer.Verify(m => m.NotifyResourceAdded( It.IsAny<int>()));
+            var resourceId = 1;
 
 
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceInsertRequest
+            {
 
+                Name = "qwe",
+                Description = "EWQEWQ",
+                Price = 1500,
+                Type = 1,
+            };
+
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+
+            //when
+            var actual = await _resourceController.AddResource(resoerceRequestModel);
+
+
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.AddResource(It.IsAny<ResourceModel>()), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            _resourceProducer.Verify(r=> r.NotifyResourceAdded(It.IsAny<int>()));
 
         }
 
+        [Test]
+        public async Task UpdateResourseTest_ShouldReturnStatusCode200()
+        {
+            // Arrange
 
-     
+            var resourceId = 1;
+
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceUpdateRequest
+            {
+
+                Name = "qwe",
+                Description = "EWQEWQ",
+                Price = 1500,
+                Type = 1,
+            };
+
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+
+            //when
+            var actual = await _resourceController.UpdateResource(resourceId, resoerceRequestModel);
 
 
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.UpdateResource(resourceId,It.IsAny<ResourceModel>()), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
+
+        }
+
+        [Test]
+        public async Task SoftDeleteResourseTest_ShouldReturnStatusCode200()
+        {
+            // Arrange
+
+            var resourceId = 1;
+
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceSoftDeleteRequest
+            {
+                IsDeleted = true,
+            };
+
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+
+            //when
+            var actual = await _resourceController.SoftDelete(resourceId, resoerceRequestModel);
+
+
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.SoftDelete(resourceId, It.IsAny<ResourceModel>()), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
+
+        }
+
+        [Test]
+        public async Task GetResourceById_ShouldReturnStatusCode200()
+        {
+            // Arrange
+
+            var resourceId = 1;
+
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceInsertRequest
+            {
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = 1,
+            };
+
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+
+            //when
+            var actual = await _resourceController.GetResourceById(resourceId);
+
+
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.GetResourceById(It.IsAny<int>()), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
+        }
+
+        [Test]
+        public async Task GetActiveResource_ShouldReturnStatusCode200()
+        {
+            // Arrange
+
+            var resourceId = 1;
+
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceInsertRequest
+            {
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = 1,
+            };
+
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+
+            //when
+            var actual = await _resourceController.GetActiveResource();
+
+
+            //then
+            Assert.IsInstanceOf<ObjectResult>(actual.Result);
+            _resourceService.Verify(r => r.GetActiveResourceService(), Times.Once);
+            _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            
+        }
 
     }
 
