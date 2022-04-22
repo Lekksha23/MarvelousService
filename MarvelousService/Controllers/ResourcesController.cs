@@ -23,14 +23,18 @@ namespace MarvelousService.API.Controllers
         private readonly IResourceProducer _resourceProducer;
         private readonly IRequestHelper _requestHelper;
         private readonly IValidator<ResourceInsertRequest> _validatorResourceInsertRequest;
+        private readonly IValidator<ResourceSoftDeleteRequest> _validatorSoftDeleteReques;
+        private readonly IValidator<ResourceUpdateRequest> _validatorUpdateRequest;
 
-        public ResourcesController(
+
+        public ResourcesController(            
             IResourceService resourceService, 
             IMapper autoMapper, 
             ILogger<ResourcesController> logger, 
             IResourceProducer resourceProducer,
             IRequestHelper requestHelper,
-            IValidator<ResourceInsertRequest> validatorResourceInsertRequest) : base(requestHelper, logger)
+            IValidator<ResourceSoftDeleteRequest> validatorSoftDeleteReques,
+            IValidator<ResourceInsertRequest> validatorResourceInsertRequest) : base(requestHelper, logger)            
         {
             _resourceService = resourceService;
             _autoMapper = autoMapper;
@@ -38,30 +42,39 @@ namespace MarvelousService.API.Controllers
             _resourceProducer = resourceProducer;
             _requestHelper = requestHelper;
             _validatorResourceInsertRequest = validatorResourceInsertRequest;
+            _validatorSoftDeleteReques = validatorSoftDeleteReques;
         }
 
-        //api/services
+        //api/resources
         [HttpPost]
         [SwaggerOperation("Add a new resource")]       
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<int>> AddResource([FromBody] ResourceInsertRequest serviceInsertRequest)
+        public async Task<ActionResult<int>> AddResource([FromBody] ResourceInsertRequest resourceInsertRequest)
         {
-
             _logger.LogInformation($"Received a request to add a new resource.");
+            var validationResult = await _validatorResourceInsertRequest.ValidateAsync(resourceInsertRequest);
 
-            Validate(serviceInsertRequest, _validatorResourceInsertRequest);
-            var lead = await CheckRole(Role.Admin);
-            _logger.LogInformation($"Role - {lead} successfully verified.");
-            var resourceModel = _autoMapper.Map<ResourceModel>(serviceInsertRequest);
-            var id = await _resourceService.AddResource(resourceModel);
-            _logger.LogInformation($"Resource with id {id} successfully added.");
-            await _resourceProducer.NotifyResourceAdded(resourceModel.Id);
-            return StatusCode(StatusCodes.Status201Created, id);
+            if(validationResult.IsValid)
+            {
+                var lead = await CheckRole(Role.Admin);
+                _logger.LogInformation($"Role - {lead} successfully verified.");
+                var resourceModel = _autoMapper.Map<ResourceModel>(resourceInsertRequest);
+                var id = await _resourceService.AddResource(resourceModel);
+                _logger.LogInformation($"Resource with id {id} successfully added.");
+                await _resourceProducer.NotifyResourceAdded(resourceModel.Id);
+
+                return StatusCode(StatusCodes.Status201Created, id);
+            }
+            else
+            {
+                _logger.LogError("Error: ResourceInsertRequest isn't valid");
+                throw new ValidationException("ResourceInsertRequest isn't valid");
+            }
         }
 
-        //api/services/
+        //api/resources/
         [HttpGet("id")]
         [SwaggerOperation("Get resource by id")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -72,7 +85,7 @@ namespace MarvelousService.API.Controllers
         {
             _logger.LogInformation($"Request for getting a resource by id {id}");
             var lead = await CheckRole(Role.Admin);
-            _logger.LogInformation($"Role - {lead} successfully verified.");
+            _logger.LogInformation($"Role - {lead.Role} successfully verified.");
             var resourceModel = await _resourceService.GetResourceById(id);
             var result = _autoMapper.Map<ResourceResponse>(resourceModel);
             _logger.LogInformation($"Resource by id {id} was received");
@@ -80,7 +93,7 @@ namespace MarvelousService.API.Controllers
             return Ok(result);
         }
 
-        //api/services/
+        //api/resources
         [HttpGet("getAll")]
         [SwaggerOperation("Get all resources")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -91,14 +104,14 @@ namespace MarvelousService.API.Controllers
         {
             _logger.LogInformation($"Request for receiving all resources");
             var lead = await CheckRole(Role.Admin);
-            _logger.LogInformation($"Role - {lead} successfully verified.");
+            _logger.LogInformation($"Role - {lead.Role} successfully verified.");
             var resourceModels = await _resourceService.GetAllResources();
             var result = _autoMapper.Map<List<ResourceResponse>>(resourceModels);
             _logger.LogInformation($"Resources received");
             return Ok(result);
         }
 
-        //api/services/
+        //api/resources
         [HttpGet("getActive")]
         [SwaggerOperation("Get active resource")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -108,50 +121,73 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<ResourceResponse>> GetActiveResource()
         {
             _logger.LogInformation($"Request for receiving all resources");
-            var lead = await CheckRole(Role.Admin,Role.Regular,Role.Vip);
-            _logger.LogInformation($"Role - {lead} successfully verified.");
+            var lead = await CheckRole(Role.Admin);
+            _logger.LogInformation($"Role - {lead.Role} successfully verified.");
             var resourceModels = await _resourceService.GetActiveResourceService();
             var result = _autoMapper.Map<List<ResourceResponse>>(resourceModels);
             _logger.LogInformation($"Resources received");
             return Ok(result);
         }
 
-        //api/services/
+        //api/resources
         [HttpPut("id")]
         [SwaggerOperation("Update a resource")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<ActionResult<ResourceResponse>> UpdateResource(int id, ResourceUpdateRequest serviceUpdateRequest)
+        public async Task<ActionResult<ResourceResponse>> UpdateResource(int id, ResourceUpdateRequest resourceUpdateRequest)
         {
             _logger.LogInformation($"Request for updating a resource with id {id}.");
-            var lead = await CheckRole(Role.Admin);
-            _logger.LogInformation($"Role - {lead} successfully verified.");
-            ResourceModel resource = _autoMapper.Map<ResourceModel>(serviceUpdateRequest);
-            await _resourceService.UpdateResource(id, resource);
-            _logger.LogInformation($"Resource with id {id} successfully received.");
-            await _resourceProducer.NotifyResourceAdded(id);
-            return Ok(resource);
+
+            var validationResult = await _validatorResourceInsertRequest.ValidateAsync(resourceUpdateRequest);
+
+            if(validationResult.IsValid)
+            {
+                var lead = await CheckRole(Role.Admin);
+                _logger.LogInformation($"Role - {lead} successfully verified.");
+                ResourceModel resource = _autoMapper.Map<ResourceModel>(resourceUpdateRequest);
+                await _resourceService.UpdateResource(id, resource);
+                _logger.LogInformation($"Resource with id {id} successfully received.");
+                await _resourceProducer.NotifyResourceAdded(id);
+                return Ok(resource);
+            }
+            else
+            {
+                _logger.LogError("Error: ResourceUpdateRequest isn't valid");
+                throw new ValidationException("ResourceUpdatetRequest isn't valid");
+            }
+            
         }
 
-        //api/services/
-        [HttpPatch("id")]
+        //api/resources
+        [HttpDelete("id")]
         [SwaggerOperation("Delete a resource")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<ActionResult<ResourceResponse>> SoftDelete(int id, ResourceSoftDeleteRequest serviceDeletedRequest)
+        public async Task<ActionResult<ResourceResponse>> SoftDelete(int id, ResourceSoftDeleteRequest resourceDeleteRequest)
         {
             _logger.LogInformation($"Request for deletion a resource with id {id}.");
-            var lead = await CheckRole(Role.Admin);
-            _logger.LogInformation($"Role - {lead} successfully verified.");
-            ResourceModel service = _autoMapper.Map<ResourceModel>(serviceDeletedRequest);
-            await _resourceService.SoftDelete(id, service);
-            _logger.LogInformation($"Resource with id {id} successfully deleted.");
-            await _resourceProducer.NotifyResourceAdded(id);
-            return Ok(service);
+
+            var validationResult = await _validatorSoftDeleteReques.ValidateAsync(resourceDeleteRequest);
+
+            if(validationResult.IsValid)
+            {
+                var lead = await CheckRole(Role.Admin);
+                _logger.LogInformation($"Role - {lead} successfully verified.");
+                ResourceModel service = _autoMapper.Map<ResourceModel>(resourceDeleteRequest);
+                await _resourceService.SoftDelete(id, service);
+                _logger.LogInformation($"Resource with id {id} successfully deleted.");
+                await _resourceProducer.NotifyResourceAdded(id);
+                return Ok(service);
+            }
+            else
+            {
+                _logger.LogError("Error: ResourceSoftDeleteRequest isn't valid");
+                throw new ValidationException("ResourceSoftDeleteRequest isn't valid");
+            }
         }
     }
 }

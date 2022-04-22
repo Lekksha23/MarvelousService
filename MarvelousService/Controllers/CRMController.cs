@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
 using MarvelousService.BusinessLayer.Clients;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +14,26 @@ namespace MarvelousService.API.Controllers
     [ApiController]
     [Route("api/crm")]
     [AllowAnonymous]
-    public class CRMController : Controller
+    public class CRMController : ControllerExtensions
     {
         private readonly ICRMClient _crmClient;
         private readonly IMapper _autoMapper;
+        private readonly IRequestHelper _requestHelper;
         private readonly ILogger<AuthController> _logger;
+        private readonly IValidator<LeadInsertRequest> _leadInsertRequestValidator;
 
-        public CRMController(ICRMClient crmClient, IMapper autoMapper, ILogger<AuthController> logger)
+        public CRMController(
+            ICRMClient crmClient,
+            IMapper autoMapper,
+            ILogger<AuthController> logger,
+            IRequestHelper requestHelper,
+            IValidator<LeadInsertRequest> leadInsertRequestValidator) : base (requestHelper, logger)
         {
             _crmClient = crmClient;
             _autoMapper = autoMapper;
             _logger = logger;
+            _requestHelper = requestHelper;
+            _leadInsertRequestValidator = leadInsertRequestValidator;
         }
 
         [HttpPost("registrate")]
@@ -29,6 +41,7 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Registrate a new lead. Roles: Anonymous")]
         public async Task<ActionResult<int>> RegistrateLead([FromBody] LeadInsertRequest leadInsertRequest)
         {
+            Validate(leadInsertRequest, _leadInsertRequestValidator);
             _logger.LogInformation($"Query for registration new lead with name:{leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
             var leadModel = _autoMapper.Map<LeadModel>(leadInsertRequest);
             var leadId = await _crmClient.AddLead(leadModel);

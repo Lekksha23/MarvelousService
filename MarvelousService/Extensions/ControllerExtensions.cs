@@ -22,20 +22,33 @@ namespace MarvelousService.API.Extensions
         {
             _logger.LogInformation($"Query for checking role in the IdentityService");
             var lead = await _requestHelper.SendRequestToValidateToken(HttpContext.Request.Headers.Authorization.First());
-            var leadRole = lead.Data.Role;
+            var leadRole = lead.Role;
             if (!roles.Select(r => r.ToString()).Contains(leadRole))
             {
                 _logger.LogError($"User with role:{leadRole} don't have acces to the method");
                 throw new ForbiddenException($"User with role:{leadRole} don't have acces to this method");
             }
-            return lead.Data;
+            return lead;
+        }
+
+        protected IdentityResponseModel GetIdentity()
+        {
+            var token = HttpContext.Request.Headers.Authorization.FirstOrDefault();
+            if (token == null)
+            {
+                var ex = new ForbiddenException($"Anonymous doesn't have access to this endpiont");
+                _logger.LogError(ex.Message);
+                throw ex;
+            }
+            var identity = _requestHelper.GetLeadIdentityByToken(token).Result;
+            return identity;
         }
 
         protected void Validate<T>(T requestModel, IValidator<T> validator)
         {
             if (requestModel == null)
             {
-                var ex = new BadRequestException("You must specify the table details in the request body");
+                var ex = new BadRequestException("You must specify details in the request body");
                 _logger.LogError(ex, ex.Message);
                 throw ex;
             }

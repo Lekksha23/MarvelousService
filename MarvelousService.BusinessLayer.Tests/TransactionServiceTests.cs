@@ -1,5 +1,4 @@
-﻿using Marvelous.Contracts.Enums;
-using Marvelous.Contracts.RequestModels;
+﻿using Marvelous.Contracts.RequestModels;
 using MarvelousService.BusinessLayer.Clients;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -25,15 +24,9 @@ namespace MarvelousService.BusinessLayer.Tests
         {
             // given
             var accountId = 23;
-            var totalPrice = 3240.0M;
+            var totalPrice = 3000.0M;
             var transactionId = 40000000;
-            var resourceTransaction = new TransactionRequestModel
-            {
-                Amount = totalPrice,
-                Currency = Currency.RUB,
-                AccountId = accountId
-            };
-            _transactionClientMock.Setup(m => m.AddResourceTransaction(resourceTransaction)).ReturnsAsync(transactionId);
+            _transactionClientMock.Setup(m => m.AddResourceTransaction(It.IsAny<TransactionRequestModel>())).ReturnsAsync(transactionId);
             var sut = new TransactionService(_transactionClientMock.Object, _loggerMock.Object);
 
             // when
@@ -41,7 +34,7 @@ namespace MarvelousService.BusinessLayer.Tests
 
             // then
             Assert.NotNull(actual);
-            //Assert.AreEqual(transactionId, actual);
+            Assert.AreEqual(transactionId, actual);
             _transactionClientMock.Verify(m => m.AddResourceTransaction(It.IsAny<TransactionRequestModel>()), Times.Once);
             _loggerMock.Verify(x => x.Log(LogLevel.Information,
                     It.IsAny<EventId>(),

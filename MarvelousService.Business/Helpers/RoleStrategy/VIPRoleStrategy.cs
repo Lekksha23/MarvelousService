@@ -8,7 +8,7 @@ namespace MarvelousService.BusinessLayer.Helpers
         private const double _discountVIP = 0.9;
         public int Id { get => (int)Role.Vip; }
 
-        public void GiveLeadDiscount(LeadResourceModel leadResourceModel, Role role)
+        public void GiveDiscountToLead(LeadResourceModel leadResourceModel, Role role)
         {
             leadResourceModel.Price *= (decimal)_discountVIP;
         }

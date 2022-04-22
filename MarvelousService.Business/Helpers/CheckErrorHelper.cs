@@ -1,4 +1,5 @@
 ﻿using MarvelousService.BusinessLayer.Exceptions;
+using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using MarvelousService.DataLayer.Entities;
 using NLog;
@@ -22,8 +23,8 @@ namespace MarvelousService.BusinessLayer.Clients
         {
             if (resource.Count == 0)
             {
-                _logger.Error("Error No active services found");
-                throw new NotFoundServiceException("No active services found");
+                _logger.Error("Error! No active resources found");
+                throw new NotFoundServiceException("No active resources found");
             }
         }
 
@@ -33,6 +34,15 @@ namespace MarvelousService.BusinessLayer.Clients
             {
                 _logger.Error("Error in receiving information about Resource payment");
                 throw new NotFoundServiceException("Resource payment not found");
+            }
+        }
+
+        public static void CheckIfRoleStrategyIsNull(IRoleStrategy roleStrategy)
+        {
+            if (roleStrategy == null)
+            {
+                _logger.Error("Unknown role was trying to get access to AddLeadResource method.");
+                throw new RoleException("Unknown role was trying to get access to AddLeadResource method.");
             }
         }
 

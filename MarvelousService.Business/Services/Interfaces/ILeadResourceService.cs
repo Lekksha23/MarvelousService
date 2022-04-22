@@ -8,7 +8,7 @@ namespace MarvelousService.BusinessLayer.Clients.Interfaces
     {
         Task<int> AddLeadResource(LeadResourceModel serviceModel, Role role, string jwtToken);
         Task<LeadResourceModel>GetById(int id);
-        Task<LeadResourceModel> GetByLeadId(int id);
+        Task<List<LeadResourceModel>> GetByLeadId(int id);
         Task<List<LeadResourceModel>> GetByPayDate(DateTime payDate);
     }
 }

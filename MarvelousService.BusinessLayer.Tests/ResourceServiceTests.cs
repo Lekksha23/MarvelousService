@@ -40,7 +40,15 @@ namespace MarvelousService.BusinessLayer.Tests
         {
             //given
             var resourceId = 3;
-            var resourceOld = new Resource();
+            var resourceModel = new ResourceModel
+            {
+                Id = 3,
+                Name = "qwe",
+                Description = "QWEQWE",
+                Price = 1500,
+                IsDeleted = false
+            };
+
             var resource = new Resource
             {
                 Id = 3,
@@ -53,14 +61,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var sut = new ResourceService(_resourceRepositoryMock.Object, _autoMapper, _logger.Object);
 
             //when
-            sut.AddResource(new ResourceModel // Не менять с await не тестит!
-            {
-                Id = 3,
-                Name = "qwe",
-                Description = "QWEQWE",
-                Price = 1500,
-                IsDeleted = false,
-            });
+            sut.AddResource(resourceModel); 
 
             var actual = await sut.GetResourceById(3);
 
