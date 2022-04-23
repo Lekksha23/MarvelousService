@@ -9,15 +9,29 @@ namespace MarvelousService.API.Validators
         {
             RuleFor(x => x.Period)
                 .NotEmpty()
-                .InclusiveBetween(1, 4)
-                .WithMessage("Please ensure you have entered Period inclusive between 1 and 4.");
+                .GreaterThanOrEqualTo(1)
+                .WithMessage("Please ensure you have entered Period greater or equal to 1.")
+                .LessThanOrEqualTo(4)
+                .WithMessage("Please ensure you have entered Period less or equal to 4.");
             RuleFor(x => x.ResourceId)
                 .NotEmpty()
-                .InclusiveBetween(1, 5)
-                .WithMessage("Please ensure you have entered ResourceId inclusive between 1 and 5.")
-                .LessThan(3)
-                .When(x => x.Period == 1)
-                .WithMessage("You can't order first or second resources with 2 - week, 3 - month and 4 - year periods.");
+                .GreaterThanOrEqualTo(1)
+                .WithMessage("Please ensure you have entered ResourceId greater or equal to 1.")
+                .LessThanOrEqualTo(5)
+                .WithMessage("Please ensure you have entered ResourceId less or equal to 5.");
+
+            When(x => x.ResourceId == 1, () =>
+            {
+                RuleFor(x => x.Period)
+                .Equal(1)
+                .WithMessage("You can't order onetime resource as subscription.");
+            });
+            When(x => x.ResourceId == 2, () =>
+            {
+                RuleFor(x => x.Period)
+                .Equal(1)
+                .WithMessage("You can't order onetime resource as subscription.");
+            });
         }
     }
 }

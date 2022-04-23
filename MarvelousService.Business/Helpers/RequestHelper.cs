@@ -56,18 +56,6 @@ namespace MarvelousService.BusinessLayer.Helpers
             return response.Data;
         }
 
-        public async Task<IdentityResponseModel> GetLeadIdentityByToken(string jwtToken)
-        {
-            _logger.LogInformation($"Query for getting lead identity in the IdentityService from token: {jwtToken}");
-            var client = new RestClient(_config[Microservice.MarvelousAuth.ToString()]);
-            client.Authenticator = new MarvelousAuthenticator(jwtToken);
-            client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
-            var request = new RestRequest($"{_config[Microservice.MarvelousAuth.ToString()]}{AuthEndpoints.ApiAuth}{AuthEndpoints.DoubleValidation}");
-            var response = await client.ExecuteAsync<IdentityResponseModel>(request);
-            CheckMicroserviceResponse(response);
-            return response.Data;
-        }
-
         public void CheckMicroserviceResponse(RestResponse response)
         {
             switch (response.StatusCode)

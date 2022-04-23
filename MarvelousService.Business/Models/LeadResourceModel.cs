@@ -13,7 +13,7 @@ namespace MarvelousService.BusinessLayer.Models
         public List<ResourcePaymentModel> ResourcePayments { get; set; }
         public decimal Price { get; set; }
 
-        public decimal CountPrice()
+        public decimal GetPrice()
         {
             SubscriptionTime time = new OneTime();
 
@@ -24,7 +24,7 @@ namespace MarvelousService.BusinessLayer.Models
                 Period.Year => new Year(),
                 _ => time
             };
-            return time.GetPrice(Resource.Price);
+            return time.CountPrice(Resource.Price);
         }
     }
 }

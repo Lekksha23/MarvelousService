@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Marvelous.Contracts.Enums;
+using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
+using MarvelousService.API.Producer.Interface;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Clients.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using MarvelousService.API.Extensions;
-using FluentValidation;
-using MarvelousService.API.Producer.Interface;
 
 namespace MarvelousService.API.Controllers
 {
@@ -59,10 +59,11 @@ namespace MarvelousService.API.Controllers
                 _logger.LogInformation($"Access to the method for lead {lead.Id} granted");
                 _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead.Id}.");
                 var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
-                var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
-                leadResourceModel.Resource = resource.Result;
+                var resource = await _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
+                leadResourceModel.Resource = resource;
                 leadResourceModel.LeadId = (int)lead.Id;
                 var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
+                await _resourceProducer.NotifyLeadResourceAdded(id);
                 return StatusCode(StatusCodes.Status201Created, id);
             }
             else

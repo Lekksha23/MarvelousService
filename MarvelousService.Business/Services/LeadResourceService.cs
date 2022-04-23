@@ -39,7 +39,7 @@ namespace MarvelousService.BusinessLayer.Clients
 
         public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role, string jwtToken)
         {
-            leadResourceModel.Price = leadResourceModel.CountPrice();
+            leadResourceModel.Price = leadResourceModel.GetPrice();
             GiveDiscountIfLeadIsVip(leadResourceModel, role);  
             var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
             var accountId = await _crmService.GetIdOfRubLeadAccount(jwtToken);

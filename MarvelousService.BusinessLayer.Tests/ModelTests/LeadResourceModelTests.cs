@@ -13,7 +13,7 @@ namespace MarvelousService.BusinessLayer.Tests.ModelTests
             var sut = LeadResourceTestData.GetLeadResourceModelWithOneTimePeriodForTests();
 
             // when
-            var actual = sut.CountPrice();
+            var actual = sut.GetPrice();
 
             // then
             Assert.AreEqual(expectedPrice, actual);
@@ -27,7 +27,7 @@ namespace MarvelousService.BusinessLayer.Tests.ModelTests
             var sut = LeadResourceTestData.GetLeadResourceModelWithWeekPeriodForTests();
 
             // when
-            var actual = sut.CountPrice();
+            var actual = sut.GetPrice();
 
             // then
             Assert.AreEqual(expectedPrice, actual);
@@ -41,7 +41,7 @@ namespace MarvelousService.BusinessLayer.Tests.ModelTests
             var sut = LeadResourceTestData.GetLeadResourceModelWithMonthPeriodForTests();
 
             // when
-            var actual = sut.CountPrice();
+            var actual = sut.GetPrice();
 
             // then
             Assert.AreEqual(expectedPrice, actual);
@@ -55,7 +55,7 @@ namespace MarvelousService.BusinessLayer.Tests.ModelTests
             var sut = LeadResourceTestData.GetLeadResourceModelWithYearPeriodForTests();
 
             // when
-            var actual = sut.CountPrice();
+            var actual = sut.GetPrice();
 
             // then
             Assert.AreEqual(expectedPrice, actual);
