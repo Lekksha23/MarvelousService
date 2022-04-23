@@ -72,7 +72,7 @@ namespace MarvelousService.API.Tests
 
             // when
             var result = await _controller.AddLeadResource(leadResourceInsertRequest);
-            var actualResult = result.Result as OkObjectResult;
+            var actualResult = result.Result as OkObjectResult; // Почему-то здесь Null но у репортинга работает... Я сломал мозг...
 
             // then
             Assert.AreEqual(leadResourceId, actualResult!.Value);
