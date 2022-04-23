@@ -11,6 +11,7 @@ namespace MarvelousService.API.Controllers
     [ApiController]
     [Route("api/auth")]
     [AllowAnonymous]
+    [SwaggerTag("This controller is used to login.")]
     public class AuthController : ControllerExtensions
     {
         private readonly ILogger<AuthController> _logger;

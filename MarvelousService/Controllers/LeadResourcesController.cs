@@ -14,6 +14,7 @@ namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/leadResources")]
+    [SwaggerTag("This controller is used to order subscriptions and onetime services and get information about them.")]
     public class LeadResourcesController : ControllerExtensions
     {
         private readonly ILeadResourceService _leadResourceService;
@@ -46,6 +47,7 @@ namespace MarvelousService.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
@@ -68,8 +70,8 @@ namespace MarvelousService.API.Controllers
             }
             else
             {
-                _logger.LogError("Error: LeadResourceInsertRequest isn't valid");
-                throw new ValidationException("LeadResourceInsertRequest isn't valid");
+                _logger.LogError($"Error: {validationResult}");
+                throw new ValidationException($"{validationResult}");
             }
         }
 
