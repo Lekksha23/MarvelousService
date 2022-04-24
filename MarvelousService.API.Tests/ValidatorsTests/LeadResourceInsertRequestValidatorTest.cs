@@ -36,6 +36,9 @@ namespace MarvelousService.API.Tests.ValidatorsTests
         }
 
         [TestCase(null)]
+        [TestCase(4)]
+        [TestCase(0)]
+        [TestCase(-1)]
 
         public void LeadResourceInsertRequestModel_NoService(int resourseId)
         {
@@ -53,7 +56,33 @@ namespace MarvelousService.API.Tests.ValidatorsTests
             validationResult.ShouldHaveValidationErrorFor(resourse => resourse.ResourceId);
         }
 
+
+        [TestCase(1)]
+        [TestCase(2)]
+
+        public void LeadResourceInsertRequestModel_ServiceExists(int resourseId)
+        {
+            //given
+            var resourse = new LeadResourceInsertRequest
+            {
+                ResourceId = resourseId,
+                Period = 1
+            };
+
+            //when
+            var validationResult = _validatorLeadResource.TestValidate(resourse);
+
+            // then
+            validationResult.ShouldNotHaveValidationErrorFor(resourse => resourse.ResourceId);
+        }
+        
+
+
+
         [TestCase(null)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        [TestCase(6)]
 
         public void LeadResourceInsertRequestModel_NoPeriod(int period)
         {
@@ -69,6 +98,26 @@ namespace MarvelousService.API.Tests.ValidatorsTests
 
             // then
             validationResult.ShouldHaveValidationErrorFor(resourse => resourse.Period);
+        }
+
+
+        [TestCase(1)]
+        [TestCase(2)]
+
+        public void LeadResourceInsertRequestModel_ExistsPeriod(int period)
+        {
+            //given
+            var resourse = new LeadResourceInsertRequest
+            {
+                ResourceId = 1,
+                Period = period
+            };
+
+            //when
+            var validationResult = _validatorLeadResource.TestValidate(resourse);
+
+            // then
+            validationResult.ShouldNotHaveValidationErrorFor(resourse => resourse.Period);
         }
     }
 }
