@@ -62,6 +62,7 @@ namespace MarvelousService.API.Controllers
                 leadResourceModel.Resource = resource.Result;
                 leadResourceModel.LeadId = (int)lead.Id;
                 var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
+                await _resourceProducer.NotifyLeadResourceAdded(id);
                 return StatusCode(StatusCodes.Status201Created, id);
             }
             else
