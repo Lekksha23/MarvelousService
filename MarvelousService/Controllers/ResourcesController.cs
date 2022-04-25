@@ -55,10 +55,9 @@ namespace MarvelousService.API.Controllers
         {
             _logger.LogInformation($"Received a request to add a new resource.");
             var validationResult = await _validatorResourceInsertRequest.ValidateAsync(resourceInsertRequest);
-
-            if(validationResult.IsValid)
+            var lead = await CheckRole(Role.Admin);
+            if (validationResult.IsValid)
             {
-                var lead = await CheckRole(Role.Admin);
                 _logger.LogInformation($"Role - {lead} successfully verified.");
                 var resourceModel = _autoMapper.Map<ResourceModel>(resourceInsertRequest);
                 var id = await _resourceService.AddResource(resourceModel);
@@ -141,10 +140,9 @@ namespace MarvelousService.API.Controllers
             _logger.LogInformation($"Request for updating a resource with id {id}.");
 
             var validationResult = await _validatorResourceInsertRequest.ValidateAsync(resourceUpdateRequest);
-
-            if(validationResult.IsValid)
-            {
-                var lead = await CheckRole(Role.Admin);
+            var lead = await CheckRole(Role.Admin);
+            if (validationResult.IsValid)
+            {              
                 _logger.LogInformation($"Role - {lead} successfully verified.");
                 ResourceModel resource = _autoMapper.Map<ResourceModel>(resourceUpdateRequest);
                 await _resourceService.UpdateResource(id, resource);
@@ -172,10 +170,9 @@ namespace MarvelousService.API.Controllers
             _logger.LogInformation($"Request for deletion a resource with id {id}.");
 
             var validationResult = await _validatorSoftDeleteReques.ValidateAsync(resourceDeleteRequest);
-
-            if(validationResult.IsValid)
-            {
-                var lead = await CheckRole(Role.Admin);
+            var lead = await CheckRole(Role.Admin);
+            if (validationResult.IsValid)
+            {               
                 _logger.LogInformation($"Role - {lead} successfully verified.");
                 ResourceModel service = _autoMapper.Map<ResourceModel>(resourceDeleteRequest);
                 await _resourceService.SoftDelete(id, service);
