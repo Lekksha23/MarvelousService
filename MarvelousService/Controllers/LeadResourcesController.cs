@@ -51,10 +51,9 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
         {
             var validationResult = await _leadResourceInsertRequestValidator.ValidateAsync(leadResourceInsertRequest);
-
+            var lead = await CheckRole(Role.Regular, Role.Vip);
             if (validationResult.IsValid)
             {
-                var lead = await CheckRole(Role.Regular, Role.Vip);
                 var role = (Role)Enum.Parse(typeof(Role), lead.Role);
                 _logger.LogInformation($"Access to the method for lead {lead.Id} granted");
                 _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead.Id}.");
@@ -63,6 +62,7 @@ namespace MarvelousService.API.Controllers
                 leadResourceModel.Resource = resource.Result;
                 leadResourceModel.LeadId = (int)lead.Id;
                 var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
+                await _resourceProducer.NotifyLeadResourceAdded(id);
                 return StatusCode(StatusCodes.Status201Created, id);
             }
             else

@@ -45,7 +45,6 @@ namespace MarvelousService.API.Controllers
 
             if (validationResult.IsValid)
             {
-                Validate(leadInsertRequest, _leadInsertRequestValidator);
                 _logger.LogInformation($"Query for registration new lead with name:{leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
                 var leadModel = _autoMapper.Map<LeadModel>(leadInsertRequest);
                 var leadId = await _crmClient.AddLead(leadModel);

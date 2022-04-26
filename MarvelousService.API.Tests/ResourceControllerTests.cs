@@ -9,6 +9,7 @@ using MarvelousService.API.Models;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.API.Validators;
 using MarvelousService.BusinessLayer.Clients.Interfaces;
+using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Threading.Tasks;
 
 namespace MarvelousService.API.Tests
@@ -103,10 +105,85 @@ namespace MarvelousService.API.Tests
             _resourceService.Verify(r => r.AddResource(It.IsAny<ResourceModel>()), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
             _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
+            VerifyLoggerHelper.LoggerVerify(_logger, "Received a request to add a new resource.", LogLevel.Information);
+            
 
         }
 
         [Test]
+        public void AddResourseTest_Forbidden_ShouldThrowForbiddenException()
+        {
+            //given
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceInsertRequest();
+            resoerceRequestModel = null;
+
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(r => r.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+            var expectedMessage = "Cannot pass null model to Validate. (Parameter 'instanceToValidate')";
+
+            //when
+            ArgumentNullException? exception = Assert.ThrowsAsync<ArgumentNullException>(() =>
+            _resourceController.AddResource(resoerceRequestModel));
+
+            //then
+            Assert.That(exception?.Message, Is.EqualTo(expectedMessage));
+            VerifyLoggerHelper.LoggerVerify(_logger, "Received a request to add a new resource.", LogLevel.Information);
+        }
+
+        [Test]
+        public void AddResourseTest_NotValidModelReceived_ShouldThrowValidationException()
+        {
+            //given
+            var resourceId = 1;
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = "EWQEWQ",
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceInsertRequest
+            {
+
+                Name = "qwe",
+                Description = null,
+                Price = 1500,
+                Type = 1,
+            };
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+            _resourceService.Setup(r => r.AddResource(It.IsAny<ResourceModel>())).ReturnsAsync(resourceId);
+            var expectedMessage = "ResourceInsertRequest isn't valid";
+
+            //when
+            ValidationException? exception = Assert.ThrowsAsync<ValidationException>(() =>
+           _resourceController.AddResource(resoerceRequestModel));
+
+            //then
+            Assert.That(exception?.Message, Is.EqualTo(expectedMessage));
+            VerifyLoggerHelper.LoggerVerify(_logger, "Received a request to add a new resource.", LogLevel.Information);
+        }
+
+
+        [Test]
+
         public async Task UpdateResourseTest_ShouldReturnStatusCode200()
         {
             // Arrange
@@ -146,6 +223,7 @@ namespace MarvelousService.API.Tests
             _resourceService.Verify(r => r.UpdateResource(resourceId, It.IsAny<ResourceModel>()), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
             _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
+            VerifyLoggerHelper.LoggerVerify(_logger, "Request for updating a resource with id 1.", LogLevel.Information);
 
         }
 
@@ -184,6 +262,7 @@ namespace MarvelousService.API.Tests
             _resourceService.Verify(r => r.SoftDelete(resourceId, It.IsAny<ResourceModel>()), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
             _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
+            VerifyLoggerHelper.LoggerVerify(_logger, "Request for deletion a resource with id 1.", LogLevel.Information);
 
         }
 
@@ -208,7 +287,9 @@ namespace MarvelousService.API.Tests
             _resourceService.Verify(r => r.GetResourceById(It.IsAny<int>()), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
             _resourceProducer.Verify(r => r.NotifyResourceAdded(It.IsAny<int>()));
+            VerifyLoggerHelper.LoggerVerify(_logger, "Request for getting a resource by id 1", LogLevel.Information);
         }
+
 
         [Test]
         public async Task GetActiveResource_ShouldReturnStatusCode200()
@@ -228,6 +309,7 @@ namespace MarvelousService.API.Tests
             Assert.IsInstanceOf<ObjectResult>(actual.Result);
             _resourceService.Verify(r => r.GetActiveResourceService(), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
+            VerifyLoggerHelper.LoggerVerify(_logger, "Request for receiving all resources", LogLevel.Information);
 
         }
 
@@ -248,7 +330,7 @@ namespace MarvelousService.API.Tests
             Assert.IsInstanceOf<ObjectResult>(actual.Result);
             _resourceService.Verify(r => r.GetAllResources(), Times.Once);
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
-
+            VerifyLoggerHelper.LoggerVerify(_logger, "Request for receiving all resources", LogLevel.Information);
         }
 
     }
