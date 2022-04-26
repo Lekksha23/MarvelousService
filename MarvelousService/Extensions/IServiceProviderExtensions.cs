@@ -31,7 +31,7 @@ namespace MarvelousService.API.Extensions
 
         public static void RegisterMarvelousServiceServices(this IServiceCollection services)
         {
-            services.AddScoped<ICRMService, CRMService>();
+            services.AddScoped<ICrmService, CrmService>();
             services.AddScoped<IResourceService, ResourceService>();
             services.AddScoped<IResourcePaymentService, ResourcePaymentService>();
             services.AddScoped<ILeadResourceService, LeadResourceService>();
@@ -41,7 +41,7 @@ namespace MarvelousService.API.Extensions
 
         public static void RegisterMarvelousServiceClients(this IServiceCollection services)
         {
-            services.AddScoped<ICRMClient, CRMClient>();
+            services.AddScoped<ICrmClient, CrmClient>();
             services.AddScoped<ITransactionStoreClient, TransactionStoreClient>();
         }
 
@@ -52,7 +52,7 @@ namespace MarvelousService.API.Extensions
             services.AddScoped<IRoleStrategyProvider, RoleStrategyProvider>();
             services.AddScoped<IRoleStrategy, RegularRoleStrategy>();
             services.AddScoped<IRoleStrategy, AdminRoleStrategy>();
-            services.AddScoped<IRoleStrategy, VIPRoleStrategy>();
+            services.AddScoped<IRoleStrategy, VipRoleStrategy>();
             services.AddScoped<IResourceProducer, ResourceProducer>();
         }
 

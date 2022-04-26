@@ -13,7 +13,7 @@ namespace MarvelousService.BusinessLayer.Clients
     {
         private readonly ILeadResourceRepository _leadResourceRepository;
         private readonly IResourcePaymentRepository _resourcePaymentRepository;
-        private readonly ICRMService _crmService;
+        private readonly ICrmService _crmService;
         private readonly ITransactionService _transactionService;
         private IRoleStrategy _roleStrategy;
         private readonly IRoleStrategyProvider _roleStrategyProvider;
@@ -23,7 +23,7 @@ namespace MarvelousService.BusinessLayer.Clients
             ILeadResourceRepository LeadResourceRepository,
             IResourcePaymentRepository resourcePaymentRepository,
             ITransactionService transactionService,
-            ICRMService crmService,
+            ICrmService crmService,
             IRoleStrategy roleStrategy,
             IRoleStrategyProvider roleStrategyProvider,
             IMapper mapper)

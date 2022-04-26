@@ -33,7 +33,7 @@ namespace MarvelousService.BusinessLayer.Tests
 
             // then 
             Assert.NotNull(actual);
-            Assert.IsInstanceOf(typeof(VIPRoleStrategy), actual);
+            Assert.IsInstanceOf(typeof(VipRoleStrategy), actual);
         }
 
         [Test]

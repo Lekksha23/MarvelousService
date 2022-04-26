@@ -1,7 +1,7 @@
 ﻿
 namespace MarvelousService.BusinessLayer.Clients
 {
-    public interface ICRMService
+    public interface ICrmService
     {
         Task<int> GetIdOfRubLeadAccount(string jwtToken);
     }

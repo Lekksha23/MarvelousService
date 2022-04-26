@@ -84,8 +84,7 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Get lead resource by id. Roles: VIP, Regular.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourceById(int id)
         {
-            var lead = await CheckRole(Role.Vip, Role.Regular);
-            var leadId = (int)lead.Id;
+            await CheckRole(Role.Vip, Role.Regular);
             _logger.LogInformation($"Request for getting lead resource with id {id}");
             var leadResourceModel = await _leadResourceService.GetById(id);
             var result = _autoMapper.Map<LeadResourceResponse>(leadResourceModel);
@@ -104,7 +103,7 @@ namespace MarvelousService.API.Controllers
         {
             var lead = await CheckRole(Role.Vip, Role.Regular);
             var leadId = (int)lead.Id;
-            _logger.LogInformation($"Request for getting all lead resources with LeadId {leadId }");
+            _logger.LogInformation($"Request for getting all lead resources with LeadId {leadId}");
             var leadResourceModelList = await _leadResourceService.GetByLeadId(leadId);
             var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
             _logger.LogInformation($"Lead resources were received by LeadId {leadId}");

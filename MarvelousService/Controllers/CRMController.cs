@@ -15,16 +15,16 @@ namespace MarvelousService.API.Controllers
     [Route("api/crm")]
     [AllowAnonymous]
     [SwaggerTag("This controller is used to registrate a new lead in CRM service.")]
-    public class CRMController : ControllerExtensions
+    public class CrmController : ControllerExtensions
     {
-        private readonly ICRMClient _crmClient;
+        private readonly ICrmClient _crmClient;
         private readonly IMapper _autoMapper;
         private readonly IRequestHelper _requestHelper;
         private readonly ILogger<AuthController> _logger;
         private readonly IValidator<LeadInsertRequest> _leadInsertRequestValidator;
 
-        public CRMController(
-            ICRMClient crmClient,
+        public CrmController(
+            ICrmClient crmClient,
             IMapper autoMapper,
             ILogger<AuthController> logger,
             IRequestHelper requestHelper,
