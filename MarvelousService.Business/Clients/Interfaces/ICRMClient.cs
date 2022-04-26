@@ -2,7 +2,7 @@
 
 namespace MarvelousService.BusinessLayer.Clients
 {
-    public interface ICRMClient
+    public interface ICrmClient
     {
         Task<int> AddLead(LeadModel lead);
         Task<List<AccountModel>> GetLeadAccounts(string jwtToken);

@@ -3,7 +3,7 @@ using MarvelousService.BusinessLayer.Models;
 
 namespace MarvelousService.BusinessLayer.Helpers
 {
-    public class VIPRoleStrategy : IRoleStrategy
+    public class VipRoleStrategy : IRoleStrategy
     {
         private const double _discountVIP = 0.9;
         public int Id { get => (int)Role.Vip; }

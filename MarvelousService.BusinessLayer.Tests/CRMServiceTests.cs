@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace MarvelousService.BusinessLayer.Tests
 {
-    public class CRMServiceTests
+    public class CrmServiceTests
     {
-        private Mock<ICRMClient> _crmClientMock;
-        private readonly Mock<ILogger<CRMService>> _loggerMock;
+        private Mock<ICrmClient> _crmClientMock;
+        private readonly Mock<ILogger<CrmService>> _loggerMock;
 
-        public CRMServiceTests()
+        public CrmServiceTests()
         {
-            _loggerMock = new Mock<ILogger<CRMService>>();
+            _loggerMock = new Mock<ILogger<CrmService>>();
         }
 
         [SetUp]
         public void Setup()
         {
-            _crmClientMock = new Mock<ICRMClient>();
+            _crmClientMock = new Mock<ICrmClient>();
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var leadAccounts = CRMServiceTestData.GetAccountModelListWithRubAccountForTests();
             var token = "IndicativeToken";
             _crmClientMock.Setup(m => m.GetLeadAccounts(token)).ReturnsAsync(leadAccounts);
-            var sut = new CRMService(_crmClientMock.Object, _loggerMock.Object);
+            var sut = new CrmService(_crmClientMock.Object, _loggerMock.Object);
 
             // when
             var actual = await sut.GetIdOfRubLeadAccount(token);
@@ -52,7 +52,7 @@ namespace MarvelousService.BusinessLayer.Tests
             var leadAccounts = CRMServiceTestData.GetAccountModelListWithoutRubAccountForTests();
             var token = "IndicativeToken";
             _crmClientMock.Setup(m => m.GetLeadAccounts(token)).ReturnsAsync(leadAccounts);
-            var sut = new CRMService(_crmClientMock.Object, _loggerMock.Object);
+            var sut = new CrmService(_crmClientMock.Object, _loggerMock.Object);
 
             // then
             Assert.ThrowsAsync<AccountNotFoundException>(async () => await sut.GetIdOfRubLeadAccount(token));

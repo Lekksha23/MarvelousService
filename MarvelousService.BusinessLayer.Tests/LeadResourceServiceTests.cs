@@ -21,7 +21,7 @@ namespace MarvelousService.BusinessLayer.Tests
         private Mock<ILeadResourceRepository> _leadResourceRepositoryMock;
         private Mock<IResourcePaymentRepository> _resourcePaymentRepositoryMock;
         private Mock<ITransactionService> _transactionServiceMock;
-        private Mock<ICRMService> _crmServiceMock;
+        private Mock<ICrmService> _crmServiceMock;
         private readonly IRoleStrategy _roleStrategy;
         private readonly IRoleStrategyProvider _roleStrategyProvider;
         private readonly IMapper _autoMapper;
@@ -38,7 +38,7 @@ namespace MarvelousService.BusinessLayer.Tests
             _leadResourceRepositoryMock = new Mock<ILeadResourceRepository>();
             _resourcePaymentRepositoryMock = new Mock<IResourcePaymentRepository>();
             _transactionServiceMock = new Mock<ITransactionService>();
-            _crmServiceMock = new Mock<ICRMService>();
+            _crmServiceMock = new Mock<ICrmService>();
         }
 
         [Test]

@@ -23,7 +23,7 @@ namespace MarvelousService.BusinessLayer.Tests.RoleStrategyTests
                 Price = leadResourceModel.Price
             };
             var expectedPrice = 1620.0M;
-            var sut = new VIPRoleStrategy();
+            var sut = new VipRoleStrategy();
 
             // when
             sut.GiveDiscountToLead(leadResourceModel, Role.Vip);

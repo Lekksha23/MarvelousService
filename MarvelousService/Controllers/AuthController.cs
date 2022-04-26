@@ -11,6 +11,7 @@ namespace MarvelousService.API.Controllers
     [ApiController]
     [Route("api/auth")]
     [AllowAnonymous]
+    [SwaggerTag("This controller is used to login.")]
     public class AuthController : ControllerExtensions
     {
         private readonly ILogger<AuthController> _logger;
@@ -28,9 +29,9 @@ namespace MarvelousService.API.Controllers
         public async Task<ActionResult> Login([FromBody] AuthRequestModel auth)
         {
             _logger.LogInformation($"Query for authentication user with email:{auth.Email}.");
-            var token = await _requestHelper.GetTokenForFront<string>(Microservice.MarvelousAuth,auth);
+            var token = await _requestHelper.GetTokenForFront(Microservice.MarvelousAuth, auth);
             _logger.LogInformation($"Authentication for user with email:{auth.Email} successfully completed.");
-            return Json(token.Content);
+            return Json(token);
         }
     }
 }

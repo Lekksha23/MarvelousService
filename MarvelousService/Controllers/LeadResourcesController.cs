@@ -1,19 +1,20 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Marvelous.Contracts.Enums;
+using MarvelousService.API.Extensions;
 using MarvelousService.API.Models;
+using MarvelousService.API.Producer.Interface;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
-using MarvelousService.BusinessLayer.Clients.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using MarvelousService.API.Extensions;
-using FluentValidation;
-using MarvelousService.API.Producer.Interface;
 
 namespace MarvelousService.API.Controllers
 {
     [ApiController]
     [Route("api/leadResources")]
+    [SwaggerTag("This controller is used to order subscriptions and onetime services and get information about them.")]
     public class LeadResourcesController : ControllerExtensions
     {
         private readonly ILeadResourceService _leadResourceService;
@@ -46,6 +47,7 @@ namespace MarvelousService.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [SwaggerOperation("Add a resource to a lead. Roles: VIP, Regular")]
         public async Task<ActionResult<int>> AddLeadResource([FromBody] LeadResourceInsertRequest leadResourceInsertRequest)
@@ -58,8 +60,8 @@ namespace MarvelousService.API.Controllers
                 _logger.LogInformation($"Access to the method for lead {lead.Id} granted");
                 _logger.LogInformation($"Request for adding a Resource {leadResourceInsertRequest.ResourceId} to Lead {lead.Id}.");
                 var leadResourceModel = _autoMapper.Map<LeadResourceModel>(leadResourceInsertRequest);
-                var resource = _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
-                leadResourceModel.Resource = resource.Result;
+                var resource = await _resourceService.GetResourceById(leadResourceInsertRequest.ResourceId);
+                leadResourceModel.Resource = resource;
                 leadResourceModel.LeadId = (int)lead.Id;
                 var id = await _leadResourceService.AddLeadResource(leadResourceModel, role, HttpContext.Request.Headers.Authorization.First());
                 await _resourceProducer.NotifyLeadResourceAdded(id);
@@ -67,8 +69,8 @@ namespace MarvelousService.API.Controllers
             }
             else
             {
-                _logger.LogError("Error: LeadResourceInsertRequest isn't valid");
-                throw new ValidationException("LeadResourceInsertRequest isn't valid");
+                _logger.LogError($"Error: {validationResult}");
+                throw new ValidationException($"{validationResult}");
             }
         }
 
@@ -81,8 +83,7 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Get lead resource by id. Roles: VIP, Regular.")]
         public async Task<ActionResult<List<LeadResourceResponse>>> GetLeadResourceById(int id)
         {
-            var lead = await CheckRole(Role.Vip, Role.Regular);
-            var leadId = (int)lead.Id;
+            await CheckRole(Role.Vip, Role.Regular);
             _logger.LogInformation($"Request for getting lead resource with id {id}");
             var leadResourceModel = await _leadResourceService.GetById(id);
             var result = _autoMapper.Map<LeadResourceResponse>(leadResourceModel);
@@ -101,7 +102,7 @@ namespace MarvelousService.API.Controllers
         {
             var lead = await CheckRole(Role.Vip, Role.Regular);
             var leadId = (int)lead.Id;
-            _logger.LogInformation($"Request for getting all lead resources with LeadId {leadId }");
+            _logger.LogInformation($"Request for getting all lead resources with LeadId {leadId}");
             var leadResourceModelList = await _leadResourceService.GetByLeadId(leadId);
             var result = _autoMapper.Map<List<LeadResourceResponse>>(leadResourceModelList);
             _logger.LogInformation($"Lead resources were received by LeadId {leadId}");

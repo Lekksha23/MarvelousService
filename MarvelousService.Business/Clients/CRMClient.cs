@@ -8,14 +8,14 @@ using RestSharp;
 
 namespace MarvelousService.BusinessLayer.Clients
 {
-    public class CRMClient : ICRMClient
+    public class CrmClient : ICrmClient
     {
         private RestClient _client;
         private readonly IRequestHelper _requestHelper;
         private readonly IConfiguration _config;
         private const string _getAccountByLeadIdPath = "/api/accounts/";
 
-        public CRMClient(IRequestHelper requestHelper, IConfiguration config)
+        public CrmClient(IRequestHelper requestHelper, IConfiguration config)
         {
             _requestHelper = requestHelper;
             _config = config;

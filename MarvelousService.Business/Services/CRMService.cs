@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 
 namespace MarvelousService.BusinessLayer.Clients
 {
-    public class CRMService : ICRMService
+    public class CrmService : ICrmService
     {
-        private readonly ICRMClient _crmClient;
-        private readonly ILogger<CRMService> _logger;
+        private readonly ICrmClient _crmClient;
+        private readonly ILogger<CrmService> _logger;
 
-        public CRMService(ICRMClient crmClient, ILogger<CRMService> logger)
+        public CrmService(ICrmClient crmClient, ILogger<CrmService> logger)
         {
             _crmClient = crmClient;
             _logger = logger;

@@ -14,18 +14,19 @@ namespace MarvelousService.API.Controllers
     [ApiController]
     [Route("api/crm")]
     [AllowAnonymous]
-    public class CRMController : ControllerExtensions
+    [SwaggerTag("This controller is used to registrate a new lead in CRM service.")]
+    public class CrmController : ControllerExtensions
     {
-        private readonly ICRMClient _crmClient;
+        private readonly ICrmClient _crmClient;
         private readonly IMapper _autoMapper;
         private readonly IRequestHelper _requestHelper;
-        private readonly ILogger<AuthController> _logger;
+        private readonly ILogger<CrmController> _logger;
         private readonly IValidator<LeadInsertRequest> _leadInsertRequestValidator;
 
-        public CRMController(
-            ICRMClient crmClient,
+        public CrmController(
+            ICrmClient crmClient,
             IMapper autoMapper,
-            ILogger<AuthController> logger,
+            ILogger<CrmController> logger,
             IRequestHelper requestHelper,
             IValidator<LeadInsertRequest> leadInsertRequestValidator) : base (requestHelper, logger)
         {
@@ -45,18 +46,17 @@ namespace MarvelousService.API.Controllers
 
             if (validationResult.IsValid)
             {
-                _logger.LogInformation($"Query for registration new lead with name:{leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
+                _logger.LogInformation($"Query for registration new lead with name: {leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
                 var leadModel = _autoMapper.Map<LeadModel>(leadInsertRequest);
                 var leadId = await _crmClient.AddLead(leadModel);
-                _logger.LogInformation($"A new lead with email:{leadInsertRequest.Email} was successfully added.");
+                _logger.LogInformation($"A new lead with email: {leadInsertRequest.Email} was successfully added.");
                 return Ok(leadId);
             }
             else
             {
-                _logger.LogError("Error: LeadResourceInsertRequest isn't valid");
-                throw new ValidationException("LeadResourceInsertRequest isn't valid");
+                _logger.LogError($"Error: {validationResult}");
+                throw new ValidationException($"{validationResult}");
             }
-
         }
     }
 }

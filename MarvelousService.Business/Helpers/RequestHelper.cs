@@ -34,35 +34,23 @@ namespace MarvelousService.BusinessLayer.Helpers
             return response;
         }
 
-        public async Task<RestResponse<T>> GetTokenForFront<T>( Microservice service, AuthRequestModel authRequest)
+        public async Task<string> GetTokenForFront(Microservice service, AuthRequestModel authRequest)
         {
             var request = new RestRequest(AuthEndpoints.ApiAuth + AuthEndpoints.Login, Method.Post);
             var client = new RestClient(_config[service.ToString()]);
             client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
             request.AddBody(authRequest);
-            var response = await client.ExecuteAsync<T>(request);
+            var response = await client.ExecuteAsync<string>(request);
             CheckMicroserviceResponse(response);
-            return response;
+            return response.Data;
         }
 
-        public async Task<IdentityResponseModel>SendRequestToValidateToken(string jwtToken)
+        public async Task<IdentityResponseModel> SendRequestToValidateToken(string jwtToken)
         {
             var request = new RestRequest(AuthEndpoints.ApiAuth + AuthEndpoints.ValidationFront);
             var client = new RestClient(_config[Microservice.MarvelousAuth.ToString()]);
             client.Authenticator = new MarvelousAuthenticator(jwtToken);
             client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
-            var response = await client.ExecuteAsync<IdentityResponseModel>(request);
-            CheckMicroserviceResponse(response);
-            return response.Data;
-        }
-
-        public async Task<IdentityResponseModel> GetLeadIdentityByToken(string jwtToken)
-        {
-            _logger.LogInformation($"Query for getting lead identity in the IdentityService from token: {jwtToken}");
-            var client = new RestClient(_config[Microservice.MarvelousAuth.ToString()]);
-            client.Authenticator = new MarvelousAuthenticator(jwtToken);
-            client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousResource.ToString());
-            var request = new RestRequest($"{_config[Microservice.MarvelousAuth.ToString()]}{AuthEndpoints.ApiAuth}{AuthEndpoints.DoubleValidation}");
             var response = await client.ExecuteAsync<IdentityResponseModel>(request);
             CheckMicroserviceResponse(response);
             return response.Data;
