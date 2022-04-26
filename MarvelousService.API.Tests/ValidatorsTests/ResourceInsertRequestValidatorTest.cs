@@ -59,6 +59,25 @@ namespace MarvelousService.API.Tests.ValidatorsTests
             validationResult.ShouldHaveValidationErrorFor(resourse => resourse.Name);
         }
 
+        [TestCase("Qwe")]
+        public void ResourceInsertRequestModel_ExistsName(string name)
+        {
+            //given
+            var resourse = new ResourceInsertRequest
+            {
+                Name = name,
+                Description = "Super predligenie",
+                Price = 1500,
+                Type = 1,
+            };
+
+            //when
+            var validationResult = _validatorInsert.TestValidate(resourse);
+
+            // then
+            validationResult.ShouldNotHaveValidationErrorFor(resourse => resourse.Name);
+        }
+
         [TestCase(null)]
         [TestCase($"Eh bien, mon prince. Gênes et Lucques ne sont plus que des apanages, des поместья, de la famille Buonaparte. Non, je vous préviens que si vous ne me dites pas que nous avons la guerre, si vous vous permettez encore de pallier toutes les infamies, toutes les atrocités de cet Antichrist (ma parole, j'y crois) — je ne vous connais plus, vous n'êtes plus mon ami, vous n'êtes plus мой верный раб, comme vous dites 1. Ну, здравствуйте, здравствуйте. Je vois que je vous fais peur 2, садитесь и рассказывайте" +
             $"Так говорила в июле 1805 года известная Анна Павловна Шерер, фрейлина и приближенная императрицы Марии Феодоровны, встречая важного и чиновного князя Василия, первого приехавшего на ее вечер.Анна Павловна кашляла несколько дней, у нее был грипп, как она говорила(грипп был тогда новое слово, употреблявшееся только редкими).В записочках, разосланных утром с красным лакеем, было написано без различия во всех " +
@@ -80,6 +99,25 @@ namespace MarvelousService.API.Tests.ValidatorsTests
 
             // then
             validationResult.ShouldHaveValidationErrorFor(resourse => resourse.Description);
+        }
+
+        [TestCase("Qweqwe,qweqwe")]
+        public void ResourceInsertRequestModel_ExiststDescription(string description)
+        {
+            //given
+            var resourse = new ResourceInsertRequest
+            {
+                Name = "Qwe",
+                Description = description,
+                Price = 1500,
+                Type = 1,
+            };
+
+            //when
+            var validationResult = _validatorInsert.TestValidate(resourse);
+
+            // then
+            validationResult.ShouldNotHaveValidationErrorFor(resourse => resourse.Description);
         }
 
         [TestCase(123123.123213)]
@@ -104,6 +142,26 @@ namespace MarvelousService.API.Tests.ValidatorsTests
             validationResult.ShouldHaveValidationErrorFor(resourse => resourse.Price);
         }
 
+        [TestCase(123123.0)]
+        [TestCase(12323)]
+        public void ResourceInsertRequestModel_ExiststPrice(decimal price)
+        {
+            //given
+            var resourse = new ResourceInsertRequest
+            {
+                Name = "Qwe",
+                Description = "Super predligenie",
+                Price = price,
+                Type = 1,
+            };
+
+            //when
+            var validationResult = _validatorInsert.TestValidate(resourse);
+
+            // then
+            validationResult.ShouldNotHaveValidationErrorFor(resourse => resourse.Price);
+        }
+
         [TestCase(null)]
         public void ResourceInsertRequestModel_NoTypeOrIncorrectCharactersUsed(int type)
         {
@@ -121,6 +179,25 @@ namespace MarvelousService.API.Tests.ValidatorsTests
 
             // then
             validationResult.ShouldHaveValidationErrorFor(resourse => resourse.Type);
+        }
+
+        [TestCase(1)]
+        public void ResourceInsertRequestModel_ExistsType(int type)
+        {
+            //given
+            var resourse = new ResourceInsertRequest
+            {
+                Name = "Qwe",
+                Description = "Super predligenie",
+                Price = 1500,
+                Type = type,
+            };
+
+            //when
+            var validationResult = _validatorInsert.TestValidate(resourse);
+
+            // then
+            validationResult.ShouldNotHaveValidationErrorFor(resourse => resourse.Type);
         }
 
     }
