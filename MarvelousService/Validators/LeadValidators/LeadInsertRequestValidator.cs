@@ -24,7 +24,7 @@ namespace CRM.APILayer.Validation
                 .NotEmpty()
                 .WithMessage("You must specify name")
                 .MaximumLength(20)
-                .WithMessage("Maximum length of name is 20 symbols");
+                .WithMessage("Maximum length of the name is 20 symbols");
             RuleFor(x => x.LastName)
                 .NotEmpty()
                 .WithMessage("You must specify last name")
