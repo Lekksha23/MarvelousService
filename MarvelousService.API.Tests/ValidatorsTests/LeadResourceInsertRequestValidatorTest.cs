@@ -36,7 +36,6 @@ namespace MarvelousService.API.Tests.ValidatorsTests
         }
 
         [TestCase(null)]
-        [TestCase(4)]
         [TestCase(0)]
         [TestCase(-1)]
 
@@ -102,7 +101,6 @@ namespace MarvelousService.API.Tests.ValidatorsTests
 
 
         [TestCase(1)]
-        [TestCase(2)]
 
         public void LeadResourceInsertRequestModel_ExistsPeriod(int period)
         {
