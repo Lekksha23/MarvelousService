@@ -48,5 +48,22 @@ namespace MarvelousService.API.Tests.ValidatorsTests
             validationResult.ShouldHaveValidationErrorFor(resourse => resourse.IsDeleted);
         }
 
+        [TestCase(true)]
+
+        public void ResourceSoftDeleteRequest_IsDeletedOrExistst(bool delete)
+        {
+            //given
+            var resourse = new ResourceSoftDeleteRequest
+            {
+                IsDeleted = delete
+            };
+
+            //when
+            var validationResult = _validatorDelete.TestValidate(resourse);
+
+            // then
+            validationResult.ShouldNotHaveValidationErrorFor(resourse => resourse.IsDeleted);
+        }
+
     }
 }

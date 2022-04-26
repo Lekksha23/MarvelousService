@@ -41,12 +41,23 @@ namespace MarvelousService.API.Controllers
         [SwaggerOperation("Registrate a new lead. Roles: Anonymous")]
         public async Task<ActionResult<int>> RegistrateLead([FromBody] LeadInsertRequest leadInsertRequest)
         {
-            Validate(leadInsertRequest, _leadInsertRequestValidator);
-            _logger.LogInformation($"Query for registration new lead with name:{leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
-            var leadModel = _autoMapper.Map<LeadModel>(leadInsertRequest);
-            var leadId = await _crmClient.AddLead(leadModel);
-            _logger.LogInformation($"A new lead with email:{leadInsertRequest.Email} was successfully added.");
-            return Ok(leadId);
+            var validationResult = await _leadInsertRequestValidator.ValidateAsync(leadInsertRequest);
+
+            if (validationResult.IsValid)
+            {
+                Validate(leadInsertRequest, _leadInsertRequestValidator);
+                _logger.LogInformation($"Query for registration new lead with name:{leadInsertRequest.Name} and email: {leadInsertRequest.Email}");
+                var leadModel = _autoMapper.Map<LeadModel>(leadInsertRequest);
+                var leadId = await _crmClient.AddLead(leadModel);
+                _logger.LogInformation($"A new lead with email:{leadInsertRequest.Email} was successfully added.");
+                return Ok(leadId);
+            }
+            else
+            {
+                _logger.LogError("Error: LeadResourceInsertRequest isn't valid");
+                throw new ValidationException("LeadResourceInsertRequest isn't valid");
+            }
+
         }
     }
 }
