@@ -41,7 +41,7 @@ namespace MarvelousService.API.Tests.ValidatorsTests
 
         public void LeadResourceInsertRequestModel_NoService(int resourseId)
         {
-            //given
+            //given 
             var resourse = new LeadResourceInsertRequest
             {
                 ResourceId = resourseId,
@@ -108,6 +108,27 @@ namespace MarvelousService.API.Tests.ValidatorsTests
             var resourse = new LeadResourceInsertRequest
             {
                 ResourceId = 1,
+                Period = period
+            };
+
+            //when
+            var validationResult = _validatorLeadResource.TestValidate(resourse);
+
+            // then
+            validationResult.ShouldNotHaveValidationErrorFor(resourse => resourse.Period);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+
+        public void LeadResourceInsertRequestModel_ExistsPeriodThree(int period)
+        {
+            //given
+            var resourse = new LeadResourceInsertRequest
+            {
+                ResourceId = 3,
                 Period = period
             };
 
