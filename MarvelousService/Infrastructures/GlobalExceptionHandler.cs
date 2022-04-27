@@ -20,10 +20,6 @@ namespace MarvelousService.API.Infrastructure
             {
                 await _next(context);
             }
-            catch (ServiceException ex)
-            {
-                await ConstructResponse(context, HttpStatusCode.NotFound, ex.Message);
-            }
             catch (NotFoundServiceException ex)
             {
                 await ConstructResponse(context, HttpStatusCode.Conflict, ex.Message);

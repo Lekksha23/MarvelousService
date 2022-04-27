@@ -9,7 +9,6 @@ using MarvelousService.API.Models;
 using MarvelousService.API.Producer.Interface;
 using MarvelousService.API.Validators;
 using MarvelousService.BusinessLayer.Clients.Interfaces;
-using MarvelousService.BusinessLayer.Exceptions;
 using MarvelousService.BusinessLayer.Helpers;
 using MarvelousService.BusinessLayer.Models;
 using Microsoft.AspNetCore.Http;
@@ -26,9 +25,7 @@ namespace MarvelousService.API.Tests
     public class ResourceControllerTests
     {
         private Mock<IResourceService> _resourceService;
-        private Mock<ControllerExtensions> _controllerExtensions;
         private Mock<ILogger<ResourcesController>> _logger;
-        private Mock<IConfiguration> _configuration;
         private IMapper _autoMapper;
         private Mock<IRequestHelper> _requestHelper;
         private IValidator<ResourceInsertRequest> _validatorResourceInsertRequest;
@@ -40,10 +37,8 @@ namespace MarvelousService.API.Tests
         [SetUp]
         public void Setup()
         {
-            _controllerExtensions = new Mock<ControllerExtensions>();
             _logger = new Mock<ILogger<ResourcesController>>();
             _resourceService = new Mock<IResourceService>();
-            _configuration = new Mock<IConfiguration>();
             _autoMapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperFromApi>()));
             _validatorResourceInsertRequest = new ResourceInsertRequestValidator();
             _validatorResourceSoftDeletetRequest = new ResourceSoftDeleteRequestValidator();
