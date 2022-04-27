@@ -73,6 +73,7 @@ namespace MarvelousService.API.Controllers
             }
         }
 
+
         //api/resources/
         [HttpGet("id")]
         [SwaggerOperation("Get resource by id")]
