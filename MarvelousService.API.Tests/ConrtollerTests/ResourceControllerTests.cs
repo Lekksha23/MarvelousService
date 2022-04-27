@@ -228,6 +228,45 @@ namespace MarvelousService.API.Tests
         }
 
         [Test]
+        public void UpdateResourseTest_NotValidModelReceived_ShouldThrowValidationException()
+        {
+            //given
+            var resourceId = 1;
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = null,
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceUpdateRequest
+            {
+
+                Name = "qwe",
+                Description = null,
+                Price = 1500,
+                Type = 1,
+            };
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+            _resourceService.Setup(r => r.UpdateResource(resourceId,It.IsAny<ResourceModel>()));
+            var expectedMessage = "ResourceUpdatetRequest isn't valid";
+
+            //when
+            ValidationException? exception = Assert.ThrowsAsync<ValidationException>(() =>
+           _resourceController.UpdateResource(resourceId,resoerceRequestModel));
+
+            //then
+            Assert.That(exception?.Message, Is.EqualTo(expectedMessage));
+            VerifyLoggerHelper.LoggerVerify(_logger, "Request for updating a resource with id 1.", LogLevel.Information);
+        }
+
+        [Test]
         public async Task SoftDeleteResourseTest_ShouldReturnStatusCode200()
         {
             // Arrange
@@ -265,6 +304,43 @@ namespace MarvelousService.API.Tests
             VerifyLoggerHelper.LoggerVerify(_logger, "Request for deletion a resource with id 1.", LogLevel.Information);
 
         }
+
+        [Test]
+        public void SoftDeleteResourseTest_NotValidModelReceived_ShouldThrowValidationException()
+        {
+            //given
+            var resourceId = 1;
+            var resourceNew = new ResourceModel
+            {
+                Id = 1,
+                Name = "ewq",
+                Description = null,
+                Price = 3000,
+                Type = DataLayer.Enums.ServiceType.OneTime,
+                IsDeleted = false,
+            };
+            var resoerceRequestModel = new ResourceSoftDeleteRequest
+            {
+                IsDeleted = false,
+            };
+            var token = "token";
+            AddContext(token);
+            _requestHelper
+                .Setup(m => m.SendRequestToValidateToken(token))
+                .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
+            _resourceService.Setup(r => r.SoftDelete(resourceId, It.IsAny<ResourceModel>()));
+            var expectedMessage = "ResourceSoftDeleteRequest isn't valid";
+
+            //when
+            ValidationException? exception = Assert.ThrowsAsync<ValidationException>(() =>
+           _resourceController.SoftDelete(resourceId, resoerceRequestModel));
+
+            //then
+            Assert.That(exception?.Message, Is.EqualTo(expectedMessage));
+            VerifyLoggerHelper.LoggerVerify(_logger, "Request for deletion a resource with id 1.", LogLevel.Information);
+        }
+
+
 
         [Test]
         public async Task GetResourceById_ShouldReturnStatusCode200()
@@ -332,6 +408,7 @@ namespace MarvelousService.API.Tests
             _requestHelper.Verify(r => r.SendRequestToValidateToken(token), Times.Once());
             VerifyLoggerHelper.LoggerVerify(_logger, "Request for receiving all resources", LogLevel.Information);
         }
+
 
     }
 
