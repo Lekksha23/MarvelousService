@@ -1,6 +1,6 @@
 ﻿namespace MarvelousService.DataLayer.Enums
 {
-    public enum ServiceType : byte
+    public enum ServiceType
     {
         OneTime = 1,
         Subscription

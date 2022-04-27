@@ -1,8 +1,8 @@
 ﻿namespace MarvelousService.DataLayer.Enums
 {
-    public enum Status : byte
+    public enum Status
     {
-        Paid = 1,
-        Suspended
+        Active = 1,
+        Inactive
     }
 }

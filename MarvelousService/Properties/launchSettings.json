@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -16,7 +16,9 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7066;http://localhost:5066",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "LOG_DIRECTORY": "C:\\Users\\Lekksha\\source\\repos\\MarvelousService",
+        "SERVICE_CONNECTION_STRING": "Data Source=(local);Initial Catalog=MarvelousService.DB;Integrated Security=True"
       }
     },
     "IIS Express": {
@@ -25,6 +27,29 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Remote": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7294;http://localhost:5294",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "LOG_DIRECTORY": "C:\\Users\\Lekksha\\source\\repos\\MarvelousService",
+        "SERVICE_CONNECTION_STRING": "Data Source=80.78.240.16;Initial Catalog=MarvelousService.DB;Persist Security Info=True;User ID=student;Password=qwe!23"
+      }
+    },
+    "Debug Config Shokhin": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "LOG_DIRECTORY": "C:\\Users\\Aleksandr\\source\\repos\\MarvelousService",
+        "SERVICE_CONNECTION_STRING": "Data Source=80.78.240.16;Initial Catalog=MarvelousService.DB;Persist Security Info=True;User ID=student;Password=qwe!23"
       }
     }
   }

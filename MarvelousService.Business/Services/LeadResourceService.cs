@@ -1,0 +1,80 @@
+﻿using AutoMapper;
+using Marvelous.Contracts.Enums;
+using MarvelousService.BusinessLayer.Helpers;
+using MarvelousService.BusinessLayer.Models;
+using MarvelousService.BusinessLayer.Clients.Interfaces;
+using MarvelousService.DataLayer.Entities;
+using MarvelousService.DataLayer.Enums;
+using MarvelousService.DataLayer.Repositories;
+
+namespace MarvelousService.BusinessLayer.Clients
+{
+    public class LeadResourceService : ILeadResourceService
+    {
+        private readonly ILeadResourceRepository _leadResourceRepository;
+        private readonly IResourcePaymentRepository _resourcePaymentRepository;
+        private readonly ICrmService _crmService;
+        private readonly ITransactionService _transactionService;
+        private IRoleStrategy _roleStrategy;
+        private readonly IRoleStrategyProvider _roleStrategyProvider;
+        private readonly IMapper _mapper;
+
+        public LeadResourceService(
+            ILeadResourceRepository LeadResourceRepository,
+            IResourcePaymentRepository resourcePaymentRepository,
+            ITransactionService transactionService,
+            ICrmService crmService,
+            IRoleStrategy roleStrategy,
+            IRoleStrategyProvider roleStrategyProvider,
+            IMapper mapper)
+        {
+            _leadResourceRepository = LeadResourceRepository;
+            _resourcePaymentRepository = resourcePaymentRepository;
+            _transactionService = transactionService;
+            _crmService = crmService;
+            _roleStrategy = roleStrategy;
+            _roleStrategyProvider = roleStrategyProvider;
+            _mapper = mapper;
+        }
+
+        public async Task<int> AddLeadResource(LeadResourceModel leadResourceModel, Role role, string jwtToken)
+        {
+            leadResourceModel.Price = leadResourceModel.GetPrice();
+            GiveDiscountIfLeadIsVip(leadResourceModel, role);  
+            var leadResource = _mapper.Map<LeadResource>(leadResourceModel);
+            var accountId = await _crmService.GetIdOfRubLeadAccount(jwtToken);
+            var transactionId = await _transactionService.AddResourceTransaction(accountId, leadResourceModel.Price);
+            leadResource.Status = Status.Active;
+            var leadResourceId = await _leadResourceRepository.AddLeadResource(leadResource);
+            await _resourcePaymentRepository.AddResourcePayment(leadResourceId, transactionId);
+            return leadResourceId;
+        }
+
+        public async Task<List<LeadResourceModel>> GetByLeadId(int id)
+        {
+            var leadResources = await _leadResourceRepository.GetByLeadId(id);
+            CheckErrorHelper.CheckIfEntityIsNull(id, leadResources);
+            return _mapper.Map<List<LeadResourceModel>>(leadResources);
+        }
+
+        public async Task<List<LeadResourceModel>> GetByPayDate(DateTime payDate)
+        {
+            var leadResources = await _leadResourceRepository.GetByPayDate(payDate);
+            return _mapper.Map<List<LeadResourceModel>>(leadResources);
+        }
+
+        public async Task<LeadResourceModel> GetById(int id)
+        {
+            var leadResource = await _leadResourceRepository.GetLeadResourceById(id);
+            CheckErrorHelper.CheckIfEntityIsNull(id, leadResource);
+            return _mapper.Map<LeadResourceModel>(leadResource);
+        }
+
+        private void GiveDiscountIfLeadIsVip(LeadResourceModel leadResourceModel, Role role)
+        {
+            _roleStrategy = _roleStrategyProvider.GetStrategy((int)role);
+            CheckErrorHelper.CheckIfRoleStrategyIsNull(_roleStrategy);
+            _roleStrategy.GiveDiscountToLead(leadResourceModel, role);
+        }
+    }
+}

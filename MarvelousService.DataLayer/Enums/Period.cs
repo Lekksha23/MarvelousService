@@ -1,8 +1,9 @@
 ﻿namespace MarvelousService.DataLayer.Enums
 {
-    public enum Period : byte
+    public enum Period
     {
-        Week = 1,
+        OneTime = 1,
+        Week,
         Month,
         Year
     }

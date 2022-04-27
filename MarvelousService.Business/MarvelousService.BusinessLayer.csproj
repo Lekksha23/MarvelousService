@@ -8,13 +8,22 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="NLog" Version="4.7.14" />
-    <PackageReference Include="NLog.Config" Version="4.7.14" />
+    <PackageReference Include="Marvelous.Contracts" Version="1.2.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.17.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="4.7.15" />
+    <PackageReference Include="RestSharp" Version="107.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MarvelousService.DataLayer\MarvelousService.DataLayer.csproj" />
-    <ProjectReference Include="..\MarvelousService.DB\MarvelousService.DB.sqlproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="C:\Users\Aleksandr\.nuget\packages\nlog.config\4.7.14\contentFiles\any\any\NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
