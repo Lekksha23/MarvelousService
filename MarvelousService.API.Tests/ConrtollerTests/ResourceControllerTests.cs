@@ -348,7 +348,7 @@ namespace MarvelousService.API.Tests
             _requestHelper
                 .Setup(m => m.SendRequestToValidateToken(token))
                 .ReturnsAsync(new IdentityResponseModel { Id = 1, IssuerMicroservice = Microservice.MarvelousCrm.ToString(), Role = "Admin" });
-
+            
             //when
             var actual = await _resourceController.GetResourceById(resourceId);
 
