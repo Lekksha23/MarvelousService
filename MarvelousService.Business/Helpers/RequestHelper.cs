@@ -62,6 +62,8 @@ namespace MarvelousService.BusinessLayer.Helpers
             {
                 case HttpStatusCode.OK:
                     break;
+                case HttpStatusCode.Created:
+                    break;
                 case HttpStatusCode.RequestTimeout:
                     throw new RequestTimeoutException($"Request Timeout {response.ErrorException!.Message}");
                 case HttpStatusCode.ServiceUnavailable:
