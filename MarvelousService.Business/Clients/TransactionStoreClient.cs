@@ -22,10 +22,10 @@ namespace MarvelousService.BusinessLayer.Clients
         public async Task<long> AddResourceTransaction(TransactionRequestModel transactionRequestModel)
         {
             var client = new RestClient();
-            var request = new RestRequest($"{_config[Microservice.MarvelousTransactionStore.ToString() + "Url"]}{TransactionEndpoints.ApiTransactions + TransactionEndpoints.ServicePayment}", Method.Post);
+            var request = new RestRequest($"{_config[Microservice.MarvelousTransactionStore.ToString() + "Url"]}" +
+                $"{TransactionEndpoints.ApiTransactions + TransactionEndpoints.ServicePayment}", Method.Post);
             request.AddBody(transactionRequestModel);
-            var token = await _requestHelper
-               .SendRequest<string>(AuthEndpoints.ApiAuth + AuthEndpoints.TokenForMicroservice, Microservice.MarvelousAuth);
+            var token = await _requestHelper.SendRequest<string>(AuthEndpoints.ApiAuth + AuthEndpoints.TokenForMicroservice, Microservice.MarvelousAuth);
             client.Authenticator = new JwtAuthenticator(token.Data);
             var response = await client.PostAsync(request);
             _requestHelper.CheckMicroserviceResponse(response);
